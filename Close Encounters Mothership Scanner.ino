@@ -11,7 +11,7 @@
 // included file:
 //   "Close Encounters Mothership Scanner.h"
 //
-// This code runs on Arduino Mega 2560, either full version or small version:
+// This code runs on an Arduino Mega 2560, either full or small version:
 //   https://www.amazon.com/dp/B0046AMGW0
 //   https://www.amazon.com/dp/B07TGF9VMQ
 //

@@ -15,19 +15,19 @@
 // interesting pattern. This code attempts to translate that physical
 // long-exposure effect into addressable LED strips.
 //
-// There are some other existing attempts at prior art on this idea which
-// attempt to do the same effect. But those versions are not trying to exactly
-// duplicate the method that was used for creating the original visual effect
-// in the movie. My version attempts to recreate it more closely, by trying to
-// perform a more direct simulation of the original effect. 
+// There are some other existing pieces of prior art which attempt to do the
+// same effect. But those versions are not trying to exactly duplicate the
+// method that was used for creating the original visual effect in the movie.
+// My version attempts to recreate it more closely, by trying to perform a more
+// direct simulation of the original effect. 
 //
 // Prior art examples (I am not using these):
 //
 // - https://gist.github.com/jasoncoon/d4c935566ec82731fece
 // - https://youtu.be/aEVh9WNl57A
 //
-// Description the original effect, from the book "Close Encounters of the Third
-// Kind - The Making of Steven Spielberg's Classic Film" by Ray Morton:
+// Description of the original effect, from the book "Close Encounters of the
+// Third Kind - The Making of Steven Spielberg's Classic Film" by Ray Morton:
 //
 //  "Another important lighting effect on the underbelly was the scanner- a
 //   series of white lights that rotate around the circular cutout from which
@@ -87,40 +87,41 @@ CRGBW zigzagSlit[ZIGZAG_SLIT_WIDTH];
 // line-to-line, not sideways pixel-to-pixel.
 #define SUBPIXEL_RESOLUTION 8   // This controls the speed of the white bars.
 
-// This is the brightness value of the white bars in the idle portion of the
-// scanner effect, and the V of the HSV values of the flashing color
-// conversation lights which appear atop the scanner. These can be a number
-// between 0 and 255. Adjust the scanner brightness down in order to keep the
-// color conversation flashes from being overwhelmed by the brilliance of the
-// white bars. Due to the way the HSV calculations work, there's little
-// difference in the conversation brightness between 1 and 255. To "mute" one
-// or the other of these animations, set the value to zero.
+// These variables control the brightness value of the white bars in the idle
+// portion of the scanner effect, and the V of the HSV values of the flashing
+// color conversation lights which appear atop the scanner. These can be a
+// number between 0 and 255. Adjust the scanner brightness down from 255 in
+// order to keep the color conversation flashes from being overwhelmed by the
+// brilliance of the white bars. Due to the way the HSV calculations work,
+// there's little difference in the brightness of the color flashes when you
+// adjust the CONVERSATION_BRIGHTNESS value between 1 and 255. To "mute" one or
+// the other of these animations, set the corresponding value to zero.
 #define SCANNER_BRIGHTNESS             190
 #define CONVERSATION_BRIGHTNESS        255
 
 // Minimum and maximum random start positions for the color conversation lights
 // along the LED strand. Use these values if you want the color flashes to be
 // constrained to a certain subsection of your LED strand. In my case, my
-// strand lights up some shelving units and I might want to constrain the color
-// flashes to a single shelf unit (in my case the third shelf runs from 206 to
-// 313). You can make these values from 0 to 32767. If a given color bar would
-// exceed NUM_LEDS, the values will be reined in so that it doesn't write past
-// the end of the strand.
+// strand lights up some shelving units, and I might want to constrain the
+// color flashes to a single shelf unit (in my case the third shelf runs from
+// 206 to 313). You can make these values from 0 to 32767. If a given color bar
+// would exceed NUM_LEDS, the values will be reined in, so that it doesn't write
+// past the end of the strand array.
 #define CONVERSATION_START_POINT_MIN   206
 #define CONVERSATION_START_POINT_MAX   313
 
 // Parameters which control the speed of the occasional flashing color
 // conversation lights overlaid atop the white scanner bars. Some of these seem
-// illogical at first look. For example, why would I limit each frame's speed
+// illogical at first glance. For example, why would I limit each frame's speed
 // to a minimum number of milliseconds, but then, skip frames to speed it up
 // again? Because I want this animation to work on different-length LED
 // strands, and the entire routine takes different amounts of milliseconds to
 // run depending on the strand length. These variables allow you to adjust for
-// different strand lengths.
+// different strand lengths and processor speeds.
 #define CONVERSATION_FLASH_MIN_FRAMES  5   // Minimum random width of color bar for each color flash animation (pixels). 
 #define CONVERSATION_FLASH_MAX_FRAMES  25  // Max is actually this plus the Minumum, for the total maximum.
 #define CONVERSATION_EXTRA_DWELL_MAX   40  // The color flashes dwell a random amount of frames at full extension during held notes (max random frames).
-#define CONVERSATION_FLASH_SPEED       13  // Minimum number of milliseconds before a new animation frame can be played. If this is lower than the number of milliseconds the entire routine takes to run, it makes no difference.
+#define CONVERSATION_FLASH_SPEED       13  // Minimum number of milliseconds before a new color flash animation frame can be played. If this is lower than the number of milliseconds the entire routine takes to run, it makes no difference.
 #define CONVERSATION_FLASH_FRAMESKIP   3   // If the color flash animation swells too slowly, skip more frames to make it faster.
 #define CONVERSATION_FLASH_FREQUENCY   990 // Each blank frame, a random number of 0-1000 must exceed this number to start a new color flash (higher is less likely).
 
@@ -136,7 +137,7 @@ CRGBW zigzagSlit[ZIGZAG_SLIT_WIDTH];
 //
 // To experiment with different patterns, look in in the same directory as this
 // file. There should be another file called "Alternate Zigzag Patterns.txt"
-// which will have some other options. Try some of those patterns.
+// which will have some other options. Try some of those patterns too.
 //
 // TO DO: In the CE3K film, there are several different sets of lighting
 // patterns which appear at different times in the scene. If we can learn the
@@ -198,11 +199,13 @@ bool zigzagImage02[] =
 // ---------------------------------------------------------------------------
 int pixelValue (long arrayPosition)
 {
-  // The arrays are coded as bool, either 0 or 1, (to make it easier to type
-  // into the code above), then this math ANDs the multiple arrays together so
-  // that any black stripes are preserved. This simulates the original
-  // fiber-optic effect where multiple transparencies were overlaid atop each
-  // other, blocking the light source from the fiber optic strand.
+  // The arrays are coded as bool, either 0 or 1, to make it easier to type into
+  // the zigzagImage arrays. Then this ANDs or ORs the multiple arrays together
+  // so that any black stripes or white stripes are preserved. (Using AND
+  // preserves black stripes, using OR preserves white stripes.) This simulates
+  // the original fiber-optic effect where multiple transparencies were
+  // overlaid atop each other, blocking the light source from the fiber optic
+  // strand.
   bool blackOrWhitePixel =
   (
     // Each array will be smaller than the arrayPosition variable, but by using
@@ -221,8 +224,8 @@ int pixelValue (long arrayPosition)
   );
 
   // Convert the binary 0 or 1 value into a pixel darkness value, i.e., 0
-  // becomes 0, 1 becomes full brightness. (No shades of gray at this point; the code
-  // antialiases elsewhere.)
+  // becomes 0, 1 becomes full brightness. (No shades of gray at this point;
+  // the code antialiases elsewhere.)
   return blackOrWhitePixel * SCANNER_BRIGHTNESS;
 }
 
@@ -249,7 +252,7 @@ void CE3Kconversation()
   //
   // TO DO: In the film, there are some moments in the scene where multiple
   // color flashes occur at the same time. This code only does one flash at a
-  // time. Investigate refactoring to keep track of multiple flashes.
+  // time. Investigate refactoring the code to keep track of multiple flashes.
   static int  flashStage      = 0;
   static int  flashFrames     = 0;
   static int  flashDwell      = 0;
@@ -287,15 +290,21 @@ void CE3Kconversation()
         colorBarWidth      = flashFrames;                            // Bar width is the same as animation frames (swells outward from center).
         colorBarStartPoint = random16(CONVERSATION_START_POINT_MAX - CONVERSATION_START_POINT_MIN - colorBarWidth) + CONVERSATION_START_POINT_MIN; 
         colorBarHue        = random8();                              // Random hue for each color light flash.
-        halfWayMark        = colorBarWidth / 2;                      // Half way mark that defines the center of the color flash.
-
+ 
         // Ensure we do not overwrite memory by making sure the start/end points
         // don't exceed the start or end of the LED strand. This should only be
         // needed when running on a small test strip where the width of the
         // color bars could become greater than the length of the strand.
         if (colorBarStartPoint < 0) { colorBarStartPoint = 0; }
         if (colorBarStartPoint >= NUM_LEDS) { colorBarStartPoint = random16(NUM_LEDS - colorBarWidth); }
-        if (colorBarStartPoint + colorBarWidth >= NUM_LEDS) { colorBarWidth = NUM_LEDS - colorBarStartPoint - 1; }
+        if (colorBarStartPoint + colorBarWidth >= NUM_LEDS)
+        {
+          colorBarWidth = NUM_LEDS - colorBarStartPoint - 1;
+          flashFrames = colorBarWidth;
+        }
+
+        // Half way mark that defines the center of the color flash.
+        halfWayMark = colorBarWidth / 2;
 
         // Create an HSV value based on the random hue, then convert HSV to RGB so
         // that I can paint *just* the RGB values into the RGBW strip but *not*
@@ -307,7 +316,7 @@ void CE3Kconversation()
 
     // Increment or decrement the animation frame, depending on the current
     // stage of the flash animation we're in right now. This must be done
-    // within the "EVERY_N_MILLISECONDS" loop so that the timing of the
+    // within the "EVERY_N_MILLISECONDS" section so that the timing of the
     // animation is preserved.
     if (flashStage > 0)
     {
@@ -362,8 +371,8 @@ void CE3Kconversation()
   }
 
   // Paint the current color flash bar onto the LED strand. Note: Must do this
-  // outside the "EVERY_N_MILLISECONDS" loop so that the color flash animation
-  // is applied to the strand on every loop. This prevents the color bars from
+  // outside the "EVERY_N_MILLISECONDS" section so that the color flash pixels
+  // are applied to the strand on every loop. This prevents the color bars from
   // rapidly flickering each loop.
   if (flashStage > 0)
   {
@@ -400,7 +409,7 @@ void CE3Kconversation()
       // being used for scrolling the black and white "idle scanner" animation
       // running in parallel to these color flashes.
       //
-      // If you are using CRGB LEDs instead of CRGBW LEDs, and refactoring this
+      // If you're using CRGB LEDs instead of CRGBW LEDs, and refactoring this
       // code to use them, then here is where you'll have to blend the
       // conversation colors with the white idle scanner pixels that are
       // already there.
@@ -489,7 +498,7 @@ void ce3kScanner()
     // Apply the final values to the array that represents the slit. I'm using
     // only the White LED in the CRGBW array here, so the colored conversation
     // lights can be painted separately without having to blend them with the
-    // white LEDs.
+    // white LEDs. If you are using CRGB LEDs, you'll have to refactor this.
     zigzagSlit[x].white = (int)blendedDarkness;
 
     // // ---------------------------------------------------------------------------
@@ -542,7 +551,7 @@ void ce3kScanner()
       numLedsToCopy = NUM_LEDS-n;
     }
 
-    // Copy the array to the LED strand. Syntax of this command is:
+    // Copy the slit array to the LED strand. Syntax of this command is:    
     // memmove8( &destination[start position], &source[start position], size of pixel data )
     //
     // NOTE: In my LED array I'm using CRGBW strand hardware, but if yours is
