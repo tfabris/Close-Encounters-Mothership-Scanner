@@ -284,10 +284,11 @@ void CE3Kconversation()
       {
         // Begin the color flash animation.
         flashStage         = 1;   
-        flashIncreasing    = true;                               
-        flashFrames        = random16(CONVERSATION_FLASH_MAX_FRAMES) + CONVERSATION_FLASH_MIN_FRAMES;
+        flashIncreasing    = true;
+
+        // Randomize the size and position of the color bar flash. 
+        colorBarWidth      = random16(CONVERSATION_FLASH_MAX_FRAMES) + CONVERSATION_FLASH_MIN_FRAMES;
         flashDwell         = random16(CONVERSATION_EXTRA_DWELL_MAX); // Color bar can dwell at its widest point for a certain number of frames.
-        colorBarWidth      = flashFrames;                            // Bar width is the same as animation frames (swells outward from center).
         colorBarStartPoint = random16(CONVERSATION_START_POINT_MAX - CONVERSATION_START_POINT_MIN - colorBarWidth) + CONVERSATION_START_POINT_MIN; 
         colorBarHue        = random8();                              // Random hue for each color light flash.
  
@@ -297,15 +298,14 @@ void CE3Kconversation()
         // color bars could become greater than the length of the strand.
         if (colorBarStartPoint < 0) { colorBarStartPoint = 0; }
         if (colorBarStartPoint >= NUM_LEDS) { colorBarStartPoint = random16(NUM_LEDS - colorBarWidth); }
-        if (colorBarStartPoint + colorBarWidth >= NUM_LEDS)
-        {
-          colorBarWidth = NUM_LEDS - colorBarStartPoint - 1;
-          flashFrames = colorBarWidth;
-        }
+        if (colorBarStartPoint + colorBarWidth >= NUM_LEDS) { colorBarWidth = NUM_LEDS - colorBarStartPoint - 1; }
 
         // Half way mark that defines the center of the color flash.
         halfWayMark = colorBarWidth / 2;
 
+        // Number of animation frames is the same as the color bar width.
+        flashFrames = colorBarWidth;
+ 
         // Create an HSV value based on the random hue, then convert HSV to RGB so
         // that I can paint *just* the RGB values into the RGBW strip but *not*
         // the W, which is responsible for the idle scanner effect.
