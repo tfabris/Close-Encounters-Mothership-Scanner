@@ -4,6 +4,8 @@
 // ---------------------------------------------------------------------------
 // Close Encounters Mothership Scanner by Tony Fabris
 //
+// https://github.com/tfabris/Close-Encounters-Mothership-Scanner
+//
 // A lighting effect for WS2812 LED strips (aka "neopixels") using FastLED.
 // This code is intended to run on an Arduino Mega, but it could be adapted
 // for other processors.
