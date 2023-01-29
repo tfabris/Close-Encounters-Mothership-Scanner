@@ -15,6 +15,11 @@ which has a ring of white fiber-optic lights which are moving in an
 interesting pattern. This code attempts to translate that physical
 long-exposure effect into addressable LED strips.
 
+Videos:
+- This code running on my LED shelves: https://youtu.be/wWnYq0T5MJ0
+- Part of the original scene in the film: https://youtu.be/pu-W292TsRM?t=223
+- Part of the original scene in the film: https://youtu.be/S4PYI6TzqYk
+
 Description of the original effect, from the book *[Close
 Encounters of the Third Kind - The Making of Steven Spielberg's
 Classic Film](https://www.amazon.com/dp/1557837104)* by Ray Morton:
