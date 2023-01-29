@@ -15,8 +15,9 @@ which has a ring of white fiber-optic lights which are moving in an
 interesting pattern. This code attempts to translate that physical
 long-exposure effect into addressable LED strips.
 
-Description of the original effect, from the book *Close Encounters of the Third
-Kind - The Making of Steven Spielberg's Classic Film* by Ray Morton:
+Description of the original effect, from the book *[Close
+Encounters of the Third Kind - The Making of Steven Spielberg's
+Classic Film](https://www.amazon.com/dp/1557837104)* by Ray Morton:
 
 > "Another important lighting effect on the underbelly was the scanner- a
 >  series of white lights that rotate around the circular cutout from which
