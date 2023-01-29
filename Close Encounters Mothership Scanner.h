@@ -48,12 +48,13 @@
 //   to merge with and separate from one another. Like the other light patterns,
 //   the scanner effect was filmed in its own separate pass."
 //
-// I'm currently trying to contact Robert Swarthe for more details. In
-// particular, I'm interested in finding out if any photos exist of the
-// original transparencies he created for the effect. The simulation could be
-// potentially very accurate if we could find out what the original zigzag
-// patterns actually looked like. If anyone can help me find his contact
-// information, please let me know at tfabris@gmail.com .
+// I'm currently trying to contact Robert Swarthe for more details. I'm
+// interested in finding old photos of the fiber optic rig, and in particular,
+// I'm hoping that photos exist of the original transparencies he created for
+// the effect. The simulation could be potentially very accurate if we could
+// find out what the original zigzag patterns actually looked like. If anyone
+// can help me find his contact information, please let me know at
+// tfabris@gmail.com .
 //
 // Special note: This code is intended for use with CRGBW LED strips. Note
 // the "W" at the end of the "CRGBW". This means that the strips have red,
