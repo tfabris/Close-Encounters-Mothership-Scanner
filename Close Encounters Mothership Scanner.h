@@ -617,8 +617,8 @@ void ce3kScanner()
     // wraps around. Then we could adjust the reset point so that the speical
     // animation happens at regular intervals.
 
-    // For testing and debugging, you can temporarily change the reset point a
-    // smaller number, so the reset will be visible in just a few loops. 
+    // For testing and debugging, you can temporarily change the reset point to
+    // a smaller number, so the reset will be visible in just a few loops. 
     //    if ( (imageOffset + ZIGZAG_SLIT_WIDTH) >= 1600 )    // Test-Debug a small reset point.
     if ( (imageOffset + ZIGZAG_SLIT_WIDTH) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
     {
