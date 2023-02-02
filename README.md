@@ -16,7 +16,7 @@ interesting pattern. This code attempts to translate that physical
 long-exposure effect into addressable LED strips.
 
 Videos:
-- This code running on my LED shelves: https://youtu.be/wWnYq0T5MJ0
+- This code running on my LED shelves: https://youtu.be/tTZtArMXk0Y
 - Part of the original scene in the film: https://youtu.be/pu-W292TsRM?t=223
 - Part of the original scene in the film: https://youtu.be/S4PYI6TzqYk
 
