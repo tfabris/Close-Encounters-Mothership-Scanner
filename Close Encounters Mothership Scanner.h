@@ -217,8 +217,8 @@ int pixelValue (long arrayPosition)
     // would have been if it had started within this small array. This allows
     // the code to support zigzag arrays of any size.
     //
-    // For different patterns, experiment with using and "or" ("|") below, which
-    // will preserve white pixels, instead of using "and" ("&") below, which
+    // For different patterns, experiment with either using and "or" ("|")
+    // below, which preserves white pixels, or using "and" ("&") below, which
     // preserves black pixels.
     zigzagImage01[arrayPosition % sizeof(zigzagImage01)] &
     zigzagImage02[arrayPosition % sizeof(zigzagImage02)]
