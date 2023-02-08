@@ -20,12 +20,10 @@ Videos:
 - Part of the original scene in the film: https://youtu.be/pu-W292TsRM?t=223
 - Part of the original scene in the film: https://youtu.be/S4PYI6TzqYk
 
-A brief description of the original effect is found on pages 231-232 of Ray
-Morton's excellent book, *[Close Encounters of the Third Kind - The Making of
-Steven Spielberg's Classic Film](https://www.amazon.com/dp/1557837104)*. I've
-had detailed conversations with Robert Swarthe who worked on the original
-effect, and I'm writing up a full detailed document about it, which will be
-added to this code repository when it's ready.
+My code attempts to recreate the original effect as closely as possible, by
+trying to perform a direct simulation of the effect rather than simply
+imitating it. Details of the original effect are here:
+[Close Encounters of the Third Kind - Scanner Effect.md](https://github.com/tfabris/Close-Encounters-Mothership-Scanner/blob/master/Close%20Encounters%20of%20the%20Third%20Kind%20-%20Scanner%20Effect.md)
 
 Special note: This code is intended for use with CRGBW LED strips. Note the "W"
 at the end of the "CRGBW". This means that the strips have red, green, and blue

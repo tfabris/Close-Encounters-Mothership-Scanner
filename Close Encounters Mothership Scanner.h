@@ -21,19 +21,13 @@
 // same effect. But those versions are not trying to exactly duplicate the
 // method that was used for creating the original visual effect in the movie.
 // Prior art examples (I am not using these):
-//
 // - https://gist.github.com/jasoncoon/d4c935566ec82731fece
 // - https://youtu.be/aEVh9WNl57A
 //
 // My version attempts to recreate the original effect more closely, by trying
-// to perform a more direct simulation rather than an imitation. 
-//
-// A brief description of the original effect is found on pages 231-232 of Ray
-// Morton's excellent book, *[Close Encounters of the Third Kind - The Making of
-// Steven Spielberg's Classic Film](https://www.amazon.com/dp/1557837104)*. I've
-// had detailed conversations with Robert Swarthe who worked on the original
-// effect, and I'm writing up a full detailed document about it, which will be
-// added to this code repository when it's ready.
+// to perform a more direct simulation rather than an imitation. Details of
+// the original effect are here:
+// https://github.com/tfabris/Close-Encounters-Mothership-Scanner/blob/master/Close%20Encounters%20of%20the%20Third%20Kind%20-%20Scanner%20Effect.md
 //
 // Special note: This code is intended for use with CRGBW LED strips. Note
 // the "W" at the end of the "CRGBW". This means that the strips have red,
@@ -44,7 +38,9 @@
 // to work with regular CRGB strips, if that's what you're using.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
 // Set up variables
+// ---------------------------------------------------------------------------
 
 // This code will scroll the view of the "slit" down the zigzag pattern image.
 // It will do so in units which are smaller than each line, in order to get
