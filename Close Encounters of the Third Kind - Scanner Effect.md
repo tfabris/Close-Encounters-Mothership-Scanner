@@ -59,9 +59,9 @@ brilliant point of light emanating from the end of a fiber optic cable. The
 fiber optic cable is connected to a rotating motorized arm, emitting the point
 of light as it rotates slowly around the circular opening in the mothership's
 underbelly dome. A set of zigzag-shaped black cutouts, made by Robert Swarthe,
-are covering a light box. The light source was moved so that the black cutouts
-would illuminate the fiber optic cable intermittently, causing the light patterns
-seen in the film.
+are covering a light box. The light box was moved so that the black cutouts
+would illuminate the fiber optic cable intermittently, causing the light
+patterns seen in the film.
 
 So Ray's book has a great description which clearly gives the general idea. A
 modern equivalent might be a handheld spinning LED toy, but they didn't have
