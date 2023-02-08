@@ -137,9 +137,9 @@ effect, long exposures were an important part of the final look.
     Encounters*, because the camera sees only the white stars and not the
     intense black background. From the looks of the photo, the cut patterns
     were about 18 inches long or so. Robert says that these paper cut-outs were
-    probably made into hi-contrast 8"x10" positive and negative transparencies
-    for use in the scanner rig. (Photo credit: Unknown. Photo courtesy of
-    Robert Swarthe)
+    probably made into high-contrast 8"x10" positive and negative
+    transparencies for use in the scanner rig. (Photo credit: Unknown. Photo
+    courtesy of Robert Swarthe)
 
 ![BobAtWork](Bob%20at%20Work.jpg)
 
