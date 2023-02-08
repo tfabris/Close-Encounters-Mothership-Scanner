@@ -233,6 +233,26 @@ try to update this section as I get more information.
   disembark. It starts as the previous pattern, and then moves in some
   interesting ways as Truffaut speaks to Dreyfuss.
 
+### Colored Flashes
+
+The colored flashing "conversation" lights for the musical sequence were
+hand-animated by Robert Swarthe, with Scott Squires assisting and operating the
+Oxberry camera.
+
+Robert came up with something he called "pivot gimmicks", an assembly of
+cardboard and paper punch brads, to make the color bars open and close, to
+synchronize with the music. The curve of the colored lights, the top and bottom
+edges, were masked with Exeter paper, and the pivot gimmicks were used for
+expanding and contracting the width of the color bars. Robert made a set of
+[exposure sheets](https://en.wikipedia.org/wiki/Exposure_sheet) with
+instructions for each frame, and Scott Squires followed those instructions,
+hand-moving the pivot gimmicks for each frame.
+
+In the "making of" documentary included in the 2001 DVD Collectors Edition of
+the film, Robert says that the color choices of the lights were his own
+personal choices, he wasn't given any directions as to what color each light
+should be.
+
 ## Conclusion
 
 With this information, I'm working on refining my code to make my simulation
