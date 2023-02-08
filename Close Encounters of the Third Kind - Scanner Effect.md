@@ -2,6 +2,8 @@ Close Encounters of the Third Kind - Scanner Effect
 ==============================================================================
 &copy; 2023 by Tony Fabris
 
+https://github.com/tfabris/Close-Encounters-Mothership-Scanner/blob/master/Close%20Encounters%20of%20the%20Third%20Kind%20-%20Scanner%20Effect.md
+
 Special thanks to Robert Swarthe and Ray Morton for providing all of the
 details and information contained in this document.
 
