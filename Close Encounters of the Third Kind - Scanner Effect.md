@@ -112,12 +112,16 @@ was mounted on its side in the studio to make it easier to work with during
 filming. The camera was turned on its side too, so that the underbelly appeared
 upright in the final film.
 
-All of the underbelly details were done with lighting effects, each photographed
-in a separate pass and recombined later with an optical printer. This included:
-The tiny lights that covered most of the underbelly and which were projected
-onto the dome via a front projector; the colored conversation lights which were
-hand-animated using an Oxberry animation stand by Robert Swarthe; and the white
-scanner lights which were created with the rotating fiber optic rig. 
+All of the underbelly details were done with lighting effects, photographed in
+separate passes. The tiny lights which formed the underbelly were created with
+slowly rotating moiré patterns projected through various color filters onto the
+curved white surface of the model. The white scanner lights using the rotating
+fiber optic rig were photographed on the same negative. This film was developed
+and sent to the optical printing department where it was combined with the
+live-action footage and a matte painting. Then, the un-developed optical
+internegative was sent to the animation department where the colored
+conversation lights which were hand-animated using an Oxberry animation stand
+by Robert Swarthe.
 
 ### Scanner Details
 
