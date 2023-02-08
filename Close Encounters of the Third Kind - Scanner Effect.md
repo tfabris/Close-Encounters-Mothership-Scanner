@@ -131,13 +131,14 @@ effect, long exposures were an important part of the final look.
 
 - &#x24D8; You can see Robert cutting one of the pattern sets in the photo
     below. The patterns were drawn onto white paper first, and then cut into
-    the black paper with an x-acto blade. Robert doesn't recall for sure, but
-    thinks it's likely that the black paper would have been Exeter paper, a
-    lightproof paper often used for mattes in special effects work. Exeter
-    paper was also used as the black background for the starfields in *Close
-    Encounters*. From the looks of the photo, the cut patterns were about 18
-    inches long or so. (Photo credit: Unknown, photo courtesy of Robert
-    Swarthe)
+    black Exeter paper with an x-acto blade. Exeter paper is a lightproof paper
+    which was popularly used for mattes in special effects work. Exeter paper
+    was also used as the black background for the starfields in *Close
+    Encounters*, because the camera sees only the white stars and not the
+    intense black background. From the looks of the photo, the cut patterns
+    were about 18 inches long or so. These paper cut-outs were probably made
+    into hi-contrast 8"x10" positive and negative transparencies for use in the
+    scanner rig. (Photo credit: Unknown, photo courtesy of Robert Swarthe)
 
 ![BobAtWork](Bob%20at%20Work.jpg)
 
