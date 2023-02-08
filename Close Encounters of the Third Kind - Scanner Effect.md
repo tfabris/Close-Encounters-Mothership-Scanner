@@ -147,13 +147,13 @@ Each long-exposure frame was photographed individually, each exposure could have
 taken 15 seconds or more to complete. During each frame, the rig would make one
 pass. Each pass equaled one revolution of the "output end" of the fiber optic
 cable rotating around the circular opening, while simultaneously, the rig with
-the light source and the patterns was moved in sync. According to Scott
-Squires, the rig with the light source and the cutout patterns was an X/Y
+the light box and the patterns was moved in sync. According to Scott
+Squires, the rig with the light box and the cutout patterns was an X/Y
 animation light table on its side, motorized by a MiniScan motion control
 system. The fiber optic cable had its own light source and an electronic
 shutter, which would open and close depending on a photocell attached to a
-light stand in front of the light source with the cutout patterns on it. The
-photocell stayed fixed, while the light stand moved. Any light hitting the
+light stand in front of the light box with the cutout patterns on it. The
+photocell stayed fixed, while the light box moved. Any light hitting the
 photocell would cause the shutter to open and let light into the rotating fiber
 optic assembly. The light box assembly would make one horizontal pass across
 the photocell for each rotation of the fiber optic cable. The entire rig would
@@ -175,7 +175,7 @@ light table with the cutout pattern would get moved slightly vertically, upward
 or downward in relation to the photocell, just a fraction of an inch. This way,
 each frame, the photocell would trace a slightly different path across the
 pattern. According to Scott Squires, the cutout patterns were usually diagonal,
-to cause the lights to rotate with each vertical step of the light source.
+to cause the lights to rotate with each vertical step of the light box.
 Patterns with long tapers would cause the the lights to seem to widen or
 shrink.
 
@@ -209,7 +209,7 @@ try to update this section as I get more information.
   diamonds would form a crosshatch of clear diagonal stripes on a black
   background. Another method could have been using two sets of opposing black
   sawtooth shapes, like meshing shark teeth, and then reversing the vertical
-  advancement direction of the source arm each time it reaches the top or
+  advancement direction of the light box each time it reaches the top or
   bottom edge of the pattern. 
 
   - &#x24D8; To do: Find out if anyone recalls if that's the way that particular
