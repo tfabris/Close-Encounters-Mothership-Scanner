@@ -4,8 +4,8 @@ Close Encounters of the Third Kind - Scanner Effect
 
 https://github.com/tfabris/Close-Encounters-Mothership-Scanner/blob/master/Close%20Encounters%20of%20the%20Third%20Kind%20-%20Scanner%20Effect.md
 
-Special thanks to Robert Swarthe and Ray Morton for providing all of the
-details and information contained in this document.
+Special thanks to Robert Swarthe, Scott Squires, and Ray Morton for providing
+all of the details and information contained in this document.
 
 ## Introduction
 
@@ -58,13 +58,10 @@ Morton's book. The white lights are long-exposure streaks from a single
 brilliant point of light emanating from the end of a fiber optic cable. The
 fiber optic cable is connected to a rotating motorized arm, emitting the point
 of light as it rotates slowly around the circular opening in the mothership's
-underbelly dome. The other end of the fiber optic cable is threaded through the
-machinery inside the dome, and off-camera nearby, the cable points at a light
-source, in front of which is a piece of glass containing a set of zigzag-shaped
-black cutouts made by Robert Swarthe. A mechanical grip, holding the end of the
-fiber optic cable, moves horizontally across the glass pane. The black cutouts
-cause the fiber optic cable to be illuminated intermittently, causing the light
-pattern seen in the film.
+underbelly dome. A set of zigzag-shaped black cutouts, made by Robert Swarthe,
+are covering a light box. The light source was moved so that the black cutouts
+would illuminate the fiber optic cable intermittently, causing the light patterns
+seen in the film.
 
 So Ray's book has a great description which clearly gives the general idea. A
 modern equivalent might be a handheld spinning LED toy, but they didn't have
@@ -82,15 +79,17 @@ to record those details for posterity.
 ### Remembering the Details
 
 The information below is based on the description in Ray Morton's book, and from
-conversations with Robert Swarthe. Robert was awesome: not only did he answer
-my questions and tell great stories, he even supplied the animated diagram
-included below. Robert worked on several aspects of the film's effects,
-alongside Richard Yuricich, Doug Trumbull, Don Trumbull, Dennis Muren, and
-Scott Squires, among other SFX artists. Robert was responsible for creating the
-zigzag pattern cutouts which were the main source of the scanner's light
+conversations with Robert Swarthe, with additional information from Scott
+Squires. Robert was awesome: not only did he answer my questions and tell great
+stories, and put me in touch with other people too, he even supplied the
+animated diagram included below. Robert worked on several aspects of the film's
+effects, alongside Richard Yuricich, Doug Trumbull, Don Trumbull, Dennis Muren,
+and Scott Squires, among other SFX artists. Robert was responsible for creating
+the zigzag pattern cutouts which were the main source of the scanner's light
 patterns, as well hand-animating the colored light flashes which overlaid the
-patterns. The other team members created the mechanical fiber optic rig and
-photographed it.
+patterns. The mechanical fiber optic rig was likely designed and created by
+Richard Yuricich, Don Trumbull, other team members. Scott Squires and Dennis
+Muren did the photography.
 
 Keep in mind that it's been over 40 years since the film was made, and even at
 the time, Robert didn't work on every aspect of this effect. The information
@@ -121,7 +120,7 @@ and sent to the optical printing department where it was combined with the
 live-action footage and a matte painting. Then, the un-developed optical
 internegative was sent to the animation department where the colored
 conversation lights which were hand-animated using an Oxberry animation stand
-by Robert Swarthe.
+by Robert Swarthe, assisted by Scott Squires.
 
 ### Scanner Details
 
@@ -136,37 +135,48 @@ effect, long exposures were an important part of the final look.
     was also used as the black background for the starfields in *Close
     Encounters*, because the camera sees only the white stars and not the
     intense black background. From the looks of the photo, the cut patterns
-    were about 18 inches long or so. These paper cut-outs were probably made
-    into hi-contrast 8"x10" positive and negative transparencies for use in the
-    scanner rig. (Photo credit: Unknown. Photo courtesy of Robert Swarthe)
+    were about 18 inches long or so. Robert says that these paper cut-outs were
+    probably made into hi-contrast 8"x10" positive and negative transparencies
+    for use in the scanner rig. (Photo credit: Unknown. Photo courtesy of
+    Robert Swarthe)
 
 ![BobAtWork](Bob%20at%20Work.jpg)
 
 Each long-exposure frame was photographed individually, each exposure could have
 taken 15 seconds or more to complete. During each frame, the rig would make one
 pass. Each pass equaled one revolution of the "output end" of the fiber optic
-cable rotating around the circular opening, while simultaneously, the motorized
-grip holding the "source end" of the fiber optic cable would make one
-horizontal pass across the zigzag pattern plate. The entire rig would then be
-reset by hand before exposing the next frame of film.
+cable rotating around the circular opening, while simultaneously, the rig with
+the light source and the patterns was moved in sync. According to Scott
+Squires, the rig with the light source and the cutout patterns was an X/Y
+animation light table on its side, motorized by a MiniScan motion control
+system. The fiber optic cable had its own light source and an electronic
+shutter, which would open and close depending on a photocell attached to a
+light stand in front of the light source with the cutout patterns on it. The
+photocell stayed fixed, while the light stand moved. Any light hitting the
+photocell would cause the shutter to open and let light into the rotating fiber
+optic assembly. The light source/photocell assembly would make one horizontal
+pass per rotation of the fiber optic cable. The entire rig would then reset
+before exposing the next frame of film.
 
-- &#x24D8; Important detail: The motorized arm, which held the source end of the
-    fiber optic cable, did not move back and forth during the frame exposure.
-    It moved only in one direction, making a single horizontal pass across the
-    pattern during the frame. After each frame, it was manually reset back to
-    its start position. Since one pass of the cable's source end equaled
-    exactly one pass of the cable's output end, it means that, for the lighting
-    patterns which seem to be repeating evenly-spaced lights, each of them had
-    to be carefully cut out, individually. (Animation: Robert Swarthe)
+- &#x24D8; Important detail: The system which moved the cutout patterns in
+    relation to the photocell didn't move back and forth during the frame
+    exposure. It moved only in one direction, making a single horizontal pass
+    across the pattern during the frame. After each frame, it was reset back to
+    its start position. Since one pass of the cutout patterns equaled one pass
+    of the cable's output end, it means that, for the lighting patterns which
+    seem to be repeating many evenly-spaced lights, each of them had to be
+    carefully cut out, individually. (Animation: Robert Swarthe)
 
 ![Animation](CE3K%20Scan%20Animated.gif)
 
-When the rig was reset for the next frame of film, before the next pass, the
-source end of the fiber optic cable would get moved slightly vertically, upward
-or downward in relation to pattern, just a fraction of an inch. This way, each
-frame, the source end of the fiber optic cable would trace a slightly different
-path across the pattern, causing the white lights to slowly move in the final
-film.
+When the rig reset for the next frame of film, before the next exposure, the
+light table with the cutout pattern would get moved slightly vertically, upward
+or downward in relation to the photocell, just a fraction of an inch. This way,
+each frame, the photocell would trace a slightly different path across the
+pattern. According to Scott Squires, the cutout patterns were usually diagonal,
+to cause the lights to rotate with each vertical step of the light source.
+Patterns with long tapers would cause the the lights to seem to widen or
+shrink.
 
 ### Multiple Patterns
 
@@ -184,14 +194,11 @@ try to update this section as I get more information.
   they're evenly spaced, and then they seem to flicker chaotically.
 
 - The next pattern is seen as the scientists are rolling the organ keyboard
-  forward towards the mothership. The pattern is composed of differing widths of
-  bars which merge and separate. During the scene, if you look closely, you can
-  see this pattern reverses backwards onto itself. I'm not sure if the
-  backwards movement is cut into the pattern, or if it's done by reversing the
-  direction that the fiber optic rig was advancing between each frame, or if
-  the scanner's film element was merely looped backwards in the edit in order
-  to extend the length of the shot. Any of those three techniques could have
-  produced the same result.
+  forward towards the mothership. The pattern is composed of differing widths
+  of bars which merge and separate. During the scene, if you look closely, you
+  can see this pattern seems to reverse backwards onto itself. According to
+  Scott Squires, this was done within the cutout patterns themselves, which
+  Scott says would have been like cross hatch lines.
 
 - The pattern for most of the musical sequence and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
@@ -204,9 +211,9 @@ try to update this section as I get more information.
   advancement direction of the source arm each time it reaches the top or
   bottom edge of the pattern. 
 
-  - &#x24D8; To do: Find out from Robert if he recalls if that's the way that
-      particular pattern was done. Does that happen to be the same pattern that
-      Robert is cutting out in the photo above?
+  - &#x24D8; To do: Find out if anyone recalls if that's the way that particular
+      pattern was done. Does that happen to be the same pattern that Robert is
+      cutting out in the photo above?
 
 - At some moments, a particularly chaotic sequence of lights is displayed,
   including the moment where a loud note causes glass to break. Robert said
