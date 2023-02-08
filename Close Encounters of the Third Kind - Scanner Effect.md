@@ -155,9 +155,9 @@ shutter, which would open and close depending on a photocell attached to a
 light stand in front of the light source with the cutout patterns on it. The
 photocell stayed fixed, while the light stand moved. Any light hitting the
 photocell would cause the shutter to open and let light into the rotating fiber
-optic assembly. The light source/photocell assembly would make one horizontal
-pass per rotation of the fiber optic cable. The entire rig would then reset
-before exposing the next frame of film.
+optic assembly. The light box assembly would make one horizontal pass across
+the photocell for each rotation of the fiber optic cable. The entire rig would
+then reset before exposing the next frame of film.
 
 - &#x24D8; Important detail: The system which moved the cutout patterns in
     relation to the photocell didn't move back and forth during the frame
