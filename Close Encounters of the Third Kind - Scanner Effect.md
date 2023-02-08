@@ -138,7 +138,7 @@ effect, long exposures were an important part of the final look.
     intense black background. From the looks of the photo, the cut patterns
     were about 18 inches long or so. These paper cut-outs were probably made
     into hi-contrast 8"x10" positive and negative transparencies for use in the
-    scanner rig. (Photo credit: Unknown, photo courtesy of Robert Swarthe)
+    scanner rig. (Photo credit: Unknown. Photo courtesy of Robert Swarthe)
 
 ![BobAtWork](Bob%20at%20Work.jpg)
 
