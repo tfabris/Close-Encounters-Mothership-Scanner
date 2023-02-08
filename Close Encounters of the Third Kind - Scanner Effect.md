@@ -104,7 +104,7 @@ mothership. The underbelly section was built and photographed as a separate
 model from the full mothership model. The full model, with its top sections
 heavily [greebled](https://en.wikipedia.org/wiki/Greeble), was used for the
 long shots of the mothership, and it's currently on display at the
-Smithsonian's Udvar-Hazy Center in Chantilly, VA. (I made a pilgirmage once,
+Smithsonian's Udvar-Hazy Center in Chantilly, VA. (I made a pilgrimage once,
 and got a bunch of pictures, it's amazing.) The full mothership model does not
 have the moving white scanner lights. The underbelly model with the scanner
 lights was just a dome painted white, with a circle cut out of its center. It
