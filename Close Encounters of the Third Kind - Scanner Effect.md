@@ -200,12 +200,11 @@ try to update this section as I get more information.
   background. Another method could have been using two sets of opposing black
   sawtooth shapes, like meshing shark teeth, and then reversing the vertical
   advancement direction of the source arm each time it reaches the top or
-  bottom edge of the pattern. If so, then perhaps that's the pattern that
-  Robert is cutting out in the photo above?
+  bottom edge of the pattern. 
 
   - &#x24D8; To do: Find out from Robert if he recalls if that's the way that
-      particular pattern was done. Also, if it was done that way, like meshing
-      shark teeth, was it meant as a sly tribute to *Jaws*?
+      particular pattern was done. Does that happen to be the same pattern that
+      Robert is cutting out in the photo above?
 
 - At some moments, a particularly chaotic sequence of lights is displayed,
   including the moment where a loud note causes glass to break. Robert said
