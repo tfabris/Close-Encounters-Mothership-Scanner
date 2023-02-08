@@ -91,10 +91,11 @@ patterns. The mechanical fiber optic rig was likely designed and created by
 Richard Yuricich, Don Trumbull, other team members. Scott Squires and Dennis
 Muren did the photography.
 
-Keep in mind that it's been over 40 years since the film was made, and even at
-the time, Robert didn't work on every aspect of this effect. The information
-below is the best we could put together. Please contact me at tfabris@gmail.com
-if you also worked on this film and you have more information or corrections.
+Keep in mind that it's been over 40 years since the film was made, and no single
+person worked on every aspect of this effect. The information below is the best
+we could assemble so far, from multiple different accounts. Please contact me
+at tfabris@gmail.com if you also worked on this film and you have more
+information or corrections.
 
 ### Underbelly - Multiple Passes
 
