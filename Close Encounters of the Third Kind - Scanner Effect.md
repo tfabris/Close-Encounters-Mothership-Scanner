@@ -120,7 +120,7 @@ fiber optic rig were photographed on the same negative. This film was developed
 and sent to the optical printing department where it was combined with the
 live-action footage and a matte painting. Then, the un-developed optical
 internegative was sent to the animation department where the colored
-conversation lights which were hand-animated using an Oxberry animation stand
+conversation lights were added, hand-animated, using an Oxberry animation stand
 by Robert Swarthe, assisted by Scott Squires.
 
 ### Scanner Details
