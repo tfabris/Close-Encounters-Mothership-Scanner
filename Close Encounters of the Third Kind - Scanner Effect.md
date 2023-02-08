@@ -138,17 +138,15 @@ effect, long exposures were an important part of the final look.
 ![BobAtWork](Bob%20at%20Work.jpg)
 
 Each long-exposure frame was photographed individually, each exposure taking
-about 15 seconds to complete.
+about 15 seconds to complete. During each frame, the rig would make one pass.
+Each pass equaled one revolution of the "output end" of the fiber optic cable
+rotating around the circular opening, while simultaneously, the motorized grip
+holding the "source end" of the fiber optic cable would make one horizontal
+pass across the zigzag pattern plate. The entire rig would then be reset by
+hand before exposing the next frame of film.
 
-- &#x24D8; To do: Double check the exposure length with Robert. I think that's
-    what he said during our call, but I could be remembering it wrong.
-
-During each frame, the rig would make one pass. Each pass equaled one revolution
-of the "output end" of the fiber optic cable rotating around the circular
-opening, while simultaneously, the motorized grip holding the "source end" of
-the fiber optic cable would make one horizontal pass across the zigzag pattern
-plate. The entire rig would then be reset by hand before exposing the next
-frame of film.
+- &#x24D8; To do: Double check the exposure time. I think that's what Robert
+    said during our call, but I could be remembering it wrong.
 
 - &#x24D8; Important detail: The motorized arm, which held the source end of the
     fiber optic cable, did not move back and forth during the frame exposure.
