@@ -184,20 +184,21 @@ try to update this section as I get more information.
   they're evenly spaced, and then they seem to flicker chaotically.
 
 - The next pattern is seen as the scientists are rolling the organ keyboard
-  forward towards the mothership. Differing widths of bars which merge and
-  separate. During the scene, if you look closely, you can see this pattern
-  reverses backwards onto itself. I'm not sure if the backwards movement is cut
-  into the pattern, or if it's done by reversing the direction that the fiber
-  optic rig was advancing between each frame, or if the scanner's film element
-  was merely looped backwards in the edit in order to extend the length of the
-  shot. Any of those three techniques could have produced the same result.
+  forward towards the mothership. The pattern is composed of differing widths of
+  bars which merge and separate. During the scene, if you look closely, you can
+  see this pattern reverses backwards onto itself. I'm not sure if the
+  backwards movement is cut into the pattern, or if it's done by reversing the
+  direction that the fiber optic rig was advancing between each frame, or if
+  the scanner's film element was merely looped backwards in the edit in order
+  to extend the length of the shot. Any of those three techniques could have
+  produced the same result.
 
 - The pattern for most of the musical sequence and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
   counter-rotate, causing them to seem to merge and separate in pairs. My
   initial guess is that the cutout version of this pattern would have looked
-  like symmetrical black diamond shapes, or, thinking about it from another
-  perspective, it would look like a crosshatch of clear stripes on a black
+  like symmetrical black diamond shapes. The negative space around the black
+  diamonds would form a crosshatch of clear diagonal stripes on a black
   background. Another method could have been using two sets of opposing black
   sawtooth shapes, like meshing shark teeth, and then reversing the vertical
   advancement direction of the source arm each time it reaches the top or
