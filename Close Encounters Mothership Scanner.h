@@ -50,8 +50,11 @@
 //   to merge with and separate from one another. Like the other light patterns,
 //   the scanner effect was filmed in its own separate pass."
 //
-// I'm currently talking to Robert Swarthe and getting more details about the
-// zigzag patterns, with the intention of making the simulation more accurate.
+// I've had detailed conversations with Robert Swarthe and gotten more
+// information about the zigzag patterns, with the intention of making the
+// simulation more accurate. I'm also writing up a full detailed document about
+// the original effect which will be added to this code repository when it's
+// ready.
 //
 // Special note: This code is intended for use with CRGBW LED strips. Note
 // the "W" at the end of the "CRGBW". This means that the strips have red,
@@ -64,39 +67,31 @@
 
 // Set up variables
 
-// This variable controls the width of a "slit" view of the zigzag patterns.
-// This must be the same as the X width of the zigzag pattern arrays.
-#define ZIGZAG_SLIT_WIDTH 44
-
-// This is an array of values that represents the "slit" view of the zigzag
-// patterns. Note: This code was written for CRGBW strip hardware; if you are
-// using CRGB hardware, you'll need to refactor some parts of this code.
-CRGBW zigzagSlit[ZIGZAG_SLIT_WIDTH];
-
-// This code will scroll the view of the "slit" up and down the zigzag pattern
-// image. It will do so in units which are smaller than each line, in order to
-// get sub-pixel resolution of the movement of the image. This variable
-// controls the number of "steps" which will occur between each line of the
-// image. The finer the subpixel resolution (the larger this variable is), then
-// the greater number of steps, so the slower that this simulation will scroll.
-// In this way, this variable is what controls the "speed" of the simulation.
-// Note that this code is only doing subpixel resolution in the vertical
-// dimension, not horizontal, so all antialiasing occurs vertically
-// line-to-line, not sideways pixel-to-pixel.
+// This code will scroll the view of the "slit" down the zigzag pattern image.
+// It will do so in units which are smaller than each line, in order to get
+// sub-pixel resolution of the movement of the image. This variable controls
+// the number of "steps" which will occur between each line of the image. The
+// finer the subpixel resolution (the larger this variable is), then the
+// greater number of steps, so the slower that this simulation will scroll. In
+// this way, this variable is what controls the "speed" of the simulation. Note
+// that this code is only doing subpixel resolution in the vertical dimension,
+// not horizontal, so all antialiasing occurs vertically line-to-line, not
+// sideways pixel-to-pixel.
 #define SUBPIXEL_RESOLUTION 8   // This controls the speed of the white bars.
 
 // These variables control the brightness value of the white bars in the idle
 // portion of the scanner effect, and the V of the HSV values of the flashing
-// color conversation lights which appear atop the scanner. These can be a
-// number between 0 and 255. Adjust the scanner brightness down from 255 in
-// order to keep the color conversation flashes from being overwhelmed by the
-// brilliance of the white bars. Due to the way the HSV calculations work,
-// there's little difference in the brightness of the color flashes when you
-// adjust the CONVERSATION_BRIGHTNESS value between 1 and 255. To "mute" one or
-// the other of these animations, set the corresponding value to zero.
+// color conversation lights which appear atop the scanner. To mute either of
+// the animations, for example, muting the color flashes so that you see only
+// the white scanner bars, or muting the scanner bars to that you only see the
+// color flashes, then set the corresponding value to 0. The scanner brightness
+// can be set to a number between 0 and 255. Recommend adjusting the scanner
+// brightness to a medium number to keep the color flash animations from being
+// overwhelmed by the brilliance of the white bars. Due to the way the HSV
+// calculations are coded, the conversation brightness value will not change
+// the LED brightness much, so set conversation brightness to just 0 or 255.
 #define SCANNER_BRIGHTNESS             100
 #define CONVERSATION_BRIGHTNESS        255
-
 // Minimum and maximum random start positions for the color conversation lights
 // along the LED strand. Use these values if you want the color flashes to be
 // constrained to a certain subsection of your LED strand. In my case, my
@@ -123,24 +118,32 @@ CRGBW zigzagSlit[ZIGZAG_SLIT_WIDTH];
 #define CONVERSATION_FLASH_FRAMESKIP   3   // If the color flash animation swells too slowly, skip more frames to make it faster.
 #define CONVERSATION_FLASH_FREQUENCY   900 // Each blank frame, a random number of 0-1000 must exceed this number to start a new color flash (higher is less likely).
 
-// These pixel arrays are supposed to imitate Robert Swarthe's zigzag patterns,
-// and will be overlaid atop each other. Make the width of the array the same
-// as ZIGZAG_SLIT_WIDTH and the height of each array can be any height you
-// want. Each array can be a different *height*, but all arrays must be the
-// same *width*. For best results, design each image in such a way that it
-// wraps around smoothly at the top/bottom and sides. The code allows arrays of
-// different heights in order to help with being able to design wrap-around
-// images, so different arrays can wrap at different points in the time
-// dimension.
+// The zigzagImage pixel arrays are supposed to imitate Robert Swarthe's cutout
+// patterns. Currently they do not imitate the patterns very well, but that
+// will be fixed in future updates to this code.
+//
+// In the CE3K film, there are several different sets of lighting patterns used.
+// The long term goal is to eventually simulate all the patterns seen in the
+// film, and then to add code that will transition between the patterns.
+//
+// You can use just one array or both arrays. If you use just one, comment out
+// the other array's data so that it creates an empty array in that slot. If
+// you use both arrays they will be overlaid atop each other, simulating what
+// would happen if two patterns were put into the glass together. If using both
+// arrays, they can be different heights, but they must be the same width.
+//
+// For best results, design each image in such a way that it wraps around
+// smoothly at the top/bottom and sides. The code allows arrays of different
+// heights in order to help with being able to design wrap-around images, so
+// different arrays can wrap at different points in the time dimension.
 //
 // To experiment with different patterns, look in in the same directory as this
 // file. There should be another file called "Alternate Zigzag Patterns.txt"
 // which will have some other options. Try some of those patterns too.
 //
-// TO DO: In the CE3K film, there are several different sets of lighting
-// patterns which appear at different times in the scene. If we can learn the
-// correct zigzag patterns to replicate them all, try to code a way to
-// occasionally transition between them. 
+// Make ZIGZAG_SLIT_WIDTH the same as the width of the array(s). Both arrays
+// must be the same width.
+#define ZIGZAG_SLIT_WIDTH 44
 bool zigzagImage01[] = 
 {
   0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
@@ -167,6 +170,7 @@ bool zigzagImage01[] =
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 };
+int zigzagImage01size = sizeof(zigzagImage01);
 
 bool zigzagImage02[] = 
 {
@@ -193,63 +197,88 @@ bool zigzagImage02[] =
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,
 };
+int zigzagImage02size = sizeof(zigzagImage02);
+
+// This is an array of values that represents the "slit" view of the zigzag
+// patterns. Note: This code was written for CRGBW strip hardware; if you are
+// using CRGB hardware, you'll need to refactor some parts of this code.
+CRGBW zigzagSlit[ZIGZAG_SLIT_WIDTH];
 
 // ---------------------------------------------------------------------------
-// Function to grab one pixel out of the overlaid zigzag arrays, and turn it
-// into a brightness value that can be applied to the LEDs.
+// Function to grab one pixel out of the zigzag array(s), and turn it into a
+// brightness value that can be applied to the LEDs.
 // ---------------------------------------------------------------------------
 int pixelValue (long arrayPosition)
 {
-  // The arrays are coded as bool, either 0 or 1, to make it easier to type into
-  // the zigzagImage arrays. Then this ANDs or ORs the multiple arrays together
-  // so that any black stripes or white stripes are preserved. (Using AND
-  // preserves black stripes, using OR preserves white stripes.) This simulates
-  // the original fiber-optic effect where multiple transparencies were
-  // overlaid atop each other, blocking the light source from the fiber optic
-  // strand.
-  bool blackOrWhitePixel =
-  (
-    // Each array will be smaller than the arrayPosition variable, but by using
-    // the modulo operator (%) we can dig into the arrays at the correct
-    // position points without needing complicated math. Basically, the
-    // arrayPosition cycles continuously through a very large range of numbers,
-    // and the "%" operator is the math that finds out what the array position
-    // would have been if it had started within this small array. This allows
-    // the code to support zigzag arrays of any size.
-    //
-    // For different patterns, experiment with either using and "or" ("|")
-    // below, which preserves white pixels, or using "and" ("&") below, which
-    // preserves black pixels.
-    zigzagImage01[arrayPosition % sizeof(zigzagImage01)] &
-    zigzagImage02[arrayPosition % sizeof(zigzagImage02)]
-  );
+  // The zigzagImage arrays are coded as bool, either 0 or 1, to make it easier
+  // to type patterns into the arrays. If you are using two arrays, this code
+  // ANDs the two arrays together so that any black stripes or are preserved.
+  // This simulates the original fiber optic effect, where the light source for
+  // the fiber optic strand is blocked by the pattern(s).
+  bool blackOrWhitePixel;
+
+  // Allow an option to combine two arrays if desired.
+  if (zigzagImage01size && zigzagImage02size)
+  {
+    blackOrWhitePixel =
+    (
+      // Each array will be smaller than the arrayPosition variable, but by using
+      // the modulo operator (%) we can dig into the arrays at the correct
+      // position points without needing complicated math. Basically, the
+      // arrayPosition cycles continuously through a very large range of numbers,
+      // and the "%" operator is the math that finds out what the array position
+      // would have been if it had started within this small array. This allows
+      // the code to support zigzag arrays of any size.
+      zigzagImage01[arrayPosition % zigzagImage01size] &
+      zigzagImage02[arrayPosition % zigzagImage02size]
+    );
+  }
+
+  // If only the second array is used, then the first array will be empty.
+  if (!zigzagImage01size)
+  {
+    blackOrWhitePixel =
+    (
+      zigzagImage02[arrayPosition % zigzagImage02size]
+    );
+  }
+
+  // If only the first array is used, then the second array will be empty.
+  if (!zigzagImage02size)
+  {
+    blackOrWhitePixel =
+    (
+      zigzagImage01[arrayPosition % zigzagImage01size]
+    );
+  }
 
   // Convert the binary 0 or 1 value into a pixel darkness value, i.e., 0
-  // becomes 0, 1 becomes full brightness. (No shades of gray at this point;
-  // the code antialiases elsewhere.)
+  // becomes 0, 1 becomes full brightness. No shades of gray at this point; the
+  // code antialiases elsewhere.
   return blackOrWhitePixel * SCANNER_BRIGHTNESS;
 }
 
 // ---------------------------------------------------------------------------
-// Subroutine to add the colored flashing "conversation" lights, atop the 
-// moving white "idle" animation bars.
+// Subroutine to add the colored flashing "conversation" lights, atop the moving
+// white "idle" animation bars. The original colored lights in the film were
+// hand-animated by Robert Swarthe, this attempts to simulate their style.
 // ---------------------------------------------------------------------------
 void CE3Kconversation()
 {
-  // Only one color flash will appear at a time, and also it has to go through
-  // several frames of animation for the entire flash. Keep track of both
-  // things with the variable "flashStage": flashStage 0 means no flash is
-  // occurring, flashStage nonzero means that we are in the middle of a color
-  // flash animation. Each time a frame of the animation is played, it
-  // increments or decrements flashStage (incrementing when the color bar is
-  // swelling up to its full length, decrementing when it's unswelling down to
-  // nothing). A separate variable, flashFrames, keeps track of the number of
-  // swelling frames in this animation (each flash will have a different size
-  // and thus a different number of frames). Then if flashStage reaches
-  // flashFrames, that means it's the last frame of the swell-up animation and
-  // it then dwells for a bit, then switches direction and decrements down to
-  // zero. Once it hits zero, then the animation is done and it waits until the
-  // next color flash is triggered. reset until the next one is triggered.
+  // Each color flash has to go through several frames of animation for the
+  // entire flash. Keep track of both things with the variable "flashStage":
+  // flashStage 0 means no flash is occurring, flashStage nonzero means that we
+  // are in the middle of a color flash animation. Each time a frame of the
+  // animation is played, it increments or decrements the flashStage variable
+  // (incrementing when the color bar is swelling up to its full length,
+  // decrementing when it's unswelling down to nothing). A separate variable,
+  // flashFrames, keeps track of the number of swelling frames in this
+  // animation (each flash will have a different size and thus a different
+  // number of frames). Then if flashStage reaches flashFrames, that means it's
+  // the last frame of the swell-up animation and it then dwells for a bit,
+  // then switches direction and decrements down to zero. Once it hits zero,
+  // then the animation is done and it waits until the next color flash is
+  // triggered.
   //
   // TO DO: In the film, there are some moments in the scene where multiple
   // color flashes occur at the same time. This code only does one flash at a
@@ -327,7 +356,10 @@ void CE3Kconversation()
       {
         // The color bar swells to full width twice as quickly as it unswells.
         // Since each color flash represents a musical note, this is like
-        // giving the note a sharper attack than the note's decay.
+        // giving the note a sharper attack than the note's decay. This seems
+        // to look best. I asked Robert Swarthe if that's the way he did it,
+        // and he doesn't remember, but said that it sounds like something he'd
+        // probably do.
         flashStage += CONVERSATION_FLASH_FRAMESKIP;
         flashStage += CONVERSATION_FLASH_FRAMESKIP;
       }
@@ -603,17 +635,13 @@ void ce3kScanner()
 
     // TO DO: In the original CE3K film, there are some interesting moments in
     // the animation where the lights appear to briefly flicker in random
-    // patterns. My guess is that this occurred when the "source" end of the
-    // fiber optic rig hit the endpoint of its travel, or ran up against
-    // (or past) the edge of one of the glass plates, or some other unexpected
-    // malfunction of the rig. Normally this kind of footage wouldn't be used,
-    // but my guess is that the team thought it looked interesting and
-    // specifically lampshaded it in the final cut; a classic "happy accident"
-    // moment. Someday I intend to simulate that light pattern as well, as a
-    // special case, and this reset point could be modified so that
-    // special "flickering" simulation is triggered whenever this reset point
-    // wraps around. Then we could adjust the reset point so that the speical
-    // animation happens at regular intervals.
+    // patterns. Robert Swarthe tells me that these were deliberate moments
+    // that were created by cutting out squiggly line patterns. When I
+    // eventually simulate those chaotic patterns, this reset point could be
+    // modified so that one of those special patterns is triggered whenever
+    // this reset point wraps around. Then we could possibly adjust the reset
+    // point so that the special chaotic animation happens at regular
+    // intervals.
 
     // For testing and debugging, you can temporarily change the reset point to
     // a smaller number, so the reset will be visible in just a few loops. 

@@ -43,8 +43,10 @@ Classic Film](https://www.amazon.com/dp/1557837104)* by Ray Morton:
 >  to merge with and separate from one another. Like the other light patterns,
 >  the scanner effect was filmed in its own separate pass."
 
-I'm currently talking to Robert Swarthe and getting more details about the
-zigzag patterns, with the intention of making the simulation more accurate.
+I've had detailed conversations with Robert Swarthe and gotten more information
+about the zigzag patterns, with the intention of making the simulation more
+accurate. I'm also writing up a full detailed document about the original
+effect which will be added to this code repository when it's ready.
 
 Special note: This code is intended for use with CRGBW LED strips. Note the "W"
 at the end of the "CRGBW". This means that the strips have red, green, and blue
