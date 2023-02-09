@@ -144,21 +144,20 @@ effect, long exposures were an important part of the final look.
 
 ![BobAtWork](Bob%20at%20Work.jpg)
 
-Each long-exposure frame was photographed individually, each exposure could have
-taken 15 seconds or more to complete. During each frame, the rig would make one
-pass. Each pass equaled one revolution of the "output end" of the fiber optic
-cable rotating around the circular opening, while simultaneously, the rig with
-the light box and the patterns was moved in sync. According to Scott
-Squires, the rig with the light box and the cutout patterns was an X/Y
-animation light table on its side, motorized by a MiniScan motion control
-system. The fiber optic cable had its own light source and an electronic
-shutter, which would open and close depending on a photocell attached to a
-light stand in front of the light box with the cutout patterns on it. The
-photocell stayed fixed, while the light box moved. Any light hitting the
-photocell would cause the shutter to open and let light into the rotating fiber
-optic assembly. The light box assembly would make one horizontal pass across
-the photocell for each rotation of the fiber optic cable. The entire rig would
-then reset before exposing the next frame of film.
+Each long-exposure frame was photographed individually, with each exposure
+taking 15 seconds or more to complete. During each frame, the rig would make
+one pass. Each pass equaled one revolution of the fiber optic cable rotating
+around the circular opening, while simultaneously, the rig with the light box
+and the patterns was moved in sync. According to Scott Squires, the rig with
+the light box and the patterns was an X/Y animation light table on its side,
+motorized by a MiniScan motion control system. The fiber optic cable had its
+own light source and an electronic shutter, which would open and close
+depending on a photocell attached to a light stand in front of the light box.
+The photocell stayed fixed, while the light box with the patterns moved past
+it. Any light hitting the photocell would cause the shutter to open, letting
+light into the rotating fiber optic assembly. The light box would make one
+horizontal pass across the photocell for each rotation of the fiber optic
+cable. The entire rig would then reset before exposing the next frame of film.
 
 - &#x24D8; Important detail: The system which moved the cutout patterns in
     relation to the photocell didn't move back and forth during the frame
