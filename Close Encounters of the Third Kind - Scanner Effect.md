@@ -159,14 +159,14 @@ light into the rotating fiber optic assembly. The light box would make one
 horizontal pass across the photocell for each rotation of the fiber optic
 cable. The entire rig would then reset before exposing the next frame of film.
 
-- &#x24D8; Important detail: The system which moved the cutout patterns in
-    relation to the photocell didn't move back and forth during the frame
-    exposure. It moved only in one direction, making a single horizontal pass
-    across the pattern during the frame. After each frame, it was reset back to
-    its start position. Since one pass of the cutout patterns equaled one pass
-    of the cable's output end, it means that, for the lighting patterns which
-    seem to be repeating many evenly-spaced lights, each of them had to be
-    carefully cut out, individually. (Animation: Robert Swarthe)
+- &#x24D8; Important detail: The system which moved the light box in relation to
+    the photocell didn't move it back and forth during the frame exposure. It
+    moved only in one direction, making a single horizontal pass across the
+    pattern during the frame. After each frame, it was reset back to its start
+    position. Since one pass of the cutout patterns equaled one pass of the
+    cable's output end, it means that, for the lighting patterns which seem to
+    be repeating many evenly-spaced lights, each of them had to be carefully
+    cut out, individually. (Animation: Robert Swarthe)
 
 ![Animation](CE3K%20Scan%20Animated.gif)
 
