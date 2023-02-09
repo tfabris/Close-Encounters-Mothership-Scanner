@@ -73,8 +73,9 @@ Thanks to the magic of the internet, and the kind help of some friendly people
 (and because I asked very nicely), I was able to get in touch with Robert
 Swarthe, who worked on the team that created the effect and who was
 specifically mentioned in Ray's book. Robert took the time to answer all my
-questions and give as many details as he could remember. This document attempts
-to record those details for posterity.
+questions and give as many details as he could remember. Robert also solicited
+help from Scott Squires, who gave us additional clarification and details. This
+document attempts to record those details for posterity.
 
 ### Remembering the Details
 
