@@ -52,7 +52,7 @@
 // that this code is only doing subpixel resolution in the vertical dimension,
 // not horizontal, so all antialiasing occurs vertically line-to-line, not
 // sideways pixel-to-pixel.
-#define SUBPIXEL_RESOLUTION 8   // This controls the speed of the white bars.
+#define SUBPIXEL_RESOLUTION 20   // This controls the speed of the white bars.
 
 // These variables control the brightness value of the white bars in the idle
 // portion of the scanner effect, and the V of the HSV values of the flashing
@@ -67,6 +67,7 @@
 // the LED brightness much, so set conversation brightness to just 0 or 255.
 #define SCANNER_BRIGHTNESS             100
 #define CONVERSATION_BRIGHTNESS        255
+
 // Minimum and maximum random start positions for the color conversation lights
 // along the LED strand. Use these values if you want the color flashes to be
 // constrained to a certain subsection of your LED strand. In my case, my
@@ -230,7 +231,21 @@ int pixelValue (long arrayPosition)
   // Convert the binary 0 or 1 value into a pixel darkness value, i.e., 0
   // becomes 0, 1 becomes full brightness. No shades of gray at this point; the
   // code antialiases elsewhere.
-  return blackOrWhitePixel * SCANNER_BRIGHTNESS;
+  // 
+  // Note: I originally had this line:
+  //      return blackOrWhitePixel * SCANNER_BRIGHTNESS;
+  //
+  // Which was intended to work if True was 1 and False was 0. But I was finding
+  // that True was not casting to 1, it was casting to a larger number. So do
+  // this instead:
+  if (blackOrWhitePixel)
+  {
+    return SCANNER_BRIGHTNESS;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -437,6 +452,7 @@ void ce3kScanner()
 {
   static long imageOffset = 0;   // Which line of the zigzag arrays are we on?
   static int subPixelOffset = 0; // Move through the arrays slowly while antialiasing.
+  static int blendedDarkness;    // Individual pixel brightness value after antialiasing.
 
   // Perform actions which are only needed on the first run of this function.
   static bool firstTime = true;
@@ -487,9 +503,13 @@ void ce3kScanner()
     long lastPixelPosition = thisPixelPosition-ZIGZAG_SLIT_WIDTH;
 
     // Get the value of the pixels of the image arrays. 
-    int lastPixelDarkness = pixelValue(lastPixelPosition);
     int thisPixelDarkness = pixelValue(thisPixelPosition);
     int nextPixelDarkness = pixelValue(nextPixelPosition);
+
+    // I had some problems with doing antialiasing both forward and backward
+    // through the array. Experimentally remove the part of the antialiasing
+    // that did the backward part.
+    //      int lastPixelDarkness = pixelValue(lastPixelPosition); 
 
     // Blend the next and previous line's pixels into the current line's pixel.
     // There is a blend feature in FastLED to do this for us, which does
@@ -499,9 +519,14 @@ void ce3kScanner()
     // three times as much. So I'm rolling my own blend math, based on this:
     // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
     // TO DO: Refactor to use FastLED's blend routine and see if it's faster.
-    float lastBlend = (thisPixelDarkness*blendWeight)+(lastPixelDarkness*(1-blendWeight));
     float nextBlend = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
-    int blendedDarkness = (lastBlend+nextBlend)/2;
+    blendedDarkness = nextBlend;
+
+    // I had some problems with doing antialiasing both forward and backward
+    // through the array. Experimentally remove the part of the antialiasing
+    // that did the backward part.
+    //     float lastBlend = (thisPixelDarkness*blendWeight)+(lastPixelDarkness*(1-blendWeight));
+    //     blendedDarkness = (lastBlend+nextBlend)/2;
 
     // Apply the final values to the array that represents the slit. I'm using
     // only the White LED in the CRGBW array here, so the colored conversation
@@ -509,36 +534,47 @@ void ce3kScanner()
     // white LEDs. If you are using CRGB LEDs, you'll have to refactor this.
     zigzagSlit[x].white = (int)blendedDarkness;
 
-    // // ---------------------------------------------------------------------------
-    // // Debugging printouts.
-    // FastLED.show();
-    // Serial.println("");
-    // Serial.println("x = " + String(x));
-    // Serial.println("sizeof(zigzagImage01) = " + String(sizeof(zigzagImage01)));
-    // Serial.println("imageOffset = " + String(imageOffset));
-    // Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
-    // Serial.println("blendWeight = " + String(blendWeight));
-    // Serial.println("subPixelOffset = " + String(subPixelOffset));
-    // Serial.println("lastPixelPosition = " + String(lastPixelPosition));
-    // Serial.println("thisPixelPosition = " + String(thisPixelPosition));
-    // Serial.println("nextPixelPosition = " + String(nextPixelPosition));
-    // Serial.println("lastPixelDarkness = " + String(lastPixelDarkness));
-    // Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
-    // Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
-    // Serial.println("lastBlend = " + String(lastBlend));
-    // Serial.println("nextBlend = " + String(nextBlend));
-    // Serial.println("blendedDarkness = " + String(blendedDarkness));
-    // Serial.println("");
-    // // Wait for keypress
-    // while (Serial.available() < 1)
+    // ---------------------------------------------------------------------------
+    // Debugging printouts.
+    // if ( imageOffset % zigzagImage01size >= 0 )
     // {
-    //   delay(10);
-    // }
-    // while (Serial.available() > 0)
+    // if ( imageOffset % zigzagImage01size < 5 )
     // {
-    //   byte dummyread = Serial.read();
+    //   FastLED.show();
+    //   //Serial.println("");
+    //   //Serial.println("x = " + String(x));
+    //   //Serial.println("sizeof(zigzagImage01) = " + String(sizeof(zigzagImage01)));
+    //   Serial.println("imageOffset % zigzagImage01size = " + String(imageOffset % zigzagImage01size));
+    //   Serial.println("imageOffset = " + String(imageOffset));
+    //   Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
+    //   Serial.println("blendWeight = " + String(blendWeight));
+    //   Serial.println("subPixelOffset = " + String(subPixelOffset));
+    //   Serial.println("lastPixelPosition = " + String(lastPixelPosition));
+    //   Serial.println("thisPixelPosition = " + String(thisPixelPosition));
+    //   Serial.println("nextPixelPosition = " + String(nextPixelPosition));
+    //   Serial.println("lastPixelDarkness = " + String(lastPixelDarkness));
+    //   Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
+    //   Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
+    //   Serial.println("lastBlend = " + String(lastBlend));
+    //   Serial.println("nextBlend = " + String(nextBlend));
+    //   Serial.println("blendedDarkness = " + String(blendedDarkness));
+    //   //Serial.println("");
+    //   // Wait for keypress
+    //   while (Serial.available() < 1)
+    //   {
+    //     delay(10);
+    //   }
+    //   while (Serial.available() > 0)
+    //   {
+    //     byte dummyread = Serial.read();
+    //   }
     // }
-    // // ---------------------------------------------------------------------------
+    // }
+    // if ( imageOffset % zigzagImage01size >= 5)
+    // {
+    //   Serial.println("");
+    // }
+    // ---------------------------------------------------------------------------
   }
 
   // Copy the slit array onto the entire LED strand. If ZIGZAG_SLIT_WIDTH is
