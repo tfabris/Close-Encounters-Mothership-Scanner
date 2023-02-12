@@ -35,18 +35,6 @@
 // Set up variables
 // ---------------------------------------------------------------------------
 
-// This code will scroll the view of the "slit" down the zigzag pattern image.
-// It will do so in units which are smaller than each line, in order to get
-// sub-pixel resolution of the movement of the image. This variable controls
-// the number of "steps" which will occur between each line of the image. The
-// finer the subpixel resolution (the larger this variable is), then the
-// greater number of steps, so the slower that this simulation will scroll. In
-// this way, this variable is what controls the "speed" of the simulation. Note
-// that this code is only doing subpixel resolution in the vertical dimension,
-// not horizontal, so all antialiasing occurs vertically line-to-line, not
-// sideways pixel-to-pixel.
-#define SUBPIXEL_RESOLUTION 20   // This controls the speed of the white bars.
-
 // These variables control the brightness value of the white bars in the idle
 // portion of the scanner effect, and the V of the HSV values of the flashing
 // color conversation lights which appear atop the scanner. To mute either of
@@ -88,33 +76,35 @@
 #define CONVERSATION_FLASH_FREQUENCY   900 // Each blank frame, a random number of 0-1000 must exceed this number to start a new color flash (higher is less likely).
 
 // ---------------------------------------------------------------------------
-// Pattern definitions
+// Pixel array definitions
 // ---------------------------------------------------------------------------
-// The pattern arrays below are intended to simulate Robert Swarthe's cutout
-// patterns. As this program gets improved, expect these pattern arrays to get
-// updated with improved versions of the patterns. In the CE3K film, there are
-// several different sets of lighting patterns used. The long term goal is to
+// The pixel arrays below are intended to simulate Robert Swarthe's cutout
+// patterns. As this program gets improved, expect these pixel arrays to get
+// updated with improved versions. In the CE3K film, there are several
+// different sets of lighting patterns used. The long term goal is to
 // eventually simulate all the patterns seen in the film.
 //
-// Up to two patterns can be used at a time. If two patterns are used, then they
-// will be displayed as if they were overlaid atop each other on the light box.
-// If using two patterns, they can be different heights, but they must be the
-// same width. If only one pattern is needed, then use patternBlank for the
-// second pattern.
+// Up to two pixel arrays can be used at a time. If two arrays are used, then
+// they will be displayed as if they were overlaid atop each other on the light
+// box. If using two arrays, they can be different heights, but they must be
+// the same width. If only one array is needed, then use arrayBlank for the
+// second array.
 // 
-// For best results, design each pattern so that it wraps around smoothly at the
+// For best results, design each array so that it wraps around smoothly at the
 // top/bottom and sides. The code allows arrays of different heights in order
 // to help with being able to design wrap-around images.
 
-// An empty pattern. If using only one pattern, supply this as the second one.
-bool patternBlank[] = {};
-int  patternBlankSize = sizeof(patternBlank);
-int  patternBlankWidth = 0;
+// Define the special empty array "arrayBlank". The purpose of this array is so
+// that if, in a given pattern, you are using only one array instead of both
+// arrays, then supply this as the second array.
+bool arrayBlank[] = {};
+int  arrayBlankSize = sizeof(arrayBlank);
+int  arrayBlankWidth = 0;
 
-// Patterns Tony01 and Tony02, when combined together, create a particularly
-// nice and interesting pattern. Reminiscent of the film, but not the same as
-// any of the ones seen in the film.
-bool patternTony01[] = 
+// Arrays Tony01 and Tony02, when combined together, create a particularly nice
+// and interesting pattern. Reminiscent of the film, but not the same as any of
+// the ones seen in the film.
+bool arrayTony01[] = 
 {
   0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,
@@ -140,10 +130,10 @@ bool patternTony01[] =
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 };
-int patternTony01Size = sizeof(patternTony01);
-int patternTony01Width = 44;
+int arrayTony01Size = sizeof(arrayTony01);
+int arrayTony01Width = 44;
 
-bool patternTony02[] = 
+bool arrayTony02[] = 
 {
   1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,
@@ -168,13 +158,13 @@ bool patternTony02[] =
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,
 };
-int patternTony02Size = sizeof(patternTony02);
-int patternTony02Width = 44;
+int arrayTony02Size = sizeof(arrayTony02);
+int arrayTony02Width = 44;
 
 // Attempt to reproduce the counter-rotating pairs of lights, used for most of
 // the conversation scene, which seem to merge and split in pairs. This is a
-// single pattern.
-bool patternConversationPairs[] = 
+// single array, not intended to be used with a second overlaid array.
+bool arrayConversationPairs[] = 
 {
   0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
@@ -207,33 +197,121 @@ bool patternConversationPairs[] =
   0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
 };
-int patternConversationPairsSize = sizeof(patternConversationPairs);
-int patternConversationPairsWidth = 32;
+int arrayConversationPairsSize = sizeof(arrayConversationPairs);
+int arrayConversationPairsWidth = 32;
 
-// Define the widest pattern width that is expected to be used in the code. It
-// should be the widest of the patterns defined above.
-const int widestPattern = 44;
+// Another paired pattern of my own (not in the film).
+bool arrayTony03[] = 
+{
+  0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
+  0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,
+  1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+  1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,
+  1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,
+  1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,
+  1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,
+  1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,1,1,1,
+  0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,
+  0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,
+};
+int arrayTony03Size = sizeof(arrayTony03);
+int arrayTony03Width = 20;
+
+bool arrayTony04[] = 
+{
+  0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
+  0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,
+  0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,
+  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+  1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,
+  1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,
+  1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,
+  1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,
+  1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,
+  0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+  0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
+  0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+  1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,
+  1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,
+  1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,
+  1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,
+  1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,
+  1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+  0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,
+  0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,
+  0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
+  0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
+};
+int arrayTony04Size = sizeof(arrayTony04);
+int arrayTony04Width = 20;
+
+// Define the widest array width that is expected to be used in the code. It
+// should be the widest of the arrays defined above.
+const int widestArray = 44;
 
 // This is an array of values that represents the "slit" view of the zigzag
 // patterns. Note: This code was written for CRGBW strip hardware; if you are
 // using CRGB hardware, you'll need to refactor some parts of this code.
-CRGBW zigzagSlit[widestPattern];
+CRGBW zigzagSlit[widestArray];
+
+// Define a data structure called "CE3Kpattern", which holds the collected
+// information for one of the currently-running patterns. Note that a running
+// pattern can be a combination of up to two of the image arrays defined
+// above.
+// 
+// A note about the SubpixelResolution parameter: This code will scroll the view
+// of a "slit" down the zigzag pattern images. It will do so in units which are
+// smaller than one line, in order to get sub-pixel resolution of the movement
+// of the image. This variable controls the number of "steps" which will occur
+// between each line of the image. The finer the subpixel resolution (the larger
+// this variable is), then the greater number of steps, so the slower that the
+// simulation will scroll that pattern. In this way, SubpixelResolution is what
+// controls the relative "speed" of the white bars during each pattern. Note
+// that this code is only doing subpixel resolution in the vertical dimension,
+// not horizontal, so all antialiasing occurs vertically line-to-line, not
+// sideways pixel-to-pixel.
+typedef struct
+{
+  bool* ArrayA;             // Can use up to two overlapping arrays if desired.
+  bool* ArrayB;             // If using only one array, set this to arrayBlank.
+  int   SizeA;  
+  int   SizeB;    
+  int   Width;              // If using two arrays, they must both be the same width. 
+  int   SubpixelResolution; // Indirectly controls the speed of the white bars.
+} CE3Kpattern;
+
+// Variable which indicates how many total runnable patterns are going to be
+// used in this program. Note: here, we are talking about the sets of data
+// structures which contain the runnable patterns, not the pixel arrays defined
+// above. If changing the number of patterns in the program, set this number,
+// then also make sure to update the definitions in the main loop of
+// ce3kScanner() where these are defined.
+#define NUM_CE3K_PATTERNS 3
+
+// Define an array to hold all of the data structures of all of the runnable
+// patterns. At the start of the main loop, values will be assigned to the data
+// structures in this array. Then we will be able to cycle through all of the
+// patterns.
+CE3Kpattern CE3Kpatterns[NUM_CE3K_PATTERNS];
+
+// Number of milliseconds between pattern changes.
+#define CE3K_PATTERN_CHANGE_INTERVAL 15000
 
 // ---------------------------------------------------------------------------
-// Function to grab one pixel out of the zigzag pattern array(s), and turn it
+// Function to grab one pixel out of the zigzag pixel array(s), and turn it
 // into a brightness value that can be applied to the LEDs.
 // ---------------------------------------------------------------------------
 int pixelValue (long arrayPosition, bool firstArray[], int firstArraySize, bool secondArray[], int secondArraySize)
 {
-  // The pattern arrays are coded as bool, either 0 or 1, to make it easier to
+  // The pixel arrays are coded as bool, either 0 or 1, to make it easier to
   // type patterns into the arrays. If you are using two arrays, this code ANDs
   // the two arrays together so that any black stripes or are preserved. This
   // simulates the original fiber optic effect, where the light source for the
   // fiber optic strand is blocked by the pattern(s).
   bool blackOrWhitePixel;
 
-  // Allow an option to combine two patterns if desired. If two patterns are
-  // used, both arrays will have a nonzero size. Detect this and combine them.
+  // Allow an option to combine two arrays if desired. If two arrays are used,
+  // both arrays will have a nonzero size. Detect this and combine them.
   if (firstArraySize && secondArraySize)
   {
     blackOrWhitePixel =
@@ -250,8 +328,8 @@ int pixelValue (long arrayPosition, bool firstArray[], int firstArraySize, bool 
     );
   }
 
-  // If only one pattern is used, then the second array will be empty and will
-  // have a size of zero. Detect this and use only the first pattern.
+  // If only one array is used, then the second array will be empty and will
+  // have a size of zero. Detect this and use only the first array.
   if (!secondArraySize)
   {
     blackOrWhitePixel =
@@ -482,16 +560,10 @@ void CE3Kconversation()
 // ---------------------------------------------------------------------------
 void ce3kScanner()
 {
-  static long imageOffset = 0;   // Which line of the zigzag arrays are we on?
-  static int subPixelOffset = 0; // Move through the arrays slowly while antialiasing.
-  static int blendedDarkness;    // Individual pixel brightness value after antialiasing.
-
-  // Initialize the variables which will control which pattern is displayed.
-  static bool* currentPattern01 = patternBlank;
-  static bool* currentPattern02 = patternBlank;
-  static int   currentSize01 =    patternBlankSize;  
-  static int   currentSize02 =    patternBlankSize;
-  static int   currentWidth  =    patternBlankWidth;   // Note: If using two patterns, they must both be the same width.
+  static long imageOffset = 0;        // Which line of the zigzag arrays are we on?
+  static int subPixelOffset = 0;      // Move through the arrays slowly while antialiasing.
+  static CE3Kpattern currentPattern;  // Which pattern is currently running.
+  static int currentPatternIndex;     // Which index in the array of pattern data structures is the curernt pattern.
   
   // Perform actions on the first run of this function only.
   static bool firstTime = true;
@@ -499,41 +571,69 @@ void ce3kScanner()
   {
     firstTime = false;
 
-    // The first time this is called, initialize the slit view array to black.
-    fill_solid( zigzagSlit, widestPattern, CRGBW(0,0,0,0) );
+    // Initialize the slit view array to black.
+    fill_solid( zigzagSlit, widestArray, CRGBW(0,0,0,0) );
 
-    // Define the first pattern that we will be using
-    currentPattern01 = patternTony01;
-    currentPattern02 = patternTony02;
-    currentSize01 =    patternTony01Size;  
-    currentSize02 =    patternTony02Size;
-    currentWidth  =    patternTony01Width;   // Note: If using two patterns, they must both be the same width.
+    // Initialize the data in all of the pattern data structures. Make sure to
+    // update the variable definition NUM_CE3K_PATTERNS at the top of the code
+    // too. Since this is something that I might tend to forget myself, I'm
+    // using a "trick" here with the checkPatternIndex variable, to force
+    // myself to ensure that NUM_CE3K_PATTERNS equals the number of definitions
+    // here.
+    int checkPatternIndex = -1;
+
+    checkPatternIndex++;
+    CE3Kpatterns[checkPatternIndex].ArrayA = arrayTony01;
+    CE3Kpatterns[checkPatternIndex].ArrayB = arrayTony02;
+    CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony01Size;  
+    CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony02Size;
+    CE3Kpatterns[checkPatternIndex].Width  = arrayTony01Width;
+    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 15;
+
+    checkPatternIndex++;
+    CE3Kpatterns[checkPatternIndex].ArrayA = arrayTony03;
+    CE3Kpatterns[checkPatternIndex].ArrayB = arrayTony04;
+    CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony03Size;  
+    CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony04Size;
+    CE3Kpatterns[checkPatternIndex].Width  = arrayTony03Width;
+    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 40;
+
+    checkPatternIndex++;
+    CE3Kpatterns[checkPatternIndex].ArrayA = arrayConversationPairs;
+    CE3Kpatterns[checkPatternIndex].ArrayB = arrayBlank;
+    CE3Kpatterns[checkPatternIndex].SizeA  = arrayConversationPairsSize;  
+    CE3Kpatterns[checkPatternIndex].SizeB  = arrayBlankSize;
+    CE3Kpatterns[checkPatternIndex].Width  = arrayConversationPairsWidth;   
+    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 15;
+
+    // Done with defining patterns. Make sure that we defined them correctly.
+    checkPatternIndex++; // Because of zero-indexing, the count is one higher than the index.
+    if (checkPatternIndex != NUM_CE3K_PATTERNS)
+    {
+      while(true)
+      {
+        // Yell at myself if I don't update the code correctly.
+        Serial.println( F("-------------------------------------------------------------------------"));
+        Serial.println( F("Error - CE3K Scanner: NUM_CE3K_PATTERNS differs from pattern definitions."));
+        Serial.println( F("-------------------------------------------------------------------------"));
+        delay(5000);
+      }
+    }
+
+    // Decide which of the patterns we'll be starting on.
+    currentPatternIndex = 0;
+    currentPattern = CE3Kpatterns[currentPatternIndex];
   }
 
-  // // Work in progress test code. Experimenting with changing the
-  // // pattern at intervals.
-  // 
-  // if (millis() > 5000)
-  // {
-  //   currentPattern01 = patternConversationPairs;
-  //   currentPattern02 = patternBlank;
-  //   currentSize01 =    patternConversationPairsSize;  
-  //   currentSize02 =    patternBlankSize;
-  //   currentWidth  =    patternConversationPairsWidth;   // Note: If using two patterns, they must both be the same width.    
-  // }
-  //
-  // // BUG: The pattern doesn't look right after we switch back.
-  // // Whole sections fade to black. Find root cause and fix.
-  // if (millis() > 10000)
-  // {
-  //   currentPattern01 = patternTony01;
-  //   currentPattern02 = patternTony02;
-  //   currentSize01 =    patternTony01Size;  
-  //   currentSize02 =    patternTony02Size;
-  //   currentWidth  =    patternTony01Width;   // Note: If using two patterns, they must both be the same width.
-  // }
-
-
+  // Cycle to the next scanner pattern at intervals.
+  EVERY_N_MILLISECONDS(CE3K_PATTERN_CHANGE_INTERVAL)
+  {
+      imageOffset = 0;      // Must reset these variables when changing patterns
+      subPixelOffset = 0;   // in order to prevent positioning and indexing bugs.
+      currentPatternIndex ++;
+      if (currentPatternIndex >= NUM_CE3K_PATTERNS) { currentPatternIndex = 0; }
+      currentPattern = CE3Kpatterns[currentPatternIndex];    
+  }
 
   // The "weight unit" is a percentage number representing the "thickness" of 1
   // unit of subpixel resolution. For example if the subpixel resolution is set
@@ -545,7 +645,7 @@ void ce3kScanner()
   // did both 0.00 and 1.00, it would work, but it would cause a short "pause"
   // in the animation where the two similar frames met. The blend is based on:
   // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
-  static float oneSubPixelWeightUnit = ((float)1 / (float)SUBPIXEL_RESOLUTION);
+  float oneSubPixelWeightUnit = ((float)1 / (float)currentPattern.SubpixelResolution);
   float blendWeight = subPixelOffset * oneSubPixelWeightUnit;
 
   // TO DO: The blend above is a purely linear blend. Unfortunately the LEDs do
@@ -553,38 +653,29 @@ void ce3kScanner()
   // The lowest brightness level of an LED is significantly brighter than when
   // the LED is just "off". This makes the antialiased pixels kind of "pop"
   // from fully dark to dimly-lit in the final animation. This causes the
-  // transition points between black and the white pixels to seem to sort
-  // of "caterpillar" across the strand instead of flowing perfectly smoothly.
-  // It would be nice if I could come up with a nonlinear blend to make it
-  // seem more smooth.
+  // transition points between black background and the white bars to seem to
+  // "caterpillar" across the strand instead of flowing perfectly smoothly. It
+  // would be nice if I could come up with a nonlinear blend to make it seem
+  // more smooth.
 
   // TO DO: The floating point calculations are a bit slow. Idea: Use a table of
-  // blend values instead of doing the FP math each time, to improve the speed
-  // of the animation. I could pre-calculate the blend values the first time
-  // through the loop, and store them in a table, instead of realtime
-  // calculating the blend value with floating point math each time through the
-  // loop. Not sure how much this would improve the speed.
+  // blend values instead of doing the FP math each frame, to improve the speed
+  // of the animation. Each time the blend values change, I could pre-calculate
+  // the blend values and store them in a table, instead of realtime
+  // calculating the blend value with floating point math every time through
+  // the loop. Not sure how much this would improve the speed, though.
 
   // Assemble the current slit view into the slit array.
-  for (int x=0; x<currentWidth; x++ )
+  for (int x=0; x<currentPattern.Width; x++ )
   {
     // Obtain the current pixel location, and also the pixels on the prior row
     // and the following row (for antialiasing).
     long thisPixelPosition = x+imageOffset;
-    long nextPixelPosition = thisPixelPosition+currentWidth;
-    long lastPixelPosition = thisPixelPosition-currentWidth;
+    long nextPixelPosition = thisPixelPosition+currentPattern.Width;
 
     // Get the value of the pixels of the image arrays. 
-
-//pixelValue (long arrayPosition, bool firstArray[], int firstArraySize, bool secondArray[], int secondArraySize)
-
-    int thisPixelDarkness = pixelValue(thisPixelPosition, currentPattern01, currentSize01, currentPattern02, currentSize02);
-    int nextPixelDarkness = pixelValue(nextPixelPosition, currentPattern01, currentSize01, currentPattern02, currentSize02);
-
-    // I had some problems with doing antialiasing both forward and backward
-    // through the array. Experimentally remove the part of the antialiasing
-    // that did the backward part.
-    //      int lastPixelDarkness = pixelValue(lastPixelPosition); 
+    int thisPixelDarkness = pixelValue(thisPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
+    int nextPixelDarkness = pixelValue(nextPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
 
     // Blend the next and previous line's pixels into the current line's pixel.
     // There is a blend feature in FastLED to do this for us, which does
@@ -594,78 +685,55 @@ void ce3kScanner()
     // three times as much. So I'm rolling my own blend math, based on this:
     // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
     // TO DO: Refactor to use FastLED's blend routine and see if it's faster.
-    float nextBlend = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
-    blendedDarkness = nextBlend;
-
-    // I had some problems with doing antialiasing both forward and backward
-    // through the array. Experimentally remove the part of the antialiasing
-    // that did the backward part.
-    //     float lastBlend = (thisPixelDarkness*blendWeight)+(lastPixelDarkness*(1-blendWeight));
-    //     blendedDarkness = (lastBlend+nextBlend)/2;
+    int blendedDarkness = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
 
     // Apply the final values to the array that represents the slit. I'm using
     // only the White LED in the CRGBW array here, so the colored conversation
     // lights can be painted separately without having to blend them with the
     // white LEDs. If you are using CRGB LEDs, you'll have to refactor this.
-    zigzagSlit[x].white = (int)blendedDarkness;
+    zigzagSlit[x].white = blendedDarkness;
 
     // ---------------------------------------------------------------------------
     // Debugging printouts.
-    // if ( imageOffset % zigzagImage01size >= 0 )
-    // {
-    // if ( imageOffset % zigzagImage01size < 5 )
-    // {
-    //   FastLED.show();
-    //   //Serial.println("");
-    //   //Serial.println("x = " + String(x));
-    //   //Serial.println("sizeof(zigzagImage01) = " + String(sizeof(zigzagImage01)));
-    //   Serial.println("imageOffset % zigzagImage01size = " + String(imageOffset % zigzagImage01size));
-    //   Serial.println("imageOffset = " + String(imageOffset));
-    //   Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
-    //   Serial.println("blendWeight = " + String(blendWeight));
-    //   Serial.println("subPixelOffset = " + String(subPixelOffset));
-    //   Serial.println("lastPixelPosition = " + String(lastPixelPosition));
-    //   Serial.println("thisPixelPosition = " + String(thisPixelPosition));
-    //   Serial.println("nextPixelPosition = " + String(nextPixelPosition));
-    //   Serial.println("lastPixelDarkness = " + String(lastPixelDarkness));
-    //   Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
-    //   Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
-    //   Serial.println("lastBlend = " + String(lastBlend));
-    //   Serial.println("nextBlend = " + String(nextBlend));
-    //   Serial.println("blendedDarkness = " + String(blendedDarkness));
-    //   //Serial.println("");
-    //   // Wait for keypress
-    //   while (Serial.available() < 1)
-    //   {
-    //     delay(10);
-    //   }
-    //   while (Serial.available() > 0)
-    //   {
-    //     byte dummyread = Serial.read();
-    //   }
-    // }
-    // }
-    // if ( imageOffset % zigzagImage01size >= 5)
-    // {
-    //   Serial.println("");
-    // }
+      // FastLED.show();
+      // Serial.println("");
+      // Serial.println("x = " + String(x));
+      // Serial.println("imageOffset = " + String(imageOffset));
+      // Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
+      // Serial.println("blendWeight = " + String(blendWeight));
+      // Serial.println("SubpixelResolution = " + String(currentPattern.SubpixelResolution));
+      // Serial.println("subPixelOffset = " + String(subPixelOffset));
+      // Serial.println("thisPixelPosition = " + String(thisPixelPosition));
+      // Serial.println("nextPixelPosition = " + String(nextPixelPosition));
+      // Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
+      // Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
+      // Serial.println("blendedDarkness = " + String(blendedDarkness));
+      // Serial.println("");
+      // while (Serial.available() < 1)
+      // {
+      //   delay(10);
+      // }
+      // while (Serial.available() > 0)
+      // {
+      //   byte dummyread = Serial.read();
+      // }
     // ---------------------------------------------------------------------------
   }
 
-  // Copy the slit array onto the entire LED strand. If currentWidth is
+  // Copy the slit array onto the entire LED strand. If the current width is
   // less than the total number of LEDs, then it will copy it multiple times.
-  // If currentWidth is larger than the total number of LEDs, it will
+  // If the current width is larger than the total number of LEDs, it will
   // copy only the relevant subsection. More details and example found here:
   // https://github.com/marmilicious/FastLED_examples/blob/master/memmove8_pattern_copy.ino
-  for (int n=0; n<NUM_LEDS; n+=currentWidth)
+  for (int n=0; n<NUM_LEDS; n+=currentPattern.Width)
   {
     // Precalculate a number to prevent myself from writing past the end of
-    // the CRGBW array. This variable will be the same as currentWidth
+    // the CRGBW array. This variable will be the same as the current width
     // for most of the copy operations, and then on the last copy operation,
-    // it will be less than currentWidth because it is copying only up
+    // it will be less than the current width because it is copying only up
     // to the end of the LEDs array.
-    int numLedsToCopy = currentWidth;
-    if (n+currentWidth >= NUM_LEDS) 
+    int numLedsToCopy = currentPattern.Width;
+    if (n+currentPattern.Width >= NUM_LEDS) 
     {
       numLedsToCopy = NUM_LEDS-n;
     }
@@ -702,37 +770,28 @@ void ce3kScanner()
   // judder". Instead, it must skip the top value. For instance, with subpixel
   // resolution of 5, it must go 01234 01234. That makes the blend values wrap
   // around correctly at the ends of each cycle.
-  if (subPixelOffset >= SUBPIXEL_RESOLUTION)
+  if (subPixelOffset >= currentPattern.SubpixelResolution)
   {
     // If we have progressed through all of the subpixels, then it's time to
     // move on to the next line in the image.
     subPixelOffset = 0;
-    imageOffset += currentWidth; 
+    imageOffset += currentPattern.Width; 
 
     // The imageOffset is a long int, which goes up to 2147483647, which will
     // take a long long time for this particular code. In any case, we still
-    // need to ensure this never crashes by resetting imageOffset back to 0
-    // occasionally. The reset does not look smooth, but it will happen
-    // super-rarely. Still, it must get reset at some point, so that its value
-    // never wraps to negative. For example, the comparison can't be ">=
-    // 2147483647" because the variable will not ever reach that number before
-    // the variable wraps to negative. In the final code, give the variable
-    // some headroom by resetting the value well before it reaches that number.
+    // need to ensure this never crashes by resetting imageOffset back to 0 if
+    // it is allowed to get large (for example, if the code is configured to
+    // run a single pattern forever and never changes). The reset does not look
+    // smooth, but it will happen super-rarely. Still, it must get reset at
+    // some point, so that its value never wraps to negative. Note that the
+    // comparison can't be ">= 2147483647" because the variable will not ever
+    // reach that number before the variable wraps to negative (since it's
+    // incremented by pattern width rather than incremented by one). So give
+    // the variable some headroom by resetting the value well before it reaches
+    // that number.
 
-    // TO DO: In the original CE3K film, there are some interesting moments in
-    // the animation where the lights appear to briefly flicker in random
-    // patterns. Robert Swarthe tells me that these were deliberate moments
-    // that were created by cutting out squiggly line patterns. When I
-    // eventually simulate those chaotic patterns, this reset point could be
-    // modified so that one of those special patterns is triggered whenever
-    // this reset point wraps around. Then we could possibly adjust the reset
-    // point so that the special chaotic animation happens at regular
-    // intervals.
-
-    // For testing and debugging, you can temporarily change the reset point to
-    // a smaller number, so the reset will be visible in just a few loops. 
-    //    if ( (imageOffset + currentWidth) >= 1600 )    // Test-Debug a small reset point.
-    if ( (imageOffset + currentWidth) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
+    //    if ( (imageOffset + currentPattern.Width) >= 1600 )    // Test-Debug a small reset point.
+    if ( (imageOffset + currentPattern.Width) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
     {
       imageOffset = 0;
       subPixelOffset = 0;
