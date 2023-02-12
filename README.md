@@ -20,10 +20,8 @@ Videos:
 - Part of the original scene in the film: https://youtu.be/pu-W292TsRM?t=223
 - Part of the original scene in the film: https://youtu.be/S4PYI6TzqYk
 
-My code attempts to recreate the original effect as closely as possible, by
-trying to perform a direct simulation of the effect rather than simply
-imitating it. Details of the original effect are here:
-[Close Encounters of the Third Kind - Scanner Effect.md](https://github.com/tfabris/Close-Encounters-Mothership-Scanner/blob/master/Close%20Encounters%20of%20the%20Third%20Kind%20-%20Scanner%20Effect.md)
+My goal is to perform an accurate simulation of the effect, rather than just an
+imitation. Details of the original effect are here: https://bit.ly/CE3K-Scanner
 
 Special note: This code is intended for use with CRGBW LED strips. Note the "W"
 at the end of the "CRGBW". This means that the strips have red, green, and blue
