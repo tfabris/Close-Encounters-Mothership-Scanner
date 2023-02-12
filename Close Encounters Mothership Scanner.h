@@ -58,7 +58,7 @@
 // overwhelmed by the brilliance of the white bars. Due to the way the HSV
 // calculations are coded, the conversation brightness value will not change
 // the LED brightness much, so set conversation brightness to just 0 or 255.
-#define SCANNER_BRIGHTNESS             100
+#define SCANNER_BRIGHTNESS             150
 #define CONVERSATION_BRIGHTNESS        255
 
 // Minimum and maximum random start positions for the color conversation lights
@@ -87,33 +87,34 @@
 #define CONVERSATION_FLASH_FRAMESKIP   3   // If the color flash animation swells too slowly, skip more frames to make it faster.
 #define CONVERSATION_FLASH_FREQUENCY   900 // Each blank frame, a random number of 0-1000 must exceed this number to start a new color flash (higher is less likely).
 
-// The zigzagImage pixel arrays are supposed to imitate Robert Swarthe's cutout
-// patterns. Currently they do not imitate the patterns very well, but that
-// will be fixed in future updates to this code.
+// ---------------------------------------------------------------------------
+// Pattern definitions
+// ---------------------------------------------------------------------------
+// The pattern arrays below are intended to simulate Robert Swarthe's cutout
+// patterns. As this program gets improved, expect these pattern arrays to get
+// updated with improved versions of the patterns. In the CE3K film, there are
+// several different sets of lighting patterns used. The long term goal is to
+// eventually simulate all the patterns seen in the film.
 //
-// In the CE3K film, there are several different sets of lighting patterns used.
-// The long term goal is to eventually simulate all the patterns seen in the
-// film, and then to add code that will transition between the patterns.
-//
-// You can use just one array or both arrays. If you use just one, comment out
-// the other array's data so that it creates an empty array in that slot. If
-// you use both arrays they will be overlaid atop each other, simulating what
-// would happen if two patterns were put into the glass together. If using both
-// arrays, they can be different heights, but they must be the same width.
-//
-// For best results, design each image in such a way that it wraps around
-// smoothly at the top/bottom and sides. The code allows arrays of different
-// heights in order to help with being able to design wrap-around images, so
-// different arrays can wrap at different points in the time dimension.
-//
-// To experiment with different patterns, look in in the same directory as this
-// file. There should be another file called "Alternate Zigzag Patterns.txt"
-// which will have some other options. Try some of those patterns too.
-//
-// Make ZIGZAG_SLIT_WIDTH the same as the width of the array(s). Both arrays
-// must be the same width.
-#define ZIGZAG_SLIT_WIDTH 44
-bool zigzagImage01[] = 
+// Up to two patterns can be used at a time. If two patterns are used, then they
+// will be displayed as if they were overlaid atop each other on the light box.
+// If using two patterns, they can be different heights, but they must be the
+// same width. If only one pattern is needed, then use patternBlank for the
+// second pattern.
+// 
+// For best results, design each pattern so that it wraps around smoothly at the
+// top/bottom and sides. The code allows arrays of different heights in order
+// to help with being able to design wrap-around images.
+
+// An empty pattern. If using only one pattern, supply this as the second one.
+bool patternBlank[] = {};
+int  patternBlankSize = sizeof(patternBlank);
+int  patternBlankWidth = 0;
+
+// Patterns Tony01 and Tony02, when combined together, create a particularly
+// nice and interesting pattern. Reminiscent of the film, but not the same as
+// any of the ones seen in the film.
+bool patternTony01[] = 
 {
   0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,
@@ -139,9 +140,10 @@ bool zigzagImage01[] =
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 };
-int zigzagImage01size = sizeof(zigzagImage01);
+int patternTony01Size = sizeof(patternTony01);
+int patternTony01Width = 44;
 
-bool zigzagImage02[] = 
+bool patternTony02[] = 
 {
   1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,
@@ -166,28 +168,73 @@ bool zigzagImage02[] =
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,
 };
-int zigzagImage02size = sizeof(zigzagImage02);
+int patternTony02Size = sizeof(patternTony02);
+int patternTony02Width = 44;
+
+// Attempt to reproduce the counter-rotating pairs of lights, used for most of
+// the conversation scene, which seem to merge and split in pairs. This is a
+// single pattern.
+bool patternConversationPairs[] = 
+{
+  0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,
+  0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
+  0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+  0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,
+  0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,
+  0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,
+  0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,
+  1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,
+  1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+  1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+  1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+  1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,
+  0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,
+  0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,
+  0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,
+  0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,
+  0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,
+  0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
+  0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
+};
+int patternConversationPairsSize = sizeof(patternConversationPairs);
+int patternConversationPairsWidth = 32;
+
+// Define the widest pattern width that is expected to be used in the code. It
+// should be the widest of the patterns defined above.
+const int widestPattern = 44;
 
 // This is an array of values that represents the "slit" view of the zigzag
 // patterns. Note: This code was written for CRGBW strip hardware; if you are
 // using CRGB hardware, you'll need to refactor some parts of this code.
-CRGBW zigzagSlit[ZIGZAG_SLIT_WIDTH];
+CRGBW zigzagSlit[widestPattern];
 
 // ---------------------------------------------------------------------------
-// Function to grab one pixel out of the zigzag array(s), and turn it into a
-// brightness value that can be applied to the LEDs.
+// Function to grab one pixel out of the zigzag pattern array(s), and turn it
+// into a brightness value that can be applied to the LEDs.
 // ---------------------------------------------------------------------------
-int pixelValue (long arrayPosition)
+int pixelValue (long arrayPosition, bool firstArray[], int firstArraySize, bool secondArray[], int secondArraySize)
 {
-  // The zigzagImage arrays are coded as bool, either 0 or 1, to make it easier
-  // to type patterns into the arrays. If you are using two arrays, this code
-  // ANDs the two arrays together so that any black stripes or are preserved.
-  // This simulates the original fiber optic effect, where the light source for
-  // the fiber optic strand is blocked by the pattern(s).
+  // The pattern arrays are coded as bool, either 0 or 1, to make it easier to
+  // type patterns into the arrays. If you are using two arrays, this code ANDs
+  // the two arrays together so that any black stripes or are preserved. This
+  // simulates the original fiber optic effect, where the light source for the
+  // fiber optic strand is blocked by the pattern(s).
   bool blackOrWhitePixel;
 
-  // Allow an option to combine two arrays if desired.
-  if (zigzagImage01size && zigzagImage02size)
+  // Allow an option to combine two patterns if desired. If two patterns are
+  // used, both arrays will have a nonzero size. Detect this and combine them.
+  if (firstArraySize && secondArraySize)
   {
     blackOrWhitePixel =
     (
@@ -198,26 +245,18 @@ int pixelValue (long arrayPosition)
       // and the "%" operator is the math that finds out what the array position
       // would have been if it had started within this small array. This allows
       // the code to support zigzag arrays of any size.
-      zigzagImage01[arrayPosition % zigzagImage01size] &
-      zigzagImage02[arrayPosition % zigzagImage02size]
+      firstArray[arrayPosition % firstArraySize] &
+      secondArray[arrayPosition % secondArraySize]
     );
   }
 
-  // If only the second array is used, then the first array will be empty.
-  if (!zigzagImage01size)
+  // If only one pattern is used, then the second array will be empty and will
+  // have a size of zero. Detect this and use only the first pattern.
+  if (!secondArraySize)
   {
     blackOrWhitePixel =
     (
-      zigzagImage02[arrayPosition % zigzagImage02size]
-    );
-  }
-
-  // If only the first array is used, then the second array will be empty.
-  if (!zigzagImage02size)
-  {
-    blackOrWhitePixel =
-    (
-      zigzagImage01[arrayPosition % zigzagImage01size]
+      firstArray[arrayPosition % firstArraySize]
     );
   }
 
@@ -447,14 +486,54 @@ void ce3kScanner()
   static int subPixelOffset = 0; // Move through the arrays slowly while antialiasing.
   static int blendedDarkness;    // Individual pixel brightness value after antialiasing.
 
-  // Perform actions which are only needed on the first run of this function.
+  // Initialize the variables which will control which pattern is displayed.
+  static bool* currentPattern01 = patternBlank;
+  static bool* currentPattern02 = patternBlank;
+  static int   currentSize01 =    patternBlankSize;  
+  static int   currentSize02 =    patternBlankSize;
+  static int   currentWidth  =    patternBlankWidth;   // Note: If using two patterns, they must both be the same width.
+  
+  // Perform actions on the first run of this function only.
   static bool firstTime = true;
   if (firstTime)
   {
-    // The first time this is called, initialize the slit view array to black.
-    fill_solid( zigzagSlit, ZIGZAG_SLIT_WIDTH, CRGBW(0,0,0,0) );
     firstTime = false;
+
+    // The first time this is called, initialize the slit view array to black.
+    fill_solid( zigzagSlit, widestPattern, CRGBW(0,0,0,0) );
+
+    // Define the first pattern that we will be using
+    currentPattern01 = patternTony01;
+    currentPattern02 = patternTony02;
+    currentSize01 =    patternTony01Size;  
+    currentSize02 =    patternTony02Size;
+    currentWidth  =    patternTony01Width;   // Note: If using two patterns, they must both be the same width.
   }
+
+  // // Work in progress test code. Experimenting with changing the
+  // // pattern at intervals.
+  // 
+  // if (millis() > 5000)
+  // {
+  //   currentPattern01 = patternConversationPairs;
+  //   currentPattern02 = patternBlank;
+  //   currentSize01 =    patternConversationPairsSize;  
+  //   currentSize02 =    patternBlankSize;
+  //   currentWidth  =    patternConversationPairsWidth;   // Note: If using two patterns, they must both be the same width.    
+  // }
+  //
+  // // BUG: The pattern doesn't look right after we switch back.
+  // // Whole sections fade to black. Find root cause and fix.
+  // if (millis() > 10000)
+  // {
+  //   currentPattern01 = patternTony01;
+  //   currentPattern02 = patternTony02;
+  //   currentSize01 =    patternTony01Size;  
+  //   currentSize02 =    patternTony02Size;
+  //   currentWidth  =    patternTony01Width;   // Note: If using two patterns, they must both be the same width.
+  // }
+
+
 
   // The "weight unit" is a percentage number representing the "thickness" of 1
   // unit of subpixel resolution. For example if the subpixel resolution is set
@@ -487,17 +566,20 @@ void ce3kScanner()
   // loop. Not sure how much this would improve the speed.
 
   // Assemble the current slit view into the slit array.
-  for (int x=0; x<ZIGZAG_SLIT_WIDTH; x++ )
+  for (int x=0; x<currentWidth; x++ )
   {
     // Obtain the current pixel location, and also the pixels on the prior row
     // and the following row (for antialiasing).
     long thisPixelPosition = x+imageOffset;
-    long nextPixelPosition = thisPixelPosition+ZIGZAG_SLIT_WIDTH;
-    long lastPixelPosition = thisPixelPosition-ZIGZAG_SLIT_WIDTH;
+    long nextPixelPosition = thisPixelPosition+currentWidth;
+    long lastPixelPosition = thisPixelPosition-currentWidth;
 
     // Get the value of the pixels of the image arrays. 
-    int thisPixelDarkness = pixelValue(thisPixelPosition);
-    int nextPixelDarkness = pixelValue(nextPixelPosition);
+
+//pixelValue (long arrayPosition, bool firstArray[], int firstArraySize, bool secondArray[], int secondArraySize)
+
+    int thisPixelDarkness = pixelValue(thisPixelPosition, currentPattern01, currentSize01, currentPattern02, currentSize02);
+    int nextPixelDarkness = pixelValue(nextPixelPosition, currentPattern01, currentSize01, currentPattern02, currentSize02);
 
     // I had some problems with doing antialiasing both forward and backward
     // through the array. Experimentally remove the part of the antialiasing
@@ -570,20 +652,20 @@ void ce3kScanner()
     // ---------------------------------------------------------------------------
   }
 
-  // Copy the slit array onto the entire LED strand. If ZIGZAG_SLIT_WIDTH is
+  // Copy the slit array onto the entire LED strand. If currentWidth is
   // less than the total number of LEDs, then it will copy it multiple times.
-  // If ZIGZAG_SLIT_WIDTH is larger than the total number of LEDs, it will
+  // If currentWidth is larger than the total number of LEDs, it will
   // copy only the relevant subsection. More details and example found here:
   // https://github.com/marmilicious/FastLED_examples/blob/master/memmove8_pattern_copy.ino
-  for (int n=0; n<NUM_LEDS; n+=ZIGZAG_SLIT_WIDTH)
+  for (int n=0; n<NUM_LEDS; n+=currentWidth)
   {
     // Precalculate a number to prevent myself from writing past the end of
-    // the CRGBW array. This variable will be the same as ZIGZAG_SLIT_WIDTH
+    // the CRGBW array. This variable will be the same as currentWidth
     // for most of the copy operations, and then on the last copy operation,
-    // it will be less than ZIGZAG_SLIT_WIDTH because it is copying only up
+    // it will be less than currentWidth because it is copying only up
     // to the end of the LEDs array.
-    int numLedsToCopy = ZIGZAG_SLIT_WIDTH;
-    if (n+ZIGZAG_SLIT_WIDTH >= NUM_LEDS) 
+    int numLedsToCopy = currentWidth;
+    if (n+currentWidth >= NUM_LEDS) 
     {
       numLedsToCopy = NUM_LEDS-n;
     }
@@ -625,7 +707,7 @@ void ce3kScanner()
     // If we have progressed through all of the subpixels, then it's time to
     // move on to the next line in the image.
     subPixelOffset = 0;
-    imageOffset += ZIGZAG_SLIT_WIDTH; 
+    imageOffset += currentWidth; 
 
     // The imageOffset is a long int, which goes up to 2147483647, which will
     // take a long long time for this particular code. In any case, we still
@@ -649,8 +731,8 @@ void ce3kScanner()
 
     // For testing and debugging, you can temporarily change the reset point to
     // a smaller number, so the reset will be visible in just a few loops. 
-    //    if ( (imageOffset + ZIGZAG_SLIT_WIDTH) >= 1600 )    // Test-Debug a small reset point.
-    if ( (imageOffset + ZIGZAG_SLIT_WIDTH) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
+    //    if ( (imageOffset + currentWidth) >= 1600 )    // Test-Debug a small reset point.
+    if ( (imageOffset + currentWidth) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
     {
       imageOffset = 0;
       subPixelOffset = 0;
