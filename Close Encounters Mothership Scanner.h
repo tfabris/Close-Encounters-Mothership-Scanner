@@ -17,9 +17,8 @@
 // interesting pattern. This code attempts to translate that physical
 // long-exposure effect into addressable LED strips.
 //
-// My version attempts to recreate the original effect, by trying to perform a
-// more direct simulation rather than an imitation. Details of the original
-// effect are here:
+// My goal is to perform an accurate simulation of the effect, rather than just
+// an imitation. Details of the original effect are here:
 //
 //                       https://bit.ly/CE3K-Scanner
 //
