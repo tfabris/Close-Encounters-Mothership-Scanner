@@ -71,7 +71,7 @@ book.
 
 Thanks to the magic of the internet, and the kind help of some friendly people
 (and because I asked very nicely), I was able to get in touch with Robert
-Swarthe, who worked on the team that created the effect and who was
+Swarthe, who worked on the team that created the effect, and who was
 specifically mentioned in Ray's book. Robert took the time to answer all my
 questions and give as many details as he could remember. Robert also solicited
 help from Scott Squires, who gave us additional clarification and details. This
@@ -148,16 +148,23 @@ Each long-exposure frame was photographed individually, with each exposure
 taking 15 seconds or more to complete. During each frame, the rig would make
 one pass. Each pass equaled one revolution of the fiber optic cable rotating
 around the circular opening, while simultaneously, the rig with the light box
-and the patterns was moved in sync. According to Scott Squires, the rig with
-the light box and the patterns was an X/Y animation light table on its side,
-motorized by a MiniScan motion control system. The fiber optic cable had its
-own light source and an electronic shutter, which would open and close
-depending on a photocell attached to a light stand in front of the light box.
+and the patterns was moved in sync.
+
+According to Scott Squires, the rig with the light box and the patterns was an
+X/Y animation light table on its side, motorized by a MiniScan motion control
+system. In front of the light box was a photocell attached to a light stand.
 The photocell stayed fixed, while the light box with the patterns moved past
-it. Any light hitting the photocell would cause the shutter to open, letting
-light into the rotating fiber optic assembly. The light box would make one
-horizontal pass across the photocell for each rotation of the fiber optic
-cable. The entire rig would then reset before exposing the next frame of film.
+it.
+
+The fiber optic cable which emitted the scanner light had its own light source
+and an electronic shutter, which was wired to open and close depending on the
+photocell in front of the light box. Any light hitting the photocell would
+cause the light source's electronic shutter to open, causing light to emit from
+the fiber optic assembly.
+
+The light box would make one horizontal pass across the photocell for each
+rotation of the fiber optic cable. The entire rig would then reset before
+exposing the next frame of film.
 
 - &#x24D8; Important detail: The system which moved the light box in relation to
     the photocell didn't move it back and forth during the frame exposure. It
@@ -171,13 +178,13 @@ cable. The entire rig would then reset before exposing the next frame of film.
 ![Animation](CE3K%20Scan%20Animated.gif)
 
 When the rig reset for the next frame of film, before the next exposure, the
-light table with the cutout pattern would get moved slightly vertically, upward
+light box with the cutout pattern would get moved slightly vertically, upward
 or downward in relation to the photocell, just a fraction of an inch. This way,
 each frame, the photocell would trace a slightly different path across the
-pattern. According to Scott Squires, the cutout patterns were usually diagonal,
-to cause the lights to rotate with each vertical step of the light box.
-Patterns with long tapers would cause the the lights to seem to widen or
-shrink.
+pattern. According to Scott Squires, the cutout patterns were usually made in
+diagonal shapes, to cause the lights to rotate with each vertical step of the
+light box. Patterns with long tapers would cause the the lights to seem to
+widen or shrink.
 
 ### Multiple Patterns
 
@@ -197,24 +204,29 @@ try to update this section as I get more information.
 - The next pattern is seen as the scientists are rolling the organ keyboard
   forward towards the mothership. The pattern is composed of differing widths
   of bars which merge and separate. During the scene, if you look closely, you
-  can see this pattern seems to reverse backwards onto itself. According to
-  Scott Squires, this was done within the cutout patterns themselves, which
-  Scott says would have been like cross hatch lines.
+  can see this pattern seems to change direction and reverse during the shot.
+  According to Scott Squires, this was done within the cutout patterns
+  themselves, which Scott says would have been like cross hatch lines.
 
 - The pattern for most of the musical sequence and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
   counter-rotate, causing them to seem to merge and separate in pairs. My
   initial guess is that the cutout version of this pattern would have looked
-  like symmetrical black diamond shapes. The negative space around the black
-  diamonds would form a crosshatch of clear diagonal stripes on a black
-  background. Another method could have been using two sets of opposing black
-  sawtooth shapes, like meshing shark teeth, and then reversing the vertical
-  advancement direction of the light box each time it reaches the top or
-  bottom edge of the pattern. 
+  like symmetrical black diamond shapes, with the negative space around the
+  black diamonds forming a crosshatch of diagonal clear stripes. Another method
+  would have been to cut out diagonal black stripes, lay them down in a
+  crosshatch pattern, and use a negative transparency print of that, for the
+  light box. Finally, it could also have been done by using two sets of
+  opposing black sawtooth shapes, like meshing shark teeth with a small gap
+  between the upper and lower teeth, and then use the motion control system to
+  reverse the vertical advancement direction of the light box each time it
+  reaches the top or bottom edge of the pattern. Any of those methods could
+  have produced the result seen in the film.
 
   - &#x24D8; To do: Find out if anyone recalls if that's the way that particular
-      pattern was done. Does that happen to be the same pattern that Robert is
-      cutting out in the photo above?
+      pattern was done. If it's the shark teeth pattern described above, does
+      that happen to be the same pattern that Robert is cutting out in the
+      photo above?
 
 - At some moments, a particularly chaotic sequence of lights is displayed,
   including the moment where a loud note causes glass to break. Robert said
