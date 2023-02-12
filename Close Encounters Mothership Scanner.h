@@ -17,17 +17,11 @@
 // interesting pattern. This code attempts to translate that physical
 // long-exposure effect into addressable LED strips.
 //
-// There are some other existing pieces of prior art which attempt to do the
-// same effect. But those versions are not trying to exactly duplicate the
-// method that was used for creating the original visual effect in the movie.
-// Prior art examples (I am not using these):
-// - https://gist.github.com/jasoncoon/d4c935566ec82731fece
-// - https://youtu.be/aEVh9WNl57A
+// My version attempts to recreate the original effect, by trying to perform a
+// more direct simulation rather than an imitation. Details of the original
+// effect are here:
 //
-// My version attempts to recreate the original effect more closely, by trying
-// to perform a more direct simulation rather than an imitation. Details of
-// the original effect are here:
-// https://github.com/tfabris/Close-Encounters-Mothership-Scanner/blob/master/Close%20Encounters%20of%20the%20Third%20Kind%20-%20Scanner%20Effect.md
+//                       https://bit.ly/CE3K-Scanner
 //
 // Special note: This code is intended for use with CRGBW LED strips. Note
 // the "W" at the end of the "CRGBW". This means that the strips have red,
