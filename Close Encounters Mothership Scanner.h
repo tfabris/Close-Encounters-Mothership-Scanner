@@ -18,9 +18,9 @@
 // long-exposure effect into addressable LED strips.
 //
 // My goal is to perform an accurate simulation of the effect, rather than just
-// an imitation. Details of the original effect are here:
+// an imitation. Full details of how the original effect was done:
 //
-//                       https://bit.ly/CE3K-Scanner
+//                    https://bit.ly/CE3K-Scanner
 //
 // Special note: This code is intended for use with CRGBW LED strips. Note
 // the "W" at the end of the "CRGBW". This means that the strips have red,
@@ -93,6 +93,12 @@
 // For best results, design each array so that it wraps around smoothly at the
 // top/bottom and sides. The code allows arrays of different heights in order
 // to help with being able to design wrap-around images.
+//
+// If new arrays have are added here, remember to also update the place at the
+// beginning of the ce3kScanner() function which defines the data structure of
+// each pattern, and also update the NUM_CE3K_PATTERNS and WIDEST_ARRAY
+// values.
+// ---------------------------------------------------------------------------
 
 // Define the special empty array "arrayBlank". The purpose of this array is so
 // that if, in a given pattern, you are using only one array instead of both
@@ -162,8 +168,8 @@ int arrayTony02Size = sizeof(arrayTony02);
 int arrayTony02Width = 44;
 
 // Attempt to reproduce the counter-rotating pairs of lights, used for most of
-// the conversation scene, which seem to merge and split in pairs. This is a
-// single array, not intended to be used with a second overlaid array.
+// the conversation scene, which seem to merge and split. This is a single
+// array, not intended to be used with a second overlaid array.
 bool arrayConversationPairs[] = 
 {
   0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -200,7 +206,7 @@ bool arrayConversationPairs[] =
 int arrayConversationPairsSize = sizeof(arrayConversationPairs);
 int arrayConversationPairsWidth = 32;
 
-// Another paired pattern of my own (not in the film).
+// Another set of two overlaid patterns of my own (not in the film).
 bool arrayTony03[] = 
 {
   0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
@@ -247,12 +253,12 @@ int arrayTony04Width = 20;
 
 // Define the widest array width that is expected to be used in the code. It
 // should be the widest of the arrays defined above.
-const int widestArray = 44;
+#define WIDEST_ARRAY 44
 
 // This is an array of values that represents the "slit" view of the zigzag
 // patterns. Note: This code was written for CRGBW strip hardware; if you are
 // using CRGB hardware, you'll need to refactor some parts of this code.
-CRGBW zigzagSlit[widestArray];
+CRGBW zigzagSlit[WIDEST_ARRAY];
 
 // Define a data structure called "CE3Kpattern", which holds the collected
 // information for one of the currently-running patterns. Note that a running
@@ -283,9 +289,9 @@ typedef struct
 // Variable which indicates how many total runnable patterns are going to be
 // used in this program. Note: here, we are talking about the sets of data
 // structures which contain the runnable patterns, not the pixel arrays defined
-// above. If changing the number of patterns in the program, set this number,
-// then also make sure to update the definitions in the main loop of
-// ce3kScanner() where these are defined.
+// above. If changing the number of patterns in the program, first update the
+// definitions at the beginning of the ce3kScanner() function which update the
+// pattern data structures, then update this number to match.
 #define NUM_CE3K_PATTERNS 3
 
 // Define an array to hold all of the data structures of all of the runnable
@@ -572,7 +578,7 @@ void ce3kScanner()
     firstTime = false;
 
     // Initialize the slit view array to black.
-    fill_solid( zigzagSlit, widestArray, CRGBW(0,0,0,0) );
+    fill_solid( zigzagSlit, WIDEST_ARRAY, CRGBW(0,0,0,0) );
 
     // Initialize the data in all of the pattern data structures. Make sure to
     // update the variable definition NUM_CE3K_PATTERNS at the top of the code

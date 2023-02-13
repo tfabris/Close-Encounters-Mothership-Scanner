@@ -11,6 +11,10 @@
 // included file:
 //   "Close Encounters Mothership Scanner.h"
 //
+// Full details of how the original effect was done:
+//
+//   https://bit.ly/CE3K-Scanner
+//
 // This code runs on an Arduino Mega 2560, either full or small version:
 //   https://www.amazon.com/dp/B0046AMGW0
 //   https://www.amazon.com/dp/B07TGF9VMQ
