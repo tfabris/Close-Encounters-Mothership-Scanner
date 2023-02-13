@@ -8,11 +8,11 @@ Arduino code for the FastLED library using WS2812 LED strips, also known as
 Neopixels. This code is intended to run on an Arduino Mega, but it could be
 adapted for other processors. This code is trying to accurately simulate this:
 
-<center>
+<center><p style="text-align: center;">
 
 ![CE3KMovieStill](CE3K%20Movie%20Still%20Small.jpg)
 
-</center>
+</p></center>
 
 This is the "Scanner ring" effect from the mothership from the Steven Spielberg
 film *Close Encounters of the Third Kind*. When the mothership extends its
@@ -22,13 +22,13 @@ attempts to translate that physical long-exposure effect into addressable LED
 strips. My goal is to perform an accurate simulation of the effect, rather than
 just an imitation.
 
-<center>
+<center><p style="text-align: center;">
 
 Full details of how the original effect was done:
 
 https://bit.ly/CE3K-Scanner
 
-</center>
+</p></center>
 
 ### Videos:
 - This code running on my LED shelves: https://youtu.be/tTZtArMXk0Y
