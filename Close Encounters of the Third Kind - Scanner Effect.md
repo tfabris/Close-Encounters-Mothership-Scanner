@@ -71,26 +71,26 @@ book.
 
 Thanks to the magic of the internet, and the kind help of some friendly people
 (and because I asked very nicely), I was able to get in touch with Robert
-Swarthe, who worked on the team that created the effect, and who was
-specifically mentioned in Ray's book. Robert took the time to answer all my
-questions and give as many details as he could remember. Robert also solicited
-help from Scott Squires, who gave us additional clarification and details. This
+Swarthe, the animator who was specifically mentioned in Ray's book as the one
+who made the black cutout patterns. Robert put me in touch with Scott Squires
+as well, who photographed the sequence and who worked directly with Robert.
+
+Robert and Scott have been awesome. They supplied the photos below, and Robert
+even made an animated diagram, also included below. They took the time to
+answer all my questions and gave as many details as they could remember. This
 document attempts to record those details for posterity.
 
 ### Remembering the Details
 
 The information below is based on the description in Ray Morton's book, and from
-conversations with Robert Swarthe, with additional information from Scott
-Squires. Robert was awesome: not only did he answer my questions and tell great
-stories, and put me in touch with other people too, he even supplied the
-animated diagram included below. Robert worked on several aspects of the film's
-effects, alongside Richard Yuricich, Doug Trumbull, Don Trumbull, Dennis Muren,
-and Scott Squires, among other SFX artists. Robert was responsible for creating
-the zigzag pattern cutouts which were the main source of the scanner's light
-patterns, as well hand-animating the colored light flashes which overlaid the
-patterns. The mechanical fiber optic rig was likely designed and created by
-Richard Yuricich, Don Trumbull, other team members. Scott Squires and Dennis
-Muren did the photography.
+conversations with Robert Swarthe, and Scott Squires. Robert and Scott worked
+on several aspects of the film's effects, alongside Richard Yuricich, Doug
+Trumbull, Don Trumbull, Dennis Muren, among other SFX artists. Robert was
+responsible for creating the zigzag pattern cutouts which were the main source
+of the scanner's light patterns, as well hand-animating the colored light
+flashes which overlaid the patterns. The mechanical fiber optic rig was likely
+designed and built by Richard Yuricich, Don Trumbull, other team members. Scott
+Squires and Dennis Muren did the photography.
 
 Keep in mind that it's been over 40 years since the film was made, and no single
 person worked on every aspect of this effect. The information below is the best
