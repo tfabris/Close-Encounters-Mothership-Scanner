@@ -145,7 +145,7 @@ effect, long exposures were an important part of the final look.
 ![BobAtWork](Bob%20at%20Work.jpg)
 
 Each long-exposure frame was photographed individually, with each exposure
-taking 15 seconds or more to complete. During each frame, the rig would make
+taking 30 seconds or more to complete. During each frame, the rig would make
 one pass. Each pass equaled one revolution of the fiber optic cable rotating
 around the circular opening, while simultaneously, the rig with the light box
 and the patterns was moved in sync.
