@@ -132,7 +132,7 @@ effect, long exposures were an important part of the final look.
 
 - &#x24D8; You can see Robert cutting one of the pattern sets in the photo
     below. The patterns were drawn onto white paper first, and then cut into
-    black Exeter paper with an x-acto blade. Exeter paper is a lightproof paper
+    black Exeter paper with an X-Acto blade. Exeter paper is a lightproof paper
     which was popularly used for mattes in special effects work. Exeter paper
     was also used as the black background for the starfields in *Close
     Encounters*, because the camera sees only the white stars and not the
