@@ -83,7 +83,7 @@ document attempts to record those details for posterity.
 ### Remembering the Details
 
 The information below is based on the description in Ray Morton's book, and from
-conversations with Robert Swarthe, and Scott Squires. Robert and Scott worked
+conversations with Robert Swarthe and Scott Squires. Robert and Scott worked
 on several aspects of the film's effects, alongside Richard Yuricich, Doug
 Trumbull, Don Trumbull, Dennis Muren, among other SFX artists. Robert was
 responsible for creating the zigzag pattern cutouts which were the main source
