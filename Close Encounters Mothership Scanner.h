@@ -641,6 +641,19 @@ void ce3kScanner()
       currentPattern = CE3Kpatterns[currentPatternIndex];    
   }
 
+  // Sanity check that I remembered to set WIDEST_ARRAY correctly.
+  if (currentPattern.Width > WIDEST_ARRAY)
+  {
+    while(true)
+    {
+      // Yell at myself if I didn't update WIDEST_ARRAY correctly.
+      Serial.println( F("-------------------------------------------------------------------------"));
+      Serial.println( F("Error - CE3K Scanner: currentPattern width is wider than WIDEST_ARRAY."));
+      Serial.println( F("-------------------------------------------------------------------------"));
+      delay(5000);
+    }
+  }  
+
   // The "weight unit" is a percentage number representing the "thickness" of 1
   // unit of subpixel resolution. For example if the subpixel resolution is set
   // to 5, then each one of these units would be 0.20. The "weight" is this
