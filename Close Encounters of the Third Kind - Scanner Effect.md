@@ -130,11 +130,11 @@ The concept of the scanner effect was Douglas Trumbull's design. It indeed
 worked similarly to his slit-scan effect from *2001*. And like the slit-scan
 effect, long exposures were an important part of the final look.
 
-- &#x24D8; You can see Robert cutting one of the pattern sets in the photo
-    below. The patterns were drawn onto white paper first, and then cut into
-    black Exeter paper with an X-Acto blade. Exeter paper is a lightproof paper
-    which was popularly used for mattes in special effects work. Exeter paper
-    was also used as the black background for the starfields in *Close
+- &#x24D8; You can see Robert Swarthe cutting one of the pattern sets in the
+    photo below. The patterns were drawn onto white paper first, and then cut
+    into black Exeter paper with an X-Acto blade. Exeter paper is a lightproof
+    paper which was popularly used for mattes in special effects work. Exeter
+    paper was also used as the black background for the starfields in *Close
     Encounters*, because the camera sees only the white stars and not the
     intense black background. From the looks of the photo, the cut patterns
     were about 18 inches long or so. Robert says that these paper cut-outs were
