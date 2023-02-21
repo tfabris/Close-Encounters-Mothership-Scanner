@@ -141,8 +141,7 @@ effect, long exposures were an important part of the final look.
     probably made into high-contrast 8"x10" positive and negative
     transparencies for use in the scanner rig. (Photo credit: Unknown. Photo
     courtesy of Robert Swarthe)
-
-![BobAtWork](Bob%20at%20Work.jpg)
+    ![BobAtWork](Bob%20at%20Work.jpg)
 
 Each long-exposure frame was photographed individually, with each exposure
 taking 30 seconds or more to complete. During each frame, the rig would make
@@ -174,8 +173,7 @@ exposing the next frame of film.
     cable's output end, it means that, for the lighting patterns which seem to
     be repeating many evenly-spaced lights, each of them had to be carefully
     cut out, individually. (Animation: Robert Swarthe)
-
-![Animation](CE3K%20Scan%20Animated.gif)
+    ![Animation](CE3K%20Scan%20Animated.gif)
 
 When the rig reset for the next frame of film, before the next exposure, the
 light box with the cutout pattern would get moved slightly vertically, upward
@@ -185,6 +183,11 @@ pattern. According to Scott Squires, the cutout patterns were usually made in
 diagonal shapes, to cause the lights to rotate with each vertical step of the
 light box. Patterns with long tapers would cause the the lights to seem to
 widen or shrink.
+
+- &#x24D8; Test polaroids of the "B" and "C" patterns. (Photos: Scott Squires)
+  | ![Test Polaroid B C Front](Test%20Polaroid%20B%20C%20Front.jpeg) | ![Test Polaroid B C Back](Test%20Polaroid%20B%20C%20Back.jpeg) |
+  | -----------------------------------------------------------------|----------------------------------------------------------------|
+  | ![Test Polaroid C C Front](Test%20Polaroid%20C%20C%20Front.jpeg) | ![Test Polaroid C C Back](Test%20Polaroid%20C%20C%20Back.jpeg) |
 
 ### Multiple Patterns
 
