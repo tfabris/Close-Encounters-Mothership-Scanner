@@ -188,7 +188,12 @@ diagonal shapes, to cause the lights to rotate with each vertical step of the
 light box. Patterns with long tapers would cause the the lights to seem to
 widen or shrink.
 
-- &#x24D8; Test polaroids of the "B" and "C" patterns. (Photos: Scott Squires)
+- &#x24D8; Test Polaroids of the "B" and "C" patterns. Note how the Polaroids
+    are labeled "White Open" or "Black Open". Scott says that it's likely that
+    the system could be switched between those two modes: "White Open" would
+    open the electronic shutter when the photocell encountered light,
+    and "Black Open" would do the opposite, closing the electronic shutter when
+    the photocell encountered light. (Photos: Scott Squires)
   | ![Test Polaroid B C Front](Test%20Polaroid%20B%20C%20Front.jpeg) | ![Test Polaroid B C Back](Test%20Polaroid%20B%20C%20Back.jpeg) |
   | -----------------------------------------------------------------|----------------------------------------------------------------|
   | ![Test Polaroid C C Front](Test%20Polaroid%20C%20C%20Front.jpeg) | ![Test Polaroid C C Back](Test%20Polaroid%20C%20C%20Back.jpeg) |
