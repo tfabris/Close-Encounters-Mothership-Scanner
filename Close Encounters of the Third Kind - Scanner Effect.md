@@ -155,6 +155,10 @@ system. In front of the light box was a photocell attached to a light stand.
 The photocell stayed fixed, while the light box with the patterns moved past
 it.
 
+- &#x24D8; Photo of one of the scanner patterns on the animation stand. with the
+    photocell. (Photo credit: Trying to obtain photo credit details now)
+    ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
+
 The fiber optic cable which emitted the scanner light had its own light source
 and an electronic shutter, which was wired to open and close depending on the
 photocell in front of the light box. Any light hitting the photocell would
@@ -174,10 +178,6 @@ exposing the next frame of film.
     be repeating many evenly-spaced lights, each of them had to be carefully
     cut out, individually. (Animation: Robert Swarthe)
     ![Animation](CE3K%20Scan%20Animated.gif)
-
-- &#x24D8; Photo of one of the scanner patterns on the animation stand.
-    (Photo credit: Trying to obtain photo credit details now)
-    ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
 
 When the rig reset for the next frame of film, before the next exposure, the
 light box with the cutout pattern would get moved slightly vertically, upward
