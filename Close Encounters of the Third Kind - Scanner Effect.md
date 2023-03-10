@@ -122,7 +122,7 @@ and sent to the optical printing department where it was combined with the
 live-action footage and a matte painting. Then, the un-developed optical
 internegative was sent to the animation department where the colored
 conversation lights were added, hand-animated, using an Oxberry animation stand
-by Robert Swarthe, assisted by Scott Squires.
+by Robert Swarthe and Scott Squires.
 
 ### Scanner Details
 
