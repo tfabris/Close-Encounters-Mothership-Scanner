@@ -217,8 +217,10 @@ try to update this section as I get more information.
 
 - The pattern for most of the musical sequence and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
-  counter-rotate, causing them to seem to merge and separate in pairs. One of
-  the photos above shows something that looks like it might be this pattern.
+  counter-rotate, causing them to seem to merge and separate in pairs. This
+  would have been created by lines making long diamond-shaped patterns; a photo
+  above, showing the pattern on the animation stand, looks like it might be
+  this pattern.
 
 - At some moments, a particularly chaotic sequence of lights is displayed,
   including the moment where a loud note causes glass to break. Robert said
