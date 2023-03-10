@@ -175,6 +175,10 @@ exposing the next frame of film.
     cut out, individually. (Animation: Robert Swarthe)
     ![Animation](CE3K%20Scan%20Animated.gif)
 
+- &#x24D8; Photo of one of the scanner patterns on the animation stand.
+    (Photo credit: Trying to obtain photo credit details now)
+    ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
+
 When the rig reset for the next frame of film, before the next exposure, the
 light box with the cutout pattern would get moved slightly vertically, upward
 or downward in relation to the photocell, just a fraction of an inch. This way,
@@ -213,23 +217,8 @@ try to update this section as I get more information.
 
 - The pattern for most of the musical sequence and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
-  counter-rotate, causing them to seem to merge and separate in pairs. My
-  initial guess is that the cutout version of this pattern would have looked
-  like symmetrical black diamond shapes, with the negative space around the
-  black diamonds forming a crosshatch of diagonal clear stripes. Another method
-  would have been to cut out diagonal black stripes, lay them down in a
-  crosshatch pattern, and use a negative transparency print of that, for the
-  light box. Finally, it could also have been done by using two sets of
-  opposing black sawtooth shapes, like meshing shark teeth with a small gap
-  between the upper and lower teeth, and then use the motion control system to
-  reverse the vertical advancement direction of the light box each time it
-  reaches the top or bottom edge of the pattern. Any of those methods could
-  have produced the result seen in the film.
-
-  - &#x24D8; To do: Find out if anyone recalls if that's the way that particular
-      pattern was done. If it's the shark teeth pattern described above, does
-      that happen to be the same pattern that Robert is cutting out in the
-      photo above?
+  counter-rotate, causing them to seem to merge and separate in pairs. One of
+  the photos above shows something that looks like it might be this pattern.
 
 - At some moments, a particularly chaotic sequence of lights is displayed,
   including the moment where a loud note causes glass to break. Robert said
