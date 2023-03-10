@@ -159,11 +159,11 @@ it.
     photocell. (Photo credit: Trying to obtain photo credit details now)
     ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
 
-The fiber optic cable which emitted the scanner light had its own light source
-and an electronic shutter, which was wired to open and close depending on the
-photocell in front of the light box. Any light hitting the photocell would
-cause the light source's electronic shutter to open, causing light to emit from
-the fiber optic assembly.
+The fiber optic cable in the mothership dome model, which emitted the scanner
+light, had its own light source and an electronic shutter, which was wired to
+open and close depending on the photocell in front of the light box. Any light
+hitting the photocell would cause the light source's electronic shutter to
+open, causing light to emit from the fiber optic assembly.
 
 The light box would make one horizontal pass across the photocell for each
 rotation of the fiber optic cable. The entire rig would then reset before
