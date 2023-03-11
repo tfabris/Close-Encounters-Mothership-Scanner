@@ -155,7 +155,7 @@ system. In front of the light box was a photocell attached to a light stand.
 The photocell stayed fixed, while the light box with the patterns moved past
 it.
 
-- &#x24D8; Photo of one of the scanner patterns on the animation stand. with the
+- &#x24D8; Photo of one of the scanner patterns on the animation stand, with the
     photocell. (Photo credit: Dennis Muren)
     ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
 
