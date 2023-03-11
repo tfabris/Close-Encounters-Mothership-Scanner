@@ -4,8 +4,8 @@ Close Encounters of the Third Kind - Scanner Effect
 
 https://bit.ly/CE3K-Scanner
 
-Special thanks to Robert Swarthe, Scott Squires, and Ray Morton for providing
-all of the details and information contained in this document.
+Special thanks to Robert Swarthe, Scott Squires, Dennis Muren, and Ray Morton for providing
+all of the details, photos, and information contained in this document.
 
 ## Introduction
 
@@ -156,7 +156,7 @@ The photocell stayed fixed, while the light box with the patterns moved past
 it.
 
 - &#x24D8; Photo of one of the scanner patterns on the animation stand. with the
-    photocell. (Photo credit: Trying to obtain photo credit details now)
+    photocell. (Photo credit: Dennis Muren)
     ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
 
 The fiber optic cable in the mothership dome model, which emitted the scanner
