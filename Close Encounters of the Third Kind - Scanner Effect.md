@@ -144,18 +144,27 @@ effect, long exposures were an important part of the final look.
     courtesy of Robert Swarthe)
     ![BobAtWork](Bob%20at%20Work.jpg)
 
-Each long-exposure frame was photographed individually, with each exposure
+Each long-exposure movie frame was photographed individually, with each exposure
 taking 30 seconds or more to complete. During each frame, the rig would make
 one pass. Each pass equaled one revolution of the fiber optic cable rotating
 around the circular opening, while simultaneously, the rig with the patterns
 was moved in sync.
 
-According to Scott Squires, the rig with the patterns was an X/Y animation light
-table on its side, motorized by a MiniScan motion control system. In front of
-the pattern was a photocell attached to a light stand. The photocell stayed
-fixed, while the animation stand with the patterns moved past it. Behind the
-pattern, on the opposite side of the animation stand, was a light source
-opposite the photocell.
+- &#x24D8; Important detail: The system didn't move it back and forth during a
+    single frame exposure. It moved only in one direction, making a single
+    horizontal pass during the frame. After each frame, it was reset back to
+    its start position. Since one pass of the pattern equaled one pass of the
+    rotating fiber optic cable, it means that, for the lighting patterns which
+    seem to be repeating many evenly-spaced lights, each "light" was its own
+    unique section of the pattern. (Animation: Robert Swarthe)
+    ![Animation](CE3K%20Scan%20Animated.gif)
+
+The rig which held the patterns was an X/Y animation light table on its side,
+motorized by a MiniScan motion control system. In front of the pattern was a
+photocell attached to a light stand. The photocell stayed fixed, while the
+animation stand with the patterns moved past it. Behind the pattern, on the
+opposite side of the animation stand, was a light source opposite the
+photocell.
 
 - &#x24D8; Photo of one of the scanner patterns on the animation stand, with the
     photocell. This pattern looks like it was originally created with tape
@@ -172,15 +181,7 @@ The pattern would make one horizontal pass across the photocell for each
 rotation of the fiber optic cable. The entire rig would then reset before
 exposing the next frame of film.
 
-- &#x24D8; Important detail: The system which moved the pattern in relation to
-    the photocell didn't move it back and forth during the frame exposure. It
-    moved only in one direction, making a single horizontal pass during the
-    frame. After each frame, it was reset back to its start position. Since one
-    pass of the pattern equaled one pass of the cable's output end, it means
-    that, for the lighting patterns which seem to be repeating many
-    evenly-spaced lights, each of them was individually created as part of the
-    pattern. (Animation: Robert Swarthe)
-    ![Animation](CE3K%20Scan%20Animated.gif)
+
 
 When the rig reset for the next frame of film, before the next exposure, the
 pattern would get moved slightly vertically in relation to the photocell, just
