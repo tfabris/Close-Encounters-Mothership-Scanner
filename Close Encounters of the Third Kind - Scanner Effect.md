@@ -179,17 +179,12 @@ open, causing light to emit from the fiber optic assembly.
 
 The pattern would make one horizontal pass across the photocell for each
 rotation of the fiber optic cable. The entire rig would then reset before
-exposing the next frame of film.
-
-
-
-When the rig reset for the next frame of film, before the next exposure, the
-pattern would get moved slightly vertically in relation to the photocell, just
-a fraction of an inch. This way, each frame, the photocell would trace a
-slightly different path across the pattern. According to Scott Squires, the
-patterns were usually made in diagonal shapes, to cause the lights to rotate
-with each vertical step of the pattern. Patterns with long tapers would cause
-the the lights to seem to widen or shrink.
+exposing the next frame of film. When the rig reset, before the next frame
+exposure, the pattern would get moved slightly vertically in relation to the
+photocell, just a fraction of an inch. This way, each frame, the photocell
+would trace a slightly different path across the pattern. Patterns which appear
+to rotate are made from diagonal shapes, patterns with long tapers like
+triangles would cause the the lights to seem to widen or shrink.
 
 - &#x24D8; Test Polaroids of the "B" and "C" patterns. Note how the Polaroids
     are labeled "White Open" or "Black Open". Scott says that it's likely that
@@ -223,7 +218,7 @@ try to update this section as I get more information.
   According to Scott Squires, this reversal would have been done within the
   pattern itself, which Scott says would have been like cross hatch lines.
 
-- The pattern for most of the musical sequence and also re-used in some other
+- The pattern for most of the musical sequence, and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
   counter-rotate, causing them to seem to merge and separate in pairs. This
   would have been created by lines making long diamond-shaped patterns; a photo
