@@ -182,9 +182,9 @@ rotation of the fiber optic cable. The entire rig would then reset before
 exposing the next frame of film. When the rig reset, before the next frame
 exposure, the pattern would get moved slightly vertically in relation to the
 photocell, just a fraction of an inch. This way, each frame, the photocell
-would trace a slightly different path across the pattern. Patterns which appear
-to rotate are made from diagonal shapes, patterns with long tapers like
-triangles would cause the the lights to seem to widen or shrink.
+would trace a slightly different path across the pattern. Lights which appear
+to rotate were made from diagonal pattern shapes, lights which seem to widen or
+shrink were made from tapered triangular patterns.
 
 - &#x24D8; Test Polaroids of the "B" and "C" patterns. Note how the Polaroids
     are labeled "White Open" or "Black Open". Scott says that it's likely that
