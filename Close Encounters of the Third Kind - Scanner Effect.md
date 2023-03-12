@@ -58,10 +58,9 @@ Morton's book. The white lights are long-exposure streaks from a single
 brilliant point of light emanating from the end of a fiber optic cable. The
 fiber optic cable is connected to a rotating motorized arm, emitting the point
 of light as it rotates slowly around the circular opening in the mothership's
-underbelly dome. A set of zigzag-shaped black cutouts, made by Robert Swarthe,
-are covering a light box. The light box was moved so that the black cutouts
-would illuminate the fiber optic cable intermittently, causing the light
-patterns seen in the film.
+underbelly dome. A set of zigzag-shaped black patterns, made by Robert Swarthe,
+are covering a light source. The patterns moved so that the fiber optic cable
+would illuminate intermittently, causing the light patterns seen in the film.
 
 So Ray's book has a great description which clearly gives the general idea. A
 modern equivalent might be a handheld spinning LED toy, but they didn't have
@@ -72,11 +71,12 @@ book.
 Thanks to the magic of the internet, and the kind help of some friendly people
 (and because I asked very nicely), I was able to get in touch with Robert
 Swarthe, the animator who was specifically mentioned in Ray's book as the one
-who made the black cutout patterns. Robert put me in touch with Scott Squires
-as well, who photographed the sequence and who worked directly with Robert.
+who made the black patterns. Robert put me in touch with Scott Squires as well,
+who photographed the sequence and who worked directly with Robert.
 
-Robert and Scott have been awesome. They supplied the photos below, and Robert
-even made an animated diagram, also included below. They took the time to
+Robert and Scott have been awesome. They supplied some of the photos below, and
+Robert even made an animated diagram, also included below. They contacted
+Dennis Muren, who sent along even more photographs. They took the time to
 answer all my questions and gave as many details as they could remember. This
 document attempts to record those details for posterity.
 
@@ -85,12 +85,12 @@ document attempts to record those details for posterity.
 The information below is based on the description in Ray Morton's book, and from
 conversations with Robert Swarthe and Scott Squires. Robert and Scott worked on
 several aspects of the film's effects, alongside Richard Yuricich, Doug
-Trumbull, Don Trumbull, Dennis Muren, among other SFX artists. Robert was
-responsible for creating the zigzag pattern cutouts which were the main source
-of the scanner's light patterns, as well hand-animating the colored light
-flashes which overlaid the patterns. The mechanical fiber optic rig was likely
-designed and built by Richard Yuricich, Don Trumbull, and other team members.
-Scott Squires and Dennis Muren did the photography.
+Trumbull, Don Trumbull, and Dennis Muren, among other SFX artists. Robert was
+responsible for creating the zigzag patterns which were the main source of the
+scanner's light patterns, as well hand-animating the colored light flashes
+which overlaid the patterns. The mechanical fiber optic rig was likely designed
+and built by Richard Yuricich, Don Trumbull, and other team members. Scott
+Squires and Dennis Muren did the photography.
 
 Keep in mind that it's been over 40 years since the film was made, and no single
 person worked on every aspect of this effect. The information below is the best
@@ -138,7 +138,7 @@ effect, long exposures were an important part of the final look.
     Encounters*, because the camera sees only the white stars and not the
     intense black background. From the looks of the photo, the cut patterns
     were about 18 inches long or so. Robert says that these paper cut-outs were
-    probably made into high-contrast 8"x10" positive and negative
+    probably made into high-contrast 8"x10" positive and negative film
     transparencies for use in the scanner rig. (Photo credit: Unknown. Photo
     courtesy of Robert Swarthe)
     ![BobAtWork](Bob%20at%20Work.jpg)
@@ -146,51 +146,52 @@ effect, long exposures were an important part of the final look.
 Each long-exposure frame was photographed individually, with each exposure
 taking 30 seconds or more to complete. During each frame, the rig would make
 one pass. Each pass equaled one revolution of the fiber optic cable rotating
-around the circular opening, while simultaneously, the rig with the light box
-and the patterns was moved in sync.
+around the circular opening, while simultaneously, the rig with the patterns
+was moved in sync.
 
-According to Scott Squires, the rig with the light box and the patterns was an
-X/Y animation light table on its side, motorized by a MiniScan motion control
-system. In front of the light box was a photocell attached to a light stand.
-The photocell stayed fixed, while the light box with the patterns moved past
-it.
+According to Scott Squires, the rig with the patterns was an X/Y animation light
+table on its side, motorized by a MiniScan motion control system. In front of
+the pattern was a photocell attached to a light stand. The photocell stayed
+fixed, while the animation stand with the patterns moved past it. Behind the
+pattern, on the opposite side of the animation stand, was a light source
+opposite the photocell.
 
 - &#x24D8; Photo of one of the scanner patterns on the animation stand, with the
-    photocell. (Photo credit: Dennis Muren)
-    ![PatternOnTheStand](Pattern%20on%20the%20Stand.jpg)
+    photocell. This pattern looks like it was originally created with tape
+    lines and then made into a transparency. (Photo: Dennis Muren)
+    ![PatternOnTheStand](Pattern%20on%20the%20Stand%201.jpg)
 
 The fiber optic cable in the mothership dome model, which emitted the scanner
 light, had its own light source and an electronic shutter, which was wired to
-open and close depending on the photocell in front of the light box. Any light
+open and close depending on the photocell in front of the pattern. Any light
 hitting the photocell would cause the light source's electronic shutter to
 open, causing light to emit from the fiber optic assembly.
 
-The light box would make one horizontal pass across the photocell for each
+The pattern would make one horizontal pass across the photocell for each
 rotation of the fiber optic cable. The entire rig would then reset before
 exposing the next frame of film.
 
-- &#x24D8; Important detail: The system which moved the light box in relation to
+- &#x24D8; Important detail: The system which moved the pattern in relation to
     the photocell didn't move it back and forth during the frame exposure. It
-    moved only in one direction, making a single horizontal pass across the
-    pattern during the frame. After each frame, it was reset back to its start
-    position. Since one pass of the cutout patterns equaled one pass of the
-    cable's output end, it means that, for the lighting patterns which seem to
-    be repeating many evenly-spaced lights, each of them had to be carefully
-    cut out, individually. (Animation: Robert Swarthe)
+    moved only in one direction, making a single horizontal pass during the
+    frame. After each frame, it was reset back to its start position. Since one
+    pass of the pattern equaled one pass of the cable's output end, it means
+    that, for the lighting patterns which seem to be repeating many
+    evenly-spaced lights, each of them was individually created as part of the
+    pattern. (Animation: Robert Swarthe)
     ![Animation](CE3K%20Scan%20Animated.gif)
 
 When the rig reset for the next frame of film, before the next exposure, the
-light box with the cutout pattern would get moved slightly vertically, upward
-or downward in relation to the photocell, just a fraction of an inch. This way,
-each frame, the photocell would trace a slightly different path across the
-pattern. According to Scott Squires, the cutout patterns were usually made in
-diagonal shapes, to cause the lights to rotate with each vertical step of the
-light box. Patterns with long tapers would cause the the lights to seem to
-widen or shrink.
+pattern would get moved slightly vertically in relation to the photocell, just
+a fraction of an inch. This way, each frame, the photocell would trace a
+slightly different path across the pattern. According to Scott Squires, the
+patterns were usually made in diagonal shapes, to cause the lights to rotate
+with each vertical step of the pattern. Patterns with long tapers would cause
+the the lights to seem to widen or shrink.
 
 - &#x24D8; Test Polaroids of the "B" and "C" patterns. Note how the Polaroids
     are labeled "White Open" or "Black Open". Scott says that it's likely that
-    the system could be switched between those two modes: "White Open" would
+    the system could be changed between those two modes: "White Open" would
     open the electronic shutter when the photocell encountered light,
     and "Black Open" would do the opposite, closing the electronic shutter when
     the photocell encountered light. (Photos: Scott Squires)
@@ -217,8 +218,8 @@ try to update this section as I get more information.
   forward towards the mothership. The pattern is composed of differing widths
   of bars which merge and separate. During the scene, if you look closely, you
   can see this pattern seems to change direction and reverse during the shot.
-  According to Scott Squires, this was done within the cutout patterns
-  themselves, which Scott says would have been like cross hatch lines.
+  According to Scott Squires, this reversal would have been done within the
+  pattern itself, which Scott says would have been like cross hatch lines.
 
 - The pattern for most of the musical sequence and also re-used in some other
   shots throughout the scene, looks like small, evenly-spaced lights which
