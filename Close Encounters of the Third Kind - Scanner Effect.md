@@ -107,11 +107,12 @@ heavily [greebled](https://en.wikipedia.org/wiki/Greeble), was used for the
 long shots of the mothership, and it's currently on display at the
 Smithsonian's Udvar-Hazy Center in Chantilly, VA. (I made a pilgrimage once,
 and got a bunch of pictures, it's amazing.) The full mothership model does not
-have the moving white scanner lights. The underbelly model with the scanner
-lights was just a dome painted white, with a circle cut out of its center. It
-was mounted on its side in the studio to make it easier to work with during
-filming. The camera was turned on its side too, so that the underbelly appeared
-upright in the final film.
+have the moving white scanner lights, those are only seen on the close-up
+underbelly section.  The underbelly model with the scanner lights was just a
+dome painted white, with a circle cut out of its center. It was mounted on its
+side in the studio to make it easier to work with during filming. The camera
+was turned on its side too, so that the underbelly appeared upright in the
+final film.
 
 All of the underbelly details were done with lighting effects, photographed in
 separate passes. The tiny lights which formed the underbelly were created with
