@@ -14,13 +14,13 @@ adapted for other processors. This code is trying to accurately simulate this:
 
 </p></center>
 
-This is the "Scanner ring" effect from the mothership from the Steven Spielberg
-film *Close Encounters of the Third Kind*. When the mothership extends its
-airlock hatch, it emerges from a circular opening which has a ring of white
-fiber-optic lights which are moving in an interesting pattern. This code
-attempts to translate that physical long-exposure effect into addressable LED
-strips. My goal is to perform an accurate simulation of the effect, rather than
-just an imitation.
+This code tries to reproduce the "Scanner ring" effect from the mothership from
+the Steven Spielberg film *Close Encounters of the Third Kind*. When the
+mothership extends its airlock hatch, it emerges from a circular opening which
+has a ring of white fiber-optic lights which are moving in an interesting
+pattern. This code attempts to translate that physical long-exposure effect
+into addressable LED strips. My goal is to perform an accurate simulation of
+the effect, rather than just an imitation.
 
 <center><p style="text-align: center;">
 
