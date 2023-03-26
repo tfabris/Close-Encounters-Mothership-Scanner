@@ -24,6 +24,8 @@ the effect, rather than just an imitation.
 
 <center><p style="text-align: center;">
 
+### Original Effect:
+
 Full details of how the original effect was done:
 
 https://bit.ly/CE3K-Scanner
