@@ -22,13 +22,17 @@ pattern. This code attempts to translate that physical long-exposure effect
 into addressable LED strips. My goal is to perform an accurate simulation of
 the effect, rather than just an imitation.
 
-<center><p style="text-align: center;">
-
 ### Original Effect:
 
-Full details of how the original effect was done:
+This is an [article with full details](https://bit.ly/CE3K-Scanner) of how the
+original effect was done, including behind the scenes photos from some of the
+legendary effects artists who created the original effect:
 
-https://bit.ly/CE3K-Scanner
+<center><p style="text-align: center;">
+
+***https://bit.ly/CE3K-Scanner***
+
+[![EffectArticleThumbnail](Effect%20Article%20Thumbnail.jpg)](https://bit.ly/CE3K-Scanner)
 
 </p></center>
 
@@ -37,10 +41,15 @@ https://bit.ly/CE3K-Scanner
 - Part of the original scene in the film: https://youtu.be/pu-W292TsRM?t=223
 - Part of the original scene in the film: https://youtu.be/S4PYI6TzqYk
 
+### LED Source code:
+- https://github.com/tfabris/Close-Encounters-Mothership-Scanner
+
 ### Notes:
-This code is intended for use with CRGBW LED strips. Note the "W" at the end of
-the "CRGBW". This means that the strips have red, green, and blue LEDS, but
-also include a white LED too. I'm deliberately taking advantage of the
-separation of RGB from W in my code, but it should be relatively simple to
-refactor this code to work with regular CRGB strips, if that's what you're
-using.
+- Most of the explanation of the LED code details can be found in the file
+  [Close Encounters Mothership Scanner.h](Close%20Encounters%20Mothership%20Scanner.h)
+- This code is intended for use with CRGBW LED strips. Note the "W" at the end
+  of the "CRGBW". This means that the strips have red, green, and blue LEDS,
+  but also include a white LED too. I'm deliberately taking advantage of the
+  separation of RGB from W in my code, but it should be relatively simple to
+  refactor this code to work with regular CRGB strips, if that's what you're
+  using.
