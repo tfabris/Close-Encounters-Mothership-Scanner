@@ -45,6 +45,9 @@ legendary effects artists who created the original effect:
 - https://github.com/tfabris/Close-Encounters-Mothership-Scanner
 
 ### Notes:
+- This code is a work in progress, it doesn't fully simulate the original
+  effect... yet. See the [issues page](../../issues) if you want to know what's
+  still to-do.
 - Most of the explanation of the LED code details can be found in the file
   [Close Encounters Mothership Scanner.h](Close%20Encounters%20Mothership%20Scanner.h)
 - This code is intended for use with CRGBW LED strips. Note the "W" at the end

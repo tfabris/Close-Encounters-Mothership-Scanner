@@ -100,17 +100,32 @@
 // values.
 // ---------------------------------------------------------------------------
 
+// Work in progress: I'm working on GitHub issue #8 - trying to allow for larger
+// patterns with proper antialiasing. So far: I have converted the arrays to
+// use PROGMEM instead of standard memory, and also they have been changed from
+// BOOL arrays to CHAR arrays. Refs:
+// https://www.e-tinkers.com/2020/05/do-you-know-arduino-progmem-demystified/
+// https://www.arduino.cc/reference/en/language/variables/utilities/progmem/
+//
+// Before, with arrays in standard memory:
+// Sketch uses 33010 bytes (12%) of program storage space. Maximum is 253952 bytes.
+// Global variables use 5495 bytes (67%) of dynamic memory, leaving 2697 bytes for local variables. Maximum is 8192 bytes.
+//
+// After changing arrays to PROGMEM:
+// Sketch uses 32924 bytes (12%) of program storage space. Maximum is 253952 bytes.
+// Global variables use 1915 bytes (23%) of dynamic memory, leaving 6277 bytes for local variables. Maximum is 8192 bytes.
+
 // Define the special empty array "arrayBlank". The purpose of this array is so
 // that if, in a given pattern, you are using only one array instead of both
 // arrays, then supply this as the second array.
-bool arrayBlank[] = {};
+const char PROGMEM arrayBlank[] = {};
 int  arrayBlankSize = sizeof(arrayBlank);
 int  arrayBlankWidth = 0;
 
 // Arrays Tony01 and Tony02, when combined together, create a particularly nice
 // and interesting pattern. Reminiscent of the film, but not the same as any of
 // the ones seen in the film.
-bool arrayTony01[] = 
+const char PROGMEM arrayTony01[] = 
 {
   0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,
@@ -139,7 +154,7 @@ bool arrayTony01[] =
 int arrayTony01Size = sizeof(arrayTony01);
 int arrayTony01Width = 44;
 
-bool arrayTony02[] = 
+const char PROGMEM arrayTony02[] = 
 {
   1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,
@@ -170,7 +185,7 @@ int arrayTony02Width = 44;
 // Attempt to reproduce the counter-rotating pairs of lights, used for most of
 // the conversation scene, which seem to merge and split. This is a single
 // array, not intended to be used with a second overlaid array.
-bool arrayConversationPairs[] = 
+const char PROGMEM arrayConversationPairs[] = 
 {
   0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
@@ -207,7 +222,7 @@ int arrayConversationPairsSize = sizeof(arrayConversationPairs);
 int arrayConversationPairsWidth = 32;
 
 // Another set of two overlaid patterns of my own (not in the film).
-bool arrayTony03[] = 
+const char PROGMEM arrayTony03[] = 
 {
   0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
   0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,
@@ -223,7 +238,7 @@ bool arrayTony03[] =
 int arrayTony03Size = sizeof(arrayTony03);
 int arrayTony03Width = 20;
 
-bool arrayTony04[] = 
+const char PROGMEM arrayTony04[] = 
 {
   0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,
   0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,
@@ -278,8 +293,8 @@ CRGBW zigzagSlit[WIDEST_ARRAY];
 // sideways pixel-to-pixel.
 typedef struct
 {
-  bool* ArrayA;             // Can use up to two overlapping arrays if desired.
-  bool* ArrayB;             // If using only one array, set this to arrayBlank.
+  char* ArrayA;             // Can use up to two overlapping arrays if desired.
+  char* ArrayB;             // If using only one array, set this to arrayBlank.
   int   SizeA;  
   int   SizeB;    
   int   Width;              // If using two arrays, they must both be the same width. 
@@ -307,53 +322,55 @@ CE3Kpattern CE3Kpatterns[NUM_CE3K_PATTERNS];
 // Function to grab one pixel out of the zigzag pixel array(s), and turn it
 // into a brightness value that can be applied to the LEDs.
 // ---------------------------------------------------------------------------
-int pixelValue (long arrayPosition, bool firstArray[], int firstArraySize, bool secondArray[], int secondArraySize)
+int pixelValue (long arrayPosition, char firstArray[], int firstArraySize, char secondArray[], int secondArraySize)
 {
-  // The pixel arrays are coded as bool, either 0 or 1, to make it easier to
-  // type patterns into the arrays. If you are using two arrays, this code ANDs
-  // the two arrays together so that any black stripes or are preserved. This
-  // simulates the original fiber optic effect, where the light source for the
-  // fiber optic strand is blocked by the pattern(s).
+  // Work in progress: I'm working on GitHub issue #8 - trying to allow for
+  // larger patterns with proper antialiasing. Originally the pixel arrays were
+  // coded as bool, either 0 or 1, to make it easier to type patterns into the
+  // arrays. This is in-process of being changed, so that each pixel in the
+  // pattern could be an 8 bit level which can be antialiased.
+  // 
+  // Current state: If you are using two arrays, this code ANDs the two arrays
+  // together so that any black stripes or are preserved. This simulates the
+  // original fiber optic effect, where the light source for the fiber optic
+  // strand is blocked by the pattern(s).
   bool blackOrWhitePixel;
 
   // Allow an option to combine two arrays if desired. If two arrays are used,
   // both arrays will have a nonzero size. Detect this and combine them.
   if (firstArraySize && secondArraySize)
   {
+    // Each array will be smaller than the arrayPosition variable, but by using
+    // the modulo operator (%) we can dig into the arrays at the correct
+    // position points without needing complicated math. Basically, the
+    // arrayPosition cycles continuously through a very large range of numbers,
+    // and the "%" operator is the math that finds out what the array position
+    // would have been if it had started within this small array. This allows
+    // the code to support zigzag arrays of any size.
     blackOrWhitePixel =
-    (
-      // Each array will be smaller than the arrayPosition variable, but by using
-      // the modulo operator (%) we can dig into the arrays at the correct
-      // position points without needing complicated math. Basically, the
-      // arrayPosition cycles continuously through a very large range of numbers,
-      // and the "%" operator is the math that finds out what the array position
-      // would have been if it had started within this small array. This allows
-      // the code to support zigzag arrays of any size.
-      firstArray[arrayPosition % firstArraySize] &
-      secondArray[arrayPosition % secondArraySize]
-    );
+      pgm_read_byte(&firstArray[arrayPosition % firstArraySize]) & 
+      pgm_read_byte(&secondArray[arrayPosition % secondArraySize]);
   }
 
   // If only one array is used, then the second array will be empty and will
   // have a size of zero. Detect this and use only the first array.
   if (!secondArraySize)
   {
-    blackOrWhitePixel =
-    (
-      firstArray[arrayPosition % firstArraySize]
-    );
+    blackOrWhitePixel = pgm_read_byte(&firstArray[arrayPosition % firstArraySize]);
   }
 
-  // Convert the binary 0 or 1 value into a pixel darkness value, i.e., 0
-  // becomes 0, 1 becomes full brightness. No shades of gray at this point; the
-  // code antialiases elsewhere.
+  // Work in progress: I'm working on GitHub issue #8 - trying to allow for
+  // larger patterns with proper antialiasing. At the moment this is still
+  // converting  the binary 0 or 1 value into a pixel darkness value, i.e., 0
+  // becomes 0, 1 becomes full brightness. I will be working on making shades
+  // of gray possible later.
   // 
   // Note: I originally had this line:
   //      return blackOrWhitePixel * SCANNER_BRIGHTNESS;
   //
   // Which was intended to work if True was 1 and False was 0. But I was finding
-  // that True was not casting to 1, it was casting to a larger number. So do
-  // this instead:
+  // that True was not casting to 1, it was casting to a larger number. This is
+  // going to be rewritten when the arrays become shades of gray.
   if (blackOrWhitePixel)
   {
     return SCANNER_BRIGHTNESS;
