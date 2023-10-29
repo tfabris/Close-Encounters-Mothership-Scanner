@@ -49,7 +49,7 @@ legendary effects artists who created the original effect:
   effect... yet. See the [issues page](../../issues) if you want to know what's
   still to-do.
 - Most of the explanation of the LED code details can be found in the file
-  [Close Encounters Mothership Scanner.h](Close%20Encounters%20Mothership%20Scanner.h)
+  [Close_Encounters_Mothership_Scanner.h](Close_Encounters_Mothership_Scanner.h)
 - This code is intended for use with CRGBW LED strips. Note the "W" at the end
   of the "CRGBW". This means that the strips have red, green, and blue LEDS,
   but also include a white LED too. I'm deliberately taking advantage of the

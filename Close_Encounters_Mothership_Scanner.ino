@@ -9,7 +9,7 @@
 // main LED setup and then make a call to the actual animation loop. For the
 // actual animation code, please view all the complicated code details in the
 // included file:
-//   "Close Encounters Mothership Scanner.h"
+//   "Close_Encounters_Mothership_Scanner.h"
 //
 // Full details of how the original effect was done:
 //
@@ -49,7 +49,7 @@ CRGBW leds[NUM_LEDS];
 CRGB *ledsRGB = (CRGB *) &leds[0];
 
 // Main code for the animations, file is in the same folder as this one.
-#include "Close Encounters Mothership Scanner.h"
+#include "Close_Encounters_Mothership_Scanner.h"
 
 // Arduino setup routine, runs once when the Arduino powers up.
 void setup()
@@ -68,7 +68,7 @@ void setup()
 void loop()
 {
   // Perform one runthrough (one frame of animation) of the main effect loop
-  // located in the included file "Close Encounters Mothership Scanner.h"
+  // located in the included file "Close_Encounters_Mothership_Scanner.h"
   ce3kScanner();
 
   // Paint the final LED array values onto the LED strip for this frame.
