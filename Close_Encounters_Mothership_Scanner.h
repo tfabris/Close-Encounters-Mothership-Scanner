@@ -701,8 +701,12 @@ void ce3kScanner()
   // calculating the blend value with floating point math every time through
   // the loop. Not sure how much this would improve the speed, though.
 
-  // Assemble the current slit view into the slit array.
-  for (int x=0; x<currentPattern.Width; x++ )
+  // Assemble the current slit view into the slit array. Loop is using
+  // a speed optimization where decrementing the uint16_t is faster than
+  // incrementing and testing an int with a For loop.
+  uint16_t x = currentPattern.Width;
+  if (currentPattern.Width <= 0) return;
+  while (x--)
   {
     // Obtain the current pixel location, and also the pixels on the prior row
     // and the following row (for antialiasing).
@@ -761,28 +765,53 @@ void ce3kScanner()
   // If the current width is larger than the total number of LEDs, it will
   // copy only the relevant subsection. More details and example found here:
   // https://github.com/marmilicious/FastLED_examples/blob/master/memmove8_pattern_copy.ino
-  for (int n=0; n<NUM_LEDS; n+=currentPattern.Width)
-  {
-    // Precalculate a number to prevent myself from writing past the end of
-    // the CRGBW array. This variable will be the same as the current width
-    // for most of the copy operations, and then on the last copy operation,
-    // it will be less than the current width because it is copying only up
-    // to the end of the LEDs array.
-    int numLedsToCopy = currentPattern.Width;
-    if (n+currentPattern.Width >= NUM_LEDS) 
-    {
-      numLedsToCopy = NUM_LEDS-n;
-    }
 
-    // Copy the slit array to the LED strand. Syntax of this command is:    
-    // memmove8( &destination[start position], &source[start position], size of pixel data )
-    //
-    // NOTE: In my LED array I'm using CRGBW strand hardware, but if yours is
-    // CRGB, you'll need to refactor the code to accept CRGB.
-    //
+  // Old unoptimized version here:
+  // for (int n=0; n<NUM_LEDS; n+=currentPattern.Width)
+  // {
+  //   // Precalculate a number to prevent myself from writing past the end of
+  //   // the CRGBW array. This variable will be the same as the current width
+  //   // for most of the copy operations, and then on the last copy operation,
+  //   // it will be less than the current width because it is copying only up
+  //   // to the end of the LEDs array.
+  //   int numLedsToCopy = currentPattern.Width;
+  //   if (n+currentPattern.Width >= NUM_LEDS) 
+  //   {
+  //     numLedsToCopy = NUM_LEDS-n;
+  //   }
+  //   // Copy the slit array to the LED strand. Syntax of this command is:    
+  //   // memmove8( &destination[start position], &source[start position], size of pixel data )
+  //   //
+  //   // NOTE: In my LED array I'm using CRGBW strand hardware, but if yours is
+  //   // CRGB, you'll need to refactor the code to accept CRGB.
+  //   //
+  //   // If you want to see just the color flashes and not the white scanner
+  //   // lights, either comment out this line or set SCANNER_BRIGHTNESS 0.
+  //   memmove8(&leds[n], &zigzagSlit[0], numLedsToCopy*sizeof(CRGBW));
+  // }
+
+  // New optimized version:
+  // Precalculate invariants outside the loop using fast unsigned variables.
+  uint16_t patternWidth = (uint16_t)currentPattern.Width;
+
+  // Precalculate how many full, un-truncated blocks fit inside the strip.
+  uint16_t fullRepeatsCount = NUM_LEDS / patternWidth;
+  uint16_t remainingLeds = NUM_LEDS % patternWidth;
+
+  // Copy the slit arrays to the LED strand.
+  uint16_t n = 0;
+  while (fullRepeatsCount--)
+  {
     // If you want to see just the color flashes and not the white scanner
-    // lights, either comment out this line or set SCANNER_BRIGHTNESS 0.
-    memmove8(&leds[n], &zigzagSlit[0], numLedsToCopy*sizeof(CRGBW));
+    // lights, either comment out the memmove8 lines, or set SCANNER_BRIGHTNESS 0.
+    memmove8(&leds[n], &zigzagSlit[0], patternWidth * sizeof(CRGBW));
+    n += patternWidth;
+  }
+
+  // Handle the final leftover slice (if the pattern doesn't divide evenly).
+  if (remainingLeds > 0)
+  {
+    memmove8(&leds[n], &zigzagSlit[0], remainingLeds * sizeof(CRGBW));
   }
 
   // Call the subroutine to add the color conversation flashes. If you wish to

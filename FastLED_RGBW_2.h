@@ -46,7 +46,7 @@ LIB8STATIC void nscale8x4( uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& w, fract
 }
 
 
-struct CRGBW  {
+struct CRGBW {
 	union {
 		struct {
 			union {
@@ -69,16 +69,20 @@ struct CRGBW  {
 		uint8_t raw[4];
 	};
 
-	CRGBW(){}
+  // The "inline" and "always_inlines" statements improve code speed by instructing the AVR compiler to insert
+  // the pixel byte updates directly into my loop assemblies instead of processing a costly function jump.
+	inline CRGBW() __attribute__((always_inline)){}
 
-	CRGBW(uint8_t rd, uint8_t grn, uint8_t blu, uint8_t wht){
+	inline CRGBW(uint8_t rd, uint8_t grn, uint8_t blu, uint8_t wht) __attribute__((always_inline))
+  {
 		r = rd;
 		g = grn;
 		b = blu;
 		w = wht;
 	}
 
-	inline void operator = (const CRGB c) __attribute__((always_inline)){ 
+	inline void operator = (const CRGB c) __attribute__((always_inline))
+  { 
 		this->r = c.r;
 		this->g = c.g;
 		this->b = c.b;
@@ -86,7 +90,7 @@ struct CRGBW  {
 	}
 
   /// add one RGBW to another, saturating at 0xFF for each channel
-  inline CRGBW& operator+= (const CRGB& rhs )
+  inline CRGBW& operator+= (const CRGB& rhs ) __attribute__((always_inline))
   {
     r = qadd8( r, rhs.r);
     g = qadd8( g, rhs.g);
@@ -96,7 +100,7 @@ struct CRGBW  {
   }
 
   /// Add one RGBW to another, saturating at 0xFF for each channel
-  inline CRGBW& operator+= (const CRGBW& rhs )
+  inline CRGBW& operator+= (const CRGBW& rhs ) __attribute__((always_inline))
   {
       r = qadd8( r, rhs.r);
       g = qadd8( g, rhs.g);
@@ -109,7 +113,7 @@ struct CRGBW  {
   /// scale down a RGBW to N 256ths of it's current brightness, using
   /// 'plain math' dimming rules, which means that if the low light levels
   /// may dim all the way to 100% black.
-  inline CRGBW& nscale8 (uint8_t scaledown )
+  inline CRGBW& nscale8 (uint8_t scaledown ) __attribute__((always_inline))
   {
     nscale8x4( r, g, b, w, scaledown);
     return *this;
@@ -118,7 +122,7 @@ struct CRGBW  {
   /// scale down a RGBW to N 256ths of it's current brightness, using
   /// 'plain math' dimming rules, which means that if the low light levels
   /// may dim all the way to 100% black.
-  inline CRGBW& nscale8 (const CRGBW & scaledown )
+  inline CRGBW& nscale8 (const CRGBW & scaledown ) __attribute__((always_inline))
   {
     r = ::scale8(r, scaledown.r);
     g = ::scale8(g, scaledown.g);
@@ -129,78 +133,94 @@ struct CRGBW  {
 };
 
 
-inline uint16_t getRGBWsize(uint16_t nleds){
+inline uint16_t getRGBWsize(uint16_t nleds)
+{
 	uint16_t nbytes = nleds * 4;
 	if(nbytes % 3 > 0) return nbytes / 3 + 1;
 	else return nbytes / 3;
 }
 
-void fill_solid( struct CRGBW * leds, int numToFill, CRGB color)
+inline void fill_solid( struct CRGBW * leds, int numToFill, CRGB color)
 {
-  for( int i = 0; i < numToFill; i++) {
+  uint16_t i = numToFill;
+  if (numToFill <= 0) return;
+  while (i--)
+  {
     leds[i] = color;
   }
 }
 
-void fill_solid( struct CRGBW * leds, int numToFill, CRGBW color)
+inline void fill_solid( struct CRGBW * leds, int numToFill, CRGBW color)
 {
-  for( int i = 0; i < numToFill; i++) {
+  uint16_t i = numToFill;
+  if (numToFill <= 0) return;
+  while (i--)
+  {
     leds[i] = color;
   }
 }
 
 template <typename PALETTE>
-void fill_palette(CRGBW* L, uint16_t N, uint8_t startIndex, uint8_t incIndex, const PALETTE& pal, uint8_t brightness, TBlendType blendType)
+inline void fill_palette(CRGBW* L, uint16_t N, uint8_t startIndex, uint8_t incIndex, const PALETTE& pal, uint8_t brightness, TBlendType blendType)
 {
     uint8_t colorIndex = startIndex;
-    for( uint16_t i = 0; i < N; i++) {
+    for( uint16_t i = 0; i < N; i++)
+    {
         L[i] = ColorFromPalette( pal, colorIndex, brightness, blendType);
         colorIndex += incIndex;
     }
 }
 
-
-void nscale8( CRGBW* leds, uint16_t num_leds, uint8_t scale)
+inline void nscale8( CRGBW* leds, uint16_t num_leds, uint8_t scale)
 {
-  for( uint16_t i = 0; i < num_leds; i++) {
+  uint16_t i = num_leds;
+  if (num_leds <= 0) return;
+  while (i--)
+  {
       leds[i].nscale8( scale);
   }
 }
 
-void fadeToBlackBy( CRGBW* leds, uint16_t num_leds, uint8_t fadeBy)
+inline void fadeToBlackBy( CRGBW* leds, uint16_t num_leds, uint8_t fadeBy)
 {
     nscale8( leds, num_leds, 255 - fadeBy);
 }
 
-void fill_rainbow( struct CRGBW * pFirstLED, int numToFill,
+inline void fill_rainbow( struct CRGBW * pFirstLED, int numToFill,
                   uint8_t initialhue,
                   uint8_t deltahue )
 {
-    CHSV hsv;
-    hsv.hue = initialhue;
-    hsv.val = 255;
-    hsv.sat = 240;
-    for( int i = 0; i < numToFill; i++) {
-        pFirstLED[i] = hsv;
-        hsv.hue += deltahue;
-    }
+  uint16_t i = numToFill;
+  if (numToFill <= 0) return;
+  CHSV hsv;
+  hsv.hue = initialhue;
+  hsv.val = 255;
+  hsv.sat = 240;
+  while (i--)
+  {
+      pFirstLED[i] = hsv;
+      hsv.hue += deltahue;
+  }
 }
 
-void blur1d( CRGBW* leds, uint16_t numLeds, fract8 blur_amount)
+inline void blur1d( CRGBW* leds, uint16_t numLeds, fract8 blur_amount)
 {
-    uint8_t keep = 255 - blur_amount;
-    uint8_t seep = blur_amount >> 1;
-    CRGBW carryover = CRGBW(0,0,0,0);
-    for( uint16_t i = 0; i < numLeds; ++i) {
-        CRGBW cur = leds[i];
-        CRGBW part = cur;
-        part.nscale8( seep);
-        cur.nscale8( keep);
-        cur += carryover;
-        if( i) leds[i-1] += part;
-        leds[i] = cur;
-        carryover = part;
-    }
+  uint16_t i = numLeds;
+  if (numLeds <= 0) return;
+  uint8_t keep = 255 - blur_amount;
+  uint8_t seep = blur_amount >> 1;
+  CRGBW carryover = CRGBW(0,0,0,0);
+  while (i--)
+  {
+      CRGBW cur = leds[i];
+      CRGBW part = cur;
+      part.nscale8( seep);
+      cur.nscale8( keep);
+      cur += carryover;
+      if( i) leds[i-1] += part;
+      leds[i] = cur;
+      carryover = part;
+  }
 }
 
 #endif
