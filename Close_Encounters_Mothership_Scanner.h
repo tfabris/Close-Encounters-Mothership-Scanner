@@ -694,12 +694,22 @@ void ce3kScanner()
   // would be nice if I could come up with a nonlinear blend to make it seem
   // more smooth.
 
-  // TO DO: The floating point calculations are a bit slow. Idea: Use a table of
-  // blend values instead of doing the FP math each frame, to improve the speed
-  // of the animation. Each time the blend values change, I could pre-calculate
-  // the blend values and store them in a table, instead of realtime
-  // calculating the blend value with floating point math every time through
-  // the loop. Not sure how much this would improve the speed, though.
+  // TO DO: The floating point calculations below are a bit slow. Fixing the
+  // floating point calculations could help towards fixing GitHub issue #6.
+
+  // Idea 1: Use a table of blend values instead of doing the FP math each
+  // frame, to improve the speed of the animation. Each time the blend values
+  // change, I could pre-calculate the blend values and store them in a table,
+  // instead of realtime calculating the blend value with floating point math
+  // every time through the loop. Not sure how much this would improve the
+  // speed, though.
+
+  // Idea 2: Replace the floating-point variables with integers, and instead
+  // of multiplying or dividing them, scale them with FastLED's native 8-bit
+  // integer scaling function. For example, if you want to have a 75% blend
+  // value to be calculated, then use the "scale8" function with the "192"
+  // parameter (because 192 is 75% of 256). The scale8 function uses raw
+  // low-level bit-shifts instead of costly floating-point calculations.
 
   // Assemble the current slit view into the slit array. Loop is using
   // a speed optimization where decrementing the uint16_t is faster than
