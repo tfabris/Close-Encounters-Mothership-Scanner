@@ -75,6 +75,13 @@
 #define CONVERSATION_FLASH_FRAMESKIP   3   // If the color flash animation swells too slowly, skip more frames to make it faster.
 #define CONVERSATION_FLASH_FREQUENCY   900 // Each blank frame, a random number of 0-1000 must exceed this number to start a new color flash (higher is less likely).
 
+// Values I'm using for some speed optimizations to avoid expensive
+// floating-point and division operations during the main loop. 
+const uint8_t MAX_SUBPIXELS = 40;       // Highest number of subpixels that we will scroll any of the patterns.
+uint8_t div256Table[MAX_SUBPIXELS];     // Speed-optimization lookup table for weighting of each sub-scroll of the pattern.
+uint16_t slitCopyFullRepeatsCount = 0;  // How many full, un-truncated slit pattern strips fit inside the total LED strip.
+uint16_t slitCopyRemainingLeds = 0;     // Number of leftover pixels need to be copied for the last remainder to fill the LED strip.
+
 // ---------------------------------------------------------------------------
 // Pixel array definitions
 // ---------------------------------------------------------------------------
@@ -421,7 +428,7 @@ void CE3Kconversation()
   static int  colorBarStartPoint = 0;
   static int  colorBarHue        = 0;
   static CRGB colorBarColor      = (0,0,0);
-  float       onePixelBrightness = 0.0;
+  uint8_t     onePixelBrightness = 0;
 
   // Each frame of the color flash animation happens at this speed.
   EVERY_N_MILLISECONDS ( CONVERSATION_FLASH_SPEED )
@@ -454,7 +461,10 @@ void CE3Kconversation()
         if (colorBarStartPoint + colorBarWidth >= NUM_LEDS) { colorBarWidth = NUM_LEDS - colorBarStartPoint - 1; }
 
         // Half way mark that defines the center of the color flash.
-        halfWayMark = colorBarWidth / 2;
+        //   halfWayMark = colorBarWidth / 2;
+        // Speed optimization: Do a right bitwise shift by one position, which is
+        // a faster way to do a divide-by-2 with integer math on this chipset.
+        halfWayMark = colorBarWidth >> 1; 
 
         // Number of animation frames is the same as the color bar width.
         flashFrames = colorBarWidth;
@@ -498,7 +508,10 @@ void CE3Kconversation()
       // point rightward toward the max mark of the color bar. This value
       // controls how far from the center point it swells on this frame of the
       // animation.
-      colorBarTempWidth = flashStage / 2;
+      //   colorBarTempWidth = flashStage / 2;
+      // Speed optimization: Do a right bitwise shift by one position, which is
+      // a faster way to do a divide-by-2 with integer math on this chipset.
+      colorBarTempWidth = flashStage >> 1; 
  
       // If we have reached widest point of the color flash animation, either
       // dwell at the widest point for a bit (like the sustain portion of a
@@ -577,6 +590,34 @@ void CE3Kconversation()
 }
 
 // ---------------------------------------------------------------------------
+// Create/update a lookup table of the current pattern subpixel resolution and
+// other variables, so that every time through the animation loop, it doesn't
+// run a costly floating point division operation to get the antialiasing
+// blend-weights and other values. Only do these costly division operations
+// once, each time a new pattern is activated. Note: Hard coding the first
+// entry in the table(index[0]) as a 0, instead of trying to calculate that
+// first entry, in order to prevent divide by zero errors in this function.
+// ---------------------------------------------------------------------------
+void updateDivTable(int currentPatternIndex)
+{
+  int subpixelResolution = CE3Kpatterns[currentPatternIndex].SubpixelResolution;
+  div256Table[0] = 0; 
+  for (uint8_t tableIndex = 1; tableIndex < subpixelResolution; tableIndex++)
+  {
+    div256Table[tableIndex] = ((float)1 / subpixelResolution) * tableIndex * 256;
+    // Debug printout if needed: Serial.print(div256Table[tableIndex]); Serial.print(" ");
+  }
+  // Debug printout if needed: Serial.println("");
+
+  // Precalculate additional division variables. These variables control the
+  // operation which copies each "slit" view of the patterns onto the full size
+  // of the entire LED strip. 
+  uint16_t patternWidth =  CE3Kpatterns[currentPatternIndex].Width;
+  slitCopyFullRepeatsCount = NUM_LEDS / patternWidth;   // How many full, un-truncated blocks fit inside the strip.
+  slitCopyRemainingLeds = NUM_LEDS % patternWidth;      // Number of leftover pixels need to be copied for the last remainder.
+}
+
+// ---------------------------------------------------------------------------
 // Main loop of the CE3K scanner effect. This routine should be called once
 // per "loop()" of the main Arduino code. This routine is responsible for
 // generating the moving white "idle" bars of the scanner ring animation.
@@ -587,7 +628,7 @@ void ce3kScanner()
   static int subPixelOffset = 0;      // Move through the arrays slowly while antialiasing.
   static CE3Kpattern currentPattern;  // Which pattern is currently running.
   static int currentPatternIndex;     // Which index in the array of pattern data structures is the curernt pattern.
-  
+
   // Perform actions on the first run of this function only.
   static bool firstTime = true;
   if (firstTime)
@@ -619,7 +660,7 @@ void ce3kScanner()
     CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony03Size;  
     CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony04Size;
     CE3Kpatterns[checkPatternIndex].Width  = arrayTony03Width;
-    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 40;
+    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 40;   // Do not go above MAX_SUBPIXELS
 
     checkPatternIndex++;
     CE3Kpatterns[checkPatternIndex].ArrayA = arrayConversationPairs;
@@ -643,9 +684,10 @@ void ce3kScanner()
       }
     }
 
-    // Decide which of the patterns we'll be starting on.
+    // Decide which of the patterns we'll be starting on, and prep it.
     currentPatternIndex = 0;
     currentPattern = CE3Kpatterns[currentPatternIndex];
+    updateDivTable(currentPatternIndex);
   }
 
   // Cycle to the next scanner pattern at intervals.
@@ -656,6 +698,7 @@ void ce3kScanner()
       currentPatternIndex ++;
       if (currentPatternIndex >= NUM_CE3K_PATTERNS) { currentPatternIndex = 0; }
       currentPattern = CE3Kpatterns[currentPatternIndex];    
+      updateDivTable(currentPatternIndex);
   }
 
   // Sanity check that I remembered to set WIDEST_ARRAY correctly.
@@ -681,37 +724,34 @@ void ce3kScanner()
   // did both 0.00 and 1.00, it would work, but it would cause a short "pause"
   // in the animation where the two similar frames met. The blend is based on:
   // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
-  float oneSubPixelWeightUnit = ((float)1 / (float)currentPattern.SubpixelResolution);
-  float blendWeight = subPixelOffset * oneSubPixelWeightUnit;
+  //    float oneSubPixelWeightUnit = ((float)1 / (float)currentPattern.SubpixelResolution);
+  //    float blendWeight = subPixelOffset * oneSubPixelWeightUnit;
 
-  // TO DO: The blend above is a purely linear blend. Unfortunately the LEDs do
-  // not have a purely linear brightness based on the numbers pumped into them.
-  // The lowest brightness level of an LED is significantly brighter than when
-  // the LED is just "off". This makes the antialiased pixels kind of "pop"
-  // from fully dark to dimly-lit in the final animation. This causes the
-  // transition points between black background and the white bars to seem to
-  // "caterpillar" across the strand instead of flowing perfectly smoothly. It
-  // would be nice if I could come up with a nonlinear blend to make it seem
+  // Speed optimization: Changing the blending code to a non-floating-point and
+  // non-division version of the blending weight code. Intended to make the
+  // loops run slightly faster by using pure integer math in the main loop.
+  // Instead of the weighting being done by a floating point percentage, it's
+  // now an integer value that is represented by a number from 0-255. For
+  // instance, if the subpixel resolution is at 5 for this particular pattern,
+  // then the first level of the five subpixel weighting values will be 51
+  // instead of 0.20. These values are stored in a lookup table which is
+  // recalculated once at the beginning of each pattern display. This way, the
+  // division operation is replaced by this quick div256Table lookup, saving
+  // dozens of CPU cycles per loop.
+  uint8_t blendWeight = div256Table[subPixelOffset];
+
+  // TO DO: The blend above (regardless of whether it's done with the floating
+  // point or the lookup table) is a purely linear blend. Unfortunately the
+  // LEDs do not have a purely linear brightness based on the numbers pumped
+  // into them. The lowest brightness level of an LED is significantly brighter
+  // than when the LED is just "off". This makes the antialiased pixels kind
+  // of "pop" from fully dark to dimly-lit in the final animation. This causes
+  // the transition points between black background and the white bars to seem
+  // to "caterpillar" across the strand instead of flowing perfectly smoothly.
+  // It would be nice if I could come up with a nonlinear blend to make it seem
   // more smooth.
 
-  // TO DO: The floating point calculations below are a bit slow. Fixing the
-  // floating point calculations could help towards fixing GitHub issue #6.
-
-  // Idea 1: Use a table of blend values instead of doing the FP math each
-  // frame, to improve the speed of the animation. Each time the blend values
-  // change, I could pre-calculate the blend values and store them in a table,
-  // instead of realtime calculating the blend value with floating point math
-  // every time through the loop. Not sure how much this would improve the
-  // speed, though.
-
-  // Idea 2: Replace the floating-point variables with integers, and instead
-  // of multiplying or dividing them, scale them with FastLED's native 8-bit
-  // integer scaling function. For example, if you want to have a 75% blend
-  // value to be calculated, then use the "scale8" function with the "192"
-  // parameter (because 192 is 75% of 256). The scale8 function uses raw
-  // low-level bit-shifts instead of costly floating-point calculations.
-
-  // Assemble the current slit view into the slit array. Loop is using
+  // Assemble the current slit view into the slit array. This loop is using
   // a speed optimization where decrementing the uint16_t is faster than
   // incrementing and testing an int with a For loop.
   uint16_t x = currentPattern.Width;
@@ -728,14 +768,15 @@ void ce3kScanner()
     int nextPixelDarkness = pixelValue(nextPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
 
     // Blend the next and previous line's pixels into the current line's pixel.
-    // There is a blend feature in FastLED to do this for us, which does
-    // essentially the same thing, but it works on three values (r,g,b) and I
-    // only need one value since the scanner is in black and white. I could use
-    // FastLED's function but, it might be slower since it has to do the math
-    // three times as much. So I'm rolling my own blend math, based on this:
+    // I tried using FastLED's "blend8" function, but it did not produce the
+    // results I wanted. This is my own blend math, based on this:
     // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
-    // TO DO: Refactor to use FastLED's blend routine and see if it's faster.
-    int blendedDarkness = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
+    //    int blendedDarkness = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
+
+    // Speed optimization: Integer-math version of the floating point blend
+    // above. Multiply by the blend weight as described above, but multiply it
+    // into a 16-bit integer and then bitshift it back down to 8 bits.
+    uint8_t blendedDarkness = (((uint16_t)nextPixelDarkness*blendWeight) >> 8)+(((uint16_t)thisPixelDarkness*(256-blendWeight)) >> 8);
 
     // Apply the final values to the array that represents the slit. I'm using
     // only the White LED in the CRGBW array here, so the colored conversation
@@ -801,27 +842,20 @@ void ce3kScanner()
   // }
 
   // New optimized version:
-  // Precalculate invariants outside the loop using fast unsigned variables.
   uint16_t patternWidth = (uint16_t)currentPattern.Width;
-
-  // Precalculate how many full, un-truncated blocks fit inside the strip.
-  uint16_t fullRepeatsCount = NUM_LEDS / patternWidth;
-  uint16_t remainingLeds = NUM_LEDS % patternWidth;
-
-  // Copy the slit arrays to the LED strand.
   uint16_t n = 0;
-  while (fullRepeatsCount--)
+  uint16_t copiedPatterns = slitCopyFullRepeatsCount;
+  while (copiedPatterns--)
   {
     // If you want to see just the color flashes and not the white scanner
     // lights, either comment out the memmove8 lines, or set SCANNER_BRIGHTNESS 0.
     memmove8(&leds[n], &zigzagSlit[0], patternWidth * sizeof(CRGBW));
     n += patternWidth;
   }
-
-  // Handle the final leftover slice (if the pattern doesn't divide evenly).
-  if (remainingLeds > 0)
+  if (slitCopyRemainingLeds > 0)
   {
-    memmove8(&leds[n], &zigzagSlit[0], remainingLeds * sizeof(CRGBW));
+    // Handle the final leftover slice (if the pattern doesn't divide evenly).
+    memmove8(&leds[n], &zigzagSlit[0], slitCopyRemainingLeds * sizeof(CRGBW));
   }
 
   // Call the subroutine to add the color conversation flashes. If you wish to
