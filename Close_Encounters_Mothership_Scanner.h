@@ -325,11 +325,12 @@ CE3Kpattern CE3Kpatterns[NUM_CE3K_PATTERNS];
 // Number of milliseconds between pattern changes.
 #define CE3K_PATTERN_CHANGE_INTERVAL 15000
 
+
 // ---------------------------------------------------------------------------
 // Function to grab one pixel out of the zigzag pixel array(s), and turn it
 // into a brightness value that can be applied to the LEDs.
 // ---------------------------------------------------------------------------
-int pixelValue (long arrayPosition, char firstArray[], int firstArraySize, char secondArray[], int secondArraySize)
+int pixelValue(long arrayPosition, char firstArray[], int firstArraySize, char secondArray[], int secondArraySize)
 {
   // Work in progress: I'm working on GitHub issue #8 - trying to allow for
   // larger patterns with proper antialiasing. Originally the pixel arrays were
@@ -338,32 +339,75 @@ int pixelValue (long arrayPosition, char firstArray[], int firstArraySize, char 
   // pattern could be an 8 bit level which can be antialiased.
   // 
   // Current state: If you are using two arrays, this code ANDs the two arrays
-  // together so that any black stripes or are preserved. This simulates the
+  // together so that any black stripes are preserved. This simulates the
   // original fiber optic effect, where the light source for the fiber optic
-  // strand is blocked by the pattern(s).
-  bool blackOrWhitePixel;
+  // strand is blocked by the pattern(s).  
+  static long lastPosition = -1;
+  static int index1 = 0;
+  static int index2 = 0;
 
-  // Allow an option to combine two arrays if desired. If two arrays are used,
-  // both arrays will have a nonzero size. Detect this and combine them.
-  if (firstArraySize && secondArraySize)
+  // Speed optimization: Handle the first run or frame reset (Position 0).
+  // Previously it did an expensive modulo calculation ("%") every time this
+  // function was called. Now it only does the modulo on the first pixel of a
+  // frame, improving the overall speed. 
+  //
+  // Each array will be smaller than the arrayPosition variable, but by using
+  // the modulo operator (%) we can dig into the arrays at the correct
+  // position points without needing complicated math. Basically, the
+  // arrayPosition cycles continuously through a very large range of numbers,
+  // and the "%" operator is the math that finds out what the array position
+  // would have been if it had started within this small array. This allows
+  // the code to support zigzag arrays of any size.
+  //
+  // The speed optimization is to only calculate the modulo at certain points
+  // where it's needed, and use normal integer addition and subtraction
+  // most of the rest of the time.
+  long difference = arrayPosition - lastPosition;
+  if (lastPosition == -1 || arrayPosition == 0 || difference == arrayPosition) 
   {
-    // Each array will be smaller than the arrayPosition variable, but by using
-    // the modulo operator (%) we can dig into the arrays at the correct
-    // position points without needing complicated math. Basically, the
-    // arrayPosition cycles continuously through a very large range of numbers,
-    // and the "%" operator is the math that finds out what the array position
-    // would have been if it had started within this small array. This allows
-    // the code to support zigzag arrays of any size.
-    blackOrWhitePixel =
-      pgm_read_byte(&firstArray[arrayPosition % firstArraySize]) & 
-      pgm_read_byte(&secondArray[arrayPosition % secondArraySize]);
+    // Also cast the modulo operations to unsigned ints to speed those up.     
+    index1 = (unsigned long)arrayPosition % (unsigned int)firstArraySize;
+    if (secondArraySize > 0)
+    {
+      index2 = (unsigned long)arrayPosition % (unsigned int)secondArraySize;
+    }
   }
+  else 
+  {
+    // For all subsequent pixels in the row, use addition/subtraction instead of
+    // expensive modulo operations.
+
+    // Update tracking for the first array.
+    index1 += (int)difference;
+    while (index1 >= firstArraySize) index1 -= firstArraySize;
+    while (index1 < 0)               index1 += firstArraySize;
+    
+    // Update tracking for the second array (if a second array is used).
+    if (secondArraySize > 0)
+    {
+      index2 += (int)difference;
+      while (index2 >= secondArraySize) index2 -= secondArraySize;
+      while (index2 < 0)               index2 += secondArraySize;
+    }
+  }
+
+  // Save the master position for the next function call.
+  lastPosition = arrayPosition;
 
   // If only one array is used, then the second array will be empty and will
   // have a size of zero. Detect this and use only the first array.
-  if (!secondArraySize)
+  bool blackOrWhitePixel;
+  if (secondArraySize > 0)
   {
-    blackOrWhitePixel = pgm_read_byte(&firstArray[arrayPosition % firstArraySize]);
+    // This is where the code ANDs the two arrays together so that any black
+    // stripes are preserved, simulating the original fiber optic effect, where
+    // the light source for the fiber optic strand is blocked by black.
+    blackOrWhitePixel = pgm_read_byte(&firstArray[index1]) & pgm_read_byte(&secondArray[index2]);
+  }
+  else
+  {
+    // If only one array is being used, then just return that byte in the array.
+    blackOrWhitePixel = pgm_read_byte(&firstArray[index1]);
   }
 
   // Work in progress: I'm working on GitHub issue #8 - trying to allow for
@@ -376,17 +420,74 @@ int pixelValue (long arrayPosition, char firstArray[], int firstArraySize, char 
   //      return blackOrWhitePixel * SCANNER_BRIGHTNESS;
   //
   // Which was intended to work if True was 1 and False was 0. But I was finding
-  // that True was not casting to 1, it was casting to a larger number. This is
-  // going to be rewritten when the arrays become shades of gray.
-  if (blackOrWhitePixel)
-  {
-    return SCANNER_BRIGHTNESS;
-  }
-  else
-  {
-    return 0;
-  }
+  // that True was not casting to 1, it was casting to a larger number. Instead
+  // do a test on blackOrWhitePixel and then multiply either the 1 or the 0
+  // times the scanner brightness value. This is going to be rewritten when the
+  // arrays become shades of gray.
+  return (blackOrWhitePixel ? 1 : 0) * SCANNER_BRIGHTNESS;
 }
+
+// Old unoptimized version of this function. Remove this commented code section
+// after the new optimized version has proven its worth over time.
+// // ---------------------------------------------------------------------------
+// // Function to grab one pixel out of the zigzag pixel array(s), and turn it
+// // into a brightness value that can be applied to the LEDs.
+// // ---------------------------------------------------------------------------
+// int pixelValue(long arrayPosition, char firstArray[], int firstArraySize, char secondArray[], int secondArraySize)
+// {
+//   // Work in progress: I'm working on GitHub issue #8 - trying to allow for
+//   // larger patterns with proper antialiasing. Originally the pixel arrays were
+//   // coded as bool, either 0 or 1, to make it easier to type patterns into the
+//   // arrays. This is in-process of being changed, so that each pixel in the
+//   // pattern could be an 8 bit level which can be antialiased.
+//   // 
+//   // Current state: If you are using two arrays, this code ANDs the two arrays
+//   // together so that any black stripes are preserved. This simulates the
+//   // original fiber optic effect, where the light source for the fiber optic
+//   // strand is blocked by the pattern(s).
+//   bool blackOrWhitePixel;
+//   // Allow an option to combine two arrays if desired. If two arrays are used,
+//   // both arrays will have a nonzero size. Detect this and combine them.
+//   if (firstArraySize && secondArraySize)
+//   {
+//     // Each array will be smaller than the arrayPosition variable, but by using
+//     // the modulo operator (%) we can dig into the arrays at the correct
+//     // position points without needing complicated math. Basically, the
+//     // arrayPosition cycles continuously through a very large range of numbers,
+//     // and the "%" operator is the math that finds out what the array position
+//     // would have been if it had started within this small array. This allows
+//     // the code to support zigzag arrays of any size.
+//     blackOrWhitePixel =
+//       pgm_read_byte(&firstArray[arrayPosition % firstArraySize]) & 
+//       pgm_read_byte(&secondArray[arrayPosition % secondArraySize]);
+//   }
+//   // If only one array is used, then the second array will be empty and will
+//   // have a size of zero. Detect this and use only the first array.
+//   if (!secondArraySize)
+//   {
+//     blackOrWhitePixel = pgm_read_byte(&firstArray[arrayPosition % firstArraySize]);
+//   }
+//   // Work in progress: I'm working on GitHub issue #8 - trying to allow for
+//   // larger patterns with proper antialiasing. At the moment this is still
+//   // converting  the binary 0 or 1 value into a pixel darkness value, i.e., 0
+//   // becomes 0, 1 becomes full brightness. I will be working on making shades
+//   // of gray possible later.
+//   // 
+//   // Note: I originally had this line:
+//   //      return blackOrWhitePixel * SCANNER_BRIGHTNESS;
+//   //
+//   // Which was intended to work if True was 1 and False was 0. But I was finding
+//   // that True was not casting to 1, it was casting to a larger number. This is
+//   // going to be rewritten when the arrays become shades of gray.
+//   if (blackOrWhitePixel)
+//   {
+//     return SCANNER_BRIGHTNESS;
+//   }
+//   else
+//   {
+//     return 0;
+//   }
+// }
 
 // ---------------------------------------------------------------------------
 // Subroutine to add the colored flashing "conversation" lights, atop the moving
@@ -451,7 +552,7 @@ void CE3Kconversation()
         flashDwell         = random16(CONVERSATION_EXTRA_DWELL_MAX); // Color bar can dwell at its widest point for a certain number of frames.
         colorBarStartPoint = random16(CONVERSATION_START_POINT_MAX - CONVERSATION_START_POINT_MIN - colorBarWidth) + CONVERSATION_START_POINT_MIN; 
         colorBarHue        = random8();                              // Random hue for each color light flash.
- 
+
         // Ensure we do not overwrite memory by making sure the start/end points
         // don't exceed the start or end of the LED strand. This should only be
         // needed when running on a small test strip where the width of the
