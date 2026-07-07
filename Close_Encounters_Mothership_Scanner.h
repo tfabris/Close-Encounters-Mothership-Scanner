@@ -49,6 +49,10 @@
 #define SCANNER_BRIGHTNESS             150
 #define CONVERSATION_BRIGHTNESS        255
 
+// Number of milliseconds between "frames" of the scanner light animation. For
+// reference, a 60fps video game displays at about 16ms per frame.
+#define SCANNER_ANIMATION_SPEED        15
+
 // Minimum and maximum random start positions for the color conversation lights
 // along the LED strand. Use these values if you want the color flashes to be
 // constrained to a certain subsection of your LED strand. In my case, my
@@ -732,282 +736,287 @@ void ce3kScanner()
 
   // Perform actions on the first run of this function only.
   static bool firstTime = true;
-  if (firstTime)
+
+  // Only animate the scanner lights at a certain frame rate.
+  EVERY_N_MILLISECONDS ( SCANNER_ANIMATION_SPEED )
   {
-    firstTime = false;
+    if (firstTime)
+    {
+      firstTime = false;
 
-    // Initialize the slit view array to black.
-    fill_solid( zigzagSlit, WIDEST_ARRAY, CRGBW(0,0,0,0) );
+      // Initialize the slit view array to black.
+      fill_solid( zigzagSlit, WIDEST_ARRAY, CRGBW(0,0,0,0) );
 
-    // Initialize the data in all of the pattern data structures. Make sure to
-    // update the variable definition NUM_CE3K_PATTERNS at the top of the code
-    // too. Since this is something that I might tend to forget myself, I'm
-    // using a "trick" here with the checkPatternIndex variable, to force
-    // myself to ensure that NUM_CE3K_PATTERNS equals the number of definitions
-    // here.
-    int checkPatternIndex = -1;
+      // Initialize the data in all of the pattern data structures. Make sure to
+      // update the variable definition NUM_CE3K_PATTERNS at the top of the code
+      // too. Since this is something that I might tend to forget myself, I'm
+      // using a "trick" here with the checkPatternIndex variable, to force
+      // myself to ensure that NUM_CE3K_PATTERNS equals the number of definitions
+      // here.
+      int checkPatternIndex = -1;
 
-    checkPatternIndex++;
-    CE3Kpatterns[checkPatternIndex].ArrayA = arrayTony01;
-    CE3Kpatterns[checkPatternIndex].ArrayB = arrayTony02;
-    CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony01Size;  
-    CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony02Size;
-    CE3Kpatterns[checkPatternIndex].Width  = arrayTony01Width;
-    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 15;
+      checkPatternIndex++;
+      CE3Kpatterns[checkPatternIndex].ArrayA = arrayTony01;
+      CE3Kpatterns[checkPatternIndex].ArrayB = arrayTony02;
+      CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony01Size;  
+      CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony02Size;
+      CE3Kpatterns[checkPatternIndex].Width  = arrayTony01Width;
+      CE3Kpatterns[checkPatternIndex].SubpixelResolution = 5;
 
-    checkPatternIndex++;
-    CE3Kpatterns[checkPatternIndex].ArrayA = arrayTony03;
-    CE3Kpatterns[checkPatternIndex].ArrayB = arrayTony04;
-    CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony03Size;  
-    CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony04Size;
-    CE3Kpatterns[checkPatternIndex].Width  = arrayTony03Width;
-    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 40;   // Do not go above MAX_SUBPIXELS
+      checkPatternIndex++;
+      CE3Kpatterns[checkPatternIndex].ArrayA = arrayTony03;
+      CE3Kpatterns[checkPatternIndex].ArrayB = arrayTony04;
+      CE3Kpatterns[checkPatternIndex].SizeA  = arrayTony03Size;  
+      CE3Kpatterns[checkPatternIndex].SizeB  = arrayTony04Size;
+      CE3Kpatterns[checkPatternIndex].Width  = arrayTony03Width;
+      CE3Kpatterns[checkPatternIndex].SubpixelResolution = 15;   // Do not go above MAX_SUBPIXELS
 
-    checkPatternIndex++;
-    CE3Kpatterns[checkPatternIndex].ArrayA = arrayConversationPairs;
-    CE3Kpatterns[checkPatternIndex].ArrayB = arrayBlank;
-    CE3Kpatterns[checkPatternIndex].SizeA  = arrayConversationPairsSize;  
-    CE3Kpatterns[checkPatternIndex].SizeB  = arrayBlankSize;
-    CE3Kpatterns[checkPatternIndex].Width  = arrayConversationPairsWidth;   
-    CE3Kpatterns[checkPatternIndex].SubpixelResolution = 15;
+      checkPatternIndex++;
+      CE3Kpatterns[checkPatternIndex].ArrayA = arrayConversationPairs;
+      CE3Kpatterns[checkPatternIndex].ArrayB = arrayBlank;
+      CE3Kpatterns[checkPatternIndex].SizeA  = arrayConversationPairsSize;  
+      CE3Kpatterns[checkPatternIndex].SizeB  = arrayBlankSize;
+      CE3Kpatterns[checkPatternIndex].Width  = arrayConversationPairsWidth;   
+      CE3Kpatterns[checkPatternIndex].SubpixelResolution = 5;
 
-    // Done with defining patterns. Make sure that we defined them correctly.
-    checkPatternIndex++; // Because of zero-indexing, the count is one higher than the index.
-    if (checkPatternIndex != NUM_CE3K_PATTERNS)
+      // Done with defining patterns. Make sure that we defined them correctly.
+      checkPatternIndex++; // Because of zero-indexing, the count is one higher than the index.
+      if (checkPatternIndex != NUM_CE3K_PATTERNS)
+      {
+        while(true)
+        {
+          // Yell at myself if I don't update the code correctly.
+          Serial.println( F("-------------------------------------------------------------------------"));
+          Serial.println( F("Error - CE3K Scanner: NUM_CE3K_PATTERNS differs from pattern definitions."));
+          Serial.println( F("-------------------------------------------------------------------------"));
+          delay(5000);
+        }
+      }
+
+      // Decide which of the patterns we'll be starting on, and prep it.
+      currentPatternIndex = 0;
+      currentPattern = CE3Kpatterns[currentPatternIndex];
+      updateDivTable(currentPatternIndex);
+    }
+
+    // Cycle to the next scanner pattern at intervals.
+    EVERY_N_MILLISECONDS(CE3K_PATTERN_CHANGE_INTERVAL)
+    {
+        imageOffset = 0;      // Must reset these variables when changing patterns
+        subPixelOffset = 0;   // in order to prevent positioning and indexing bugs.
+        currentPatternIndex ++;
+        if (currentPatternIndex >= NUM_CE3K_PATTERNS) { currentPatternIndex = 0; }
+        currentPattern = CE3Kpatterns[currentPatternIndex];    
+        updateDivTable(currentPatternIndex);
+    }
+
+    // Sanity check that I remembered to set WIDEST_ARRAY correctly.
+    if (currentPattern.Width > WIDEST_ARRAY)
     {
       while(true)
       {
-        // Yell at myself if I don't update the code correctly.
+        // Yell at myself if I didn't update WIDEST_ARRAY correctly.
         Serial.println( F("-------------------------------------------------------------------------"));
-        Serial.println( F("Error - CE3K Scanner: NUM_CE3K_PATTERNS differs from pattern definitions."));
+        Serial.println( F("Error - CE3K Scanner: currentPattern width is wider than WIDEST_ARRAY."));
         Serial.println( F("-------------------------------------------------------------------------"));
         delay(5000);
       }
-    }
+    }  
 
-    // Decide which of the patterns we'll be starting on, and prep it.
-    currentPatternIndex = 0;
-    currentPattern = CE3Kpatterns[currentPatternIndex];
-    updateDivTable(currentPatternIndex);
-  }
-
-  // Cycle to the next scanner pattern at intervals.
-  EVERY_N_MILLISECONDS(CE3K_PATTERN_CHANGE_INTERVAL)
-  {
-      imageOffset = 0;      // Must reset these variables when changing patterns
-      subPixelOffset = 0;   // in order to prevent positioning and indexing bugs.
-      currentPatternIndex ++;
-      if (currentPatternIndex >= NUM_CE3K_PATTERNS) { currentPatternIndex = 0; }
-      currentPattern = CE3Kpatterns[currentPatternIndex];    
-      updateDivTable(currentPatternIndex);
-  }
-
-  // Sanity check that I remembered to set WIDEST_ARRAY correctly.
-  if (currentPattern.Width > WIDEST_ARRAY)
-  {
-    while(true)
-    {
-      // Yell at myself if I didn't update WIDEST_ARRAY correctly.
-      Serial.println( F("-------------------------------------------------------------------------"));
-      Serial.println( F("Error - CE3K Scanner: currentPattern width is wider than WIDEST_ARRAY."));
-      Serial.println( F("-------------------------------------------------------------------------"));
-      delay(5000);
-    }
-  }  
-
-  // The "weight unit" is a percentage number representing the "thickness" of 1
-  // unit of subpixel resolution. For example if the subpixel resolution is set
-  // to 5, then each one of these units would be 0.20. The "weight" is this
-  // times the subpixel offset, so that the "weight" of each anti-aliased step
-  // is a smooth linear brightness transition between each line: 0.00, 0.20,
-  // 0.40, 0.60, 0.80. Note that 1.00 is skipped in the loops because that ends
-  // up being the same as the 0.00 for the following iteration. If it actually
-  // did both 0.00 and 1.00, it would work, but it would cause a short "pause"
-  // in the animation where the two similar frames met. The blend is based on:
-  // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
-  //    float oneSubPixelWeightUnit = ((float)1 / (float)currentPattern.SubpixelResolution);
-  //    float blendWeight = subPixelOffset * oneSubPixelWeightUnit;
-
-  // Speed optimization: Changing the blending code to a non-floating-point and
-  // non-division version of the blending weight code. Intended to make the
-  // loops run slightly faster by using pure integer math in the main loop.
-  // Instead of the weighting being done by a floating point percentage, it's
-  // now an integer value that is represented by a number from 0-255. For
-  // instance, if the subpixel resolution is at 5 for this particular pattern,
-  // then the first level of the five subpixel weighting values will be 51
-  // instead of 0.20. These values are stored in a lookup table which is
-  // recalculated once at the beginning of each pattern display. This way, the
-  // division operation is replaced by this quick div256Table lookup, saving
-  // dozens of CPU cycles per loop.
-  uint8_t blendWeight = div256Table[subPixelOffset];
-
-  // TO DO: The blend above (regardless of whether it's done with the floating
-  // point or the lookup table) is a purely linear blend. Unfortunately the
-  // LEDs do not have a purely linear brightness based on the numbers pumped
-  // into them. The lowest brightness level of an LED is significantly brighter
-  // than when the LED is just "off". This makes the antialiased pixels kind
-  // of "pop" from fully dark to dimly-lit in the final animation. This causes
-  // the transition points between black background and the white bars to seem
-  // to "caterpillar" across the strand instead of flowing perfectly smoothly.
-  // It would be nice if I could come up with a nonlinear blend to make it seem
-  // more smooth.
-
-  // Assemble the current slit view into the slit array. This loop is using
-  // a speed optimization where decrementing the uint16_t is faster than
-  // incrementing and testing an int with a For loop.
-  uint16_t x = currentPattern.Width;
-  if (currentPattern.Width <= 0) return;
-  while (x--)
-  {
-    // Obtain the current pixel location, and also the pixels on the prior row
-    // and the following row (for antialiasing).
-    long thisPixelPosition = x+imageOffset;
-    long nextPixelPosition = thisPixelPosition+currentPattern.Width;
-
-    // Get the value of the pixels of the image arrays. 
-    int thisPixelDarkness = pixelValue(thisPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
-    int nextPixelDarkness = pixelValue(nextPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
-
-    // Blend the next and previous line's pixels into the current line's pixel.
-    // I tried using FastLED's "blend8" function, but it did not produce the
-    // results I wanted. This is my own blend math, based on this:
+    // The "weight unit" is a percentage number representing the "thickness" of 1
+    // unit of subpixel resolution. For example if the subpixel resolution is set
+    // to 5, then each one of these units would be 0.20. The "weight" is this
+    // times the subpixel offset, so that the "weight" of each anti-aliased step
+    // is a smooth linear brightness transition between each line: 0.00, 0.20,
+    // 0.40, 0.60, 0.80. Note that 1.00 is skipped in the loops because that ends
+    // up being the same as the 0.00 for the following iteration. If it actually
+    // did both 0.00 and 1.00, it would work, but it would cause a short "pause"
+    // in the animation where the two similar frames met. The blend is based on:
     // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
-    //    int blendedDarkness = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
+    //    float oneSubPixelWeightUnit = ((float)1 / (float)currentPattern.SubpixelResolution);
+    //    float blendWeight = subPixelOffset * oneSubPixelWeightUnit;
 
-    // Speed optimization: Integer-math version of the floating point blend
-    // above. Multiply by the blend weight as described above, but multiply it
-    // into a 16-bit integer and then bitshift it back down to 8 bits.
-    uint8_t blendedDarkness = (((uint16_t)nextPixelDarkness*blendWeight) >> 8)+(((uint16_t)thisPixelDarkness*(256-blendWeight)) >> 8);
+    // Speed optimization: Changing the blending code to a non-floating-point and
+    // non-division version of the blending weight code. Intended to make the
+    // loops run slightly faster by using pure integer math in the main loop.
+    // Instead of the weighting being done by a floating point percentage, it's
+    // now an integer value that is represented by a number from 0-255. For
+    // instance, if the subpixel resolution is at 5 for this particular pattern,
+    // then the first level of the five subpixel weighting values will be 51
+    // instead of 0.20. These values are stored in a lookup table which is
+    // recalculated once at the beginning of each pattern display. This way, the
+    // division operation is replaced by this quick div256Table lookup, saving
+    // dozens of CPU cycles per loop.
+    uint8_t blendWeight = div256Table[subPixelOffset];
 
-    // Apply the final values to the array that represents the slit. I'm using
-    // only the White LED in the CRGBW array here, so the colored conversation
-    // lights can be painted separately without having to blend them with the
-    // white LEDs. If you are using CRGB LEDs, you'll have to refactor this.
-    zigzagSlit[x].white = blendedDarkness;
+    // TO DO: The blend above (regardless of whether it's done with the floating
+    // point or the lookup table) is a purely linear blend. Unfortunately the
+    // LEDs do not have a purely linear brightness based on the numbers pumped
+    // into them. The lowest brightness level of an LED is significantly brighter
+    // than when the LED is just "off". This makes the antialiased pixels kind
+    // of "pop" from fully dark to dimly-lit in the final animation. This causes
+    // the transition points between black background and the white bars to seem
+    // to "caterpillar" across the strand instead of flowing perfectly smoothly.
+    // It would be nice if I could come up with a nonlinear blend to make it seem
+    // more smooth.
 
-    // ---------------------------------------------------------------------------
-    // Debugging printouts.
-      // FastLED.show();
-      // Serial.println("");
-      // Serial.println("x = " + String(x));
-      // Serial.println("imageOffset = " + String(imageOffset));
-      // Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
-      // Serial.println("blendWeight = " + String(blendWeight));
-      // Serial.println("SubpixelResolution = " + String(currentPattern.SubpixelResolution));
-      // Serial.println("subPixelOffset = " + String(subPixelOffset));
-      // Serial.println("thisPixelPosition = " + String(thisPixelPosition));
-      // Serial.println("nextPixelPosition = " + String(nextPixelPosition));
-      // Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
-      // Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
-      // Serial.println("blendedDarkness = " + String(blendedDarkness));
-      // Serial.println("");
-      // while (Serial.available() < 1)
-      // {
-      //   delay(10);
-      // }
-      // while (Serial.available() > 0)
-      // {
-      //   byte dummyread = Serial.read();
-      // }
-    // ---------------------------------------------------------------------------
-  }
+    // Assemble the current slit view into the slit array. This loop is using
+    // a speed optimization where decrementing the uint16_t is faster than
+    // incrementing and testing an int with a For loop.
+    uint16_t x = currentPattern.Width;
+    if (currentPattern.Width <= 0) return;
+    while (x--)
+    {
+      // Obtain the current pixel location, and also the pixels on the prior row
+      // and the following row (for antialiasing).
+      long thisPixelPosition = x+imageOffset;
+      long nextPixelPosition = thisPixelPosition+currentPattern.Width;
 
-  // Copy the slit array onto the entire LED strand. If the current width is
-  // less than the total number of LEDs, then it will copy it multiple times.
-  // If the current width is larger than the total number of LEDs, it will
-  // copy only the relevant subsection. More details and example found here:
-  // https://github.com/marmilicious/FastLED_examples/blob/master/memmove8_pattern_copy.ino
+      // Get the value of the pixels of the image arrays. 
+      int thisPixelDarkness = pixelValue(thisPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
+      int nextPixelDarkness = pixelValue(nextPixelPosition, currentPattern.ArrayA, currentPattern.SizeA, currentPattern.ArrayB, currentPattern.SizeB);
 
-  // Old unoptimized version here:
-  // for (int n=0; n<NUM_LEDS; n+=currentPattern.Width)
-  // {
-  //   // Precalculate a number to prevent myself from writing past the end of
-  //   // the CRGBW array. This variable will be the same as the current width
-  //   // for most of the copy operations, and then on the last copy operation,
-  //   // it will be less than the current width because it is copying only up
-  //   // to the end of the LEDs array.
-  //   int numLedsToCopy = currentPattern.Width;
-  //   if (n+currentPattern.Width >= NUM_LEDS) 
-  //   {
-  //     numLedsToCopy = NUM_LEDS-n;
-  //   }
-  //   // Copy the slit array to the LED strand. Syntax of this command is:    
-  //   // memmove8( &destination[start position], &source[start position], size of pixel data )
-  //   //
-  //   // NOTE: In my LED array I'm using CRGBW strand hardware, but if yours is
-  //   // CRGB, you'll need to refactor the code to accept CRGB.
-  //   //
-  //   // If you want to see just the color flashes and not the white scanner
-  //   // lights, either comment out this line or set SCANNER_BRIGHTNESS 0.
-  //   memmove8(&leds[n], &zigzagSlit[0], numLedsToCopy*sizeof(CRGBW));
-  // }
+      // Blend the next and previous line's pixels into the current line's pixel.
+      // I tried using FastLED's "blend8" function, but it did not produce the
+      // results I wanted. This is my own blend math, based on this:
+      // http://www.designimage.co.uk/quick-tip-the-maths-to-blend-between-two-values/
+      //    int blendedDarkness = (nextPixelDarkness*blendWeight)+(thisPixelDarkness*(1-blendWeight));
 
-  // New optimized version:
-  uint16_t patternWidth = (uint16_t)currentPattern.Width;
-  uint16_t n = 0;
-  uint16_t copiedPatterns = slitCopyFullRepeatsCount;
-  while (copiedPatterns--)
-  {
-    // If you want to see just the color flashes and not the white scanner
-    // lights, either comment out the memmove8 lines, or set SCANNER_BRIGHTNESS 0.
-    memmove8(&leds[n], &zigzagSlit[0], patternWidth * sizeof(CRGBW));
-    n += patternWidth;
-  }
-  if (slitCopyRemainingLeds > 0)
-  {
-    // Handle the final leftover slice (if the pattern doesn't divide evenly).
-    memmove8(&leds[n], &zigzagSlit[0], slitCopyRemainingLeds * sizeof(CRGBW));
-  }
+      // Speed optimization: Integer-math version of the floating point blend
+      // above. Multiply by the blend weight as described above, but multiply it
+      // into a 16-bit integer and then bitshift it back down to 8 bits.
+      uint8_t blendedDarkness = (((uint16_t)nextPixelDarkness*blendWeight) >> 8)+(((uint16_t)thisPixelDarkness*(256-blendWeight)) >> 8);
+
+      // Apply the final values to the array that represents the slit. I'm using
+      // only the White LED in the CRGBW array here, so the colored conversation
+      // lights can be painted separately without having to blend them with the
+      // white LEDs. If you are using CRGB LEDs, you'll have to refactor this.
+      zigzagSlit[x].white = blendedDarkness;
+
+      // ---------------------------------------------------------------------------
+      // Debugging printouts.
+        // FastLED.show();
+        // Serial.println("");
+        // Serial.println("x = " + String(x));
+        // Serial.println("imageOffset = " + String(imageOffset));
+        // Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
+        // Serial.println("blendWeight = " + String(blendWeight));
+        // Serial.println("SubpixelResolution = " + String(currentPattern.SubpixelResolution));
+        // Serial.println("subPixelOffset = " + String(subPixelOffset));
+        // Serial.println("thisPixelPosition = " + String(thisPixelPosition));
+        // Serial.println("nextPixelPosition = " + String(nextPixelPosition));
+        // Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
+        // Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
+        // Serial.println("blendedDarkness = " + String(blendedDarkness));
+        // Serial.println("");
+        // while (Serial.available() < 1)
+        // {
+        //   delay(10);
+        // }
+        // while (Serial.available() > 0)
+        // {
+        //   byte dummyread = Serial.read();
+        // }
+      // ---------------------------------------------------------------------------
+    }
+
+    // Copy the slit array onto the entire LED strand. If the current width is
+    // less than the total number of LEDs, then it will copy it multiple times.
+    // If the current width is larger than the total number of LEDs, it will
+    // copy only the relevant subsection. More details and example found here:
+    // https://github.com/marmilicious/FastLED_examples/blob/master/memmove8_pattern_copy.ino
+
+    // Old unoptimized version here:
+    // for (int n=0; n<NUM_LEDS; n+=currentPattern.Width)
+    // {
+    //   // Precalculate a number to prevent myself from writing past the end of
+    //   // the CRGBW array. This variable will be the same as the current width
+    //   // for most of the copy operations, and then on the last copy operation,
+    //   // it will be less than the current width because it is copying only up
+    //   // to the end of the LEDs array.
+    //   int numLedsToCopy = currentPattern.Width;
+    //   if (n+currentPattern.Width >= NUM_LEDS) 
+    //   {
+    //     numLedsToCopy = NUM_LEDS-n;
+    //   }
+    //   // Copy the slit array to the LED strand. Syntax of this command is:    
+    //   // memmove8( &destination[start position], &source[start position], size of pixel data )
+    //   //
+    //   // NOTE: In my LED array I'm using CRGBW strand hardware, but if yours is
+    //   // CRGB, you'll need to refactor the code to accept CRGB.
+    //   //
+    //   // If you want to see just the color flashes and not the white scanner
+    //   // lights, either comment out this line or set SCANNER_BRIGHTNESS 0.
+    //   memmove8(&leds[n], &zigzagSlit[0], numLedsToCopy*sizeof(CRGBW));
+    // }
+
+    // New optimized version:
+    uint16_t patternWidth = (uint16_t)currentPattern.Width;
+    uint16_t n = 0;
+    uint16_t copiedPatterns = slitCopyFullRepeatsCount;
+    while (copiedPatterns--)
+    {
+      // If you want to see just the color flashes and not the white scanner
+      // lights, either comment out the memmove8 lines, or set SCANNER_BRIGHTNESS 0.
+      memmove8(&leds[n], &zigzagSlit[0], patternWidth * sizeof(CRGBW));
+      n += patternWidth;
+    }
+    if (slitCopyRemainingLeds > 0)
+    {
+      // Handle the final leftover slice (if the pattern doesn't divide evenly).
+      memmove8(&leds[n], &zigzagSlit[0], slitCopyRemainingLeds * sizeof(CRGBW));
+    }
+
+    // Increment to the next line in the image (by fractional sub-pixel).
+    subPixelOffset ++;
+
+    // This comparison must be ">=" rather than just ">", in order to prevent a
+    // small pause in the animation. The pause occurs if the subpixel offset
+    // number can be at the maximum value in one frame and then also be 0 in the
+    // next frame. For instance with a subpixel resolution of 5, it would go
+    // 012345 012345 012345, making the blend values for each animation go 0.00,
+    // 0.20, 0.40, 0.60, 0.80, 1.00 each cycle. The 1.00 blend value in that last
+    // frame would match the 0.00 in the next cycle, and so the brightness of the
+    // pixel would be the same in both the "0" and the "5" frames because the
+    // blend results would be the same in both frames, and the animation would
+    // not seem to advance during that frame. This causes a noticeable "frame
+    // judder". Instead, it must skip the top value. For instance, with subpixel
+    // resolution of 5, it must go 01234 01234. That makes the blend values wrap
+    // around correctly at the ends of each cycle.
+    if (subPixelOffset >= currentPattern.SubpixelResolution)
+    {
+      // If we have progressed through all of the subpixels, then it's time to
+      // move on to the next line in the image.
+      subPixelOffset = 0;
+      imageOffset += currentPattern.Width; 
+
+      // The imageOffset is a long int, which goes up to 2147483647, which will
+      // take a long long time for this particular code. In any case, we still
+      // need to ensure this never crashes by resetting imageOffset back to 0 if
+      // it is allowed to get large (for example, if the code is configured to
+      // run a single pattern forever and never changes). The reset does not look
+      // smooth, but it will happen super-rarely. Still, it must get reset at
+      // some point, so that its value never wraps to negative. Note that the
+      // comparison can't be ">= 2147483647" because the variable will not ever
+      // reach that number before the variable wraps to negative (since it's
+      // incremented by pattern width rather than incremented by one). So give
+      // the variable some headroom by resetting the value well before it reaches
+      // that number.
+
+      //    if ( (imageOffset + currentPattern.Width) >= 1600 )    // Test-Debug a small reset point.
+      if ( (imageOffset + currentPattern.Width) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
+      {
+        imageOffset = 0;
+        subPixelOffset = 0;
+        // Serial.println (F("CE3K animation has wrapped around."));    // Test-Debug message to be notified of the reset point.
+      }
+    }   
+  }  // This bracket ends the "EVERY_N_MILLISECONDS" for the scanner animation frames.
 
   // Call the subroutine to add the color conversation flashes. If you wish to
   // see only the scanner lines and not the color flashes, then comment out
   // this line, or set CONVERSATION_BRIGHTNESS 0.
   CE3Kconversation();
-
-  // Increment to the next line in the image (by fractional sub-pixel).
-  subPixelOffset ++;
-
-  // This comparison must be ">=" rather than just ">", in order to prevent a
-  // small pause in the animation. The pause occurs if the subpixel offset
-  // number can be at the maximum value in one frame and then also be 0 in the
-  // next frame. For instance with a subpixel resolution of 5, it would go
-  // 012345 012345 012345, making the blend values for each animation go 0.00,
-  // 0.20, 0.40, 0.60, 0.80, 1.00 each cycle. The 1.00 blend value in that last
-  // frame would match the 0.00 in the next cycle, and so the brightness of the
-  // pixel would be the same in both the "0" and the "5" frames because the
-  // blend results would be the same in both frames, and the animation would
-  // not seem to advance during that frame. This causes a noticeable "frame
-  // judder". Instead, it must skip the top value. For instance, with subpixel
-  // resolution of 5, it must go 01234 01234. That makes the blend values wrap
-  // around correctly at the ends of each cycle.
-  if (subPixelOffset >= currentPattern.SubpixelResolution)
-  {
-    // If we have progressed through all of the subpixels, then it's time to
-    // move on to the next line in the image.
-    subPixelOffset = 0;
-    imageOffset += currentPattern.Width; 
-
-    // The imageOffset is a long int, which goes up to 2147483647, which will
-    // take a long long time for this particular code. In any case, we still
-    // need to ensure this never crashes by resetting imageOffset back to 0 if
-    // it is allowed to get large (for example, if the code is configured to
-    // run a single pattern forever and never changes). The reset does not look
-    // smooth, but it will happen super-rarely. Still, it must get reset at
-    // some point, so that its value never wraps to negative. Note that the
-    // comparison can't be ">= 2147483647" because the variable will not ever
-    // reach that number before the variable wraps to negative (since it's
-    // incremented by pattern width rather than incremented by one). So give
-    // the variable some headroom by resetting the value well before it reaches
-    // that number.
-
-    //    if ( (imageOffset + currentPattern.Width) >= 1600 )    // Test-Debug a small reset point.
-    if ( (imageOffset + currentPattern.Width) >= 2147480000 )    // Reset before it reaches too close to the Long Int limit.
-    {
-      imageOffset = 0;
-      subPixelOffset = 0;
-      // Serial.println (F("CE3K animation has wrapped around."));    // Test-Debug message to be notified of the reset point.
-    }
-  }       
 }
 
 #endif
