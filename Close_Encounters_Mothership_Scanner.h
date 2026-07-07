@@ -344,8 +344,8 @@ int pixelValue(long arrayPosition, char firstArray[], int firstArraySize, char s
   // 
   // Current state: If you are using two arrays, this code ANDs the two arrays
   // together so that any black stripes are preserved. This simulates the
-  // original fiber optic effect, where the light source for the fiber optic
-  // strand is blocked by the pattern(s).  
+  // original fiber optic effect, where the photosensor controlling the fiber
+  // optic light is blocked by the pattern(s).  
   static long lastPosition = -1;
   static int index1 = 0;
   static int index2 = 0;
@@ -405,7 +405,7 @@ int pixelValue(long arrayPosition, char firstArray[], int firstArraySize, char s
   {
     // This is where the code ANDs the two arrays together so that any black
     // stripes are preserved, simulating the original fiber optic effect, where
-    // the light source for the fiber optic strand is blocked by black.
+    // the photosensor controlling the fiber optic light is blocked by black.
     blackOrWhitePixel = pgm_read_byte(&firstArray[index1]) & pgm_read_byte(&secondArray[index2]);
   }
   else
@@ -431,67 +431,6 @@ int pixelValue(long arrayPosition, char firstArray[], int firstArraySize, char s
   return (blackOrWhitePixel ? 1 : 0) * SCANNER_BRIGHTNESS;
 }
 
-// Old unoptimized version of this function. Remove this commented code section
-// after the new optimized version has proven its worth over time.
-// // ---------------------------------------------------------------------------
-// // Function to grab one pixel out of the zigzag pixel array(s), and turn it
-// // into a brightness value that can be applied to the LEDs.
-// // ---------------------------------------------------------------------------
-// int pixelValue(long arrayPosition, char firstArray[], int firstArraySize, char secondArray[], int secondArraySize)
-// {
-//   // Work in progress: I'm working on GitHub issue #8 - trying to allow for
-//   // larger patterns with proper antialiasing. Originally the pixel arrays were
-//   // coded as bool, either 0 or 1, to make it easier to type patterns into the
-//   // arrays. This is in-process of being changed, so that each pixel in the
-//   // pattern could be an 8 bit level which can be antialiased.
-//   // 
-//   // Current state: If you are using two arrays, this code ANDs the two arrays
-//   // together so that any black stripes are preserved. This simulates the
-//   // original fiber optic effect, where the light source for the fiber optic
-//   // strand is blocked by the pattern(s).
-//   bool blackOrWhitePixel;
-//   // Allow an option to combine two arrays if desired. If two arrays are used,
-//   // both arrays will have a nonzero size. Detect this and combine them.
-//   if (firstArraySize && secondArraySize)
-//   {
-//     // Each array will be smaller than the arrayPosition variable, but by using
-//     // the modulo operator (%) we can dig into the arrays at the correct
-//     // position points without needing complicated math. Basically, the
-//     // arrayPosition cycles continuously through a very large range of numbers,
-//     // and the "%" operator is the math that finds out what the array position
-//     // would have been if it had started within this small array. This allows
-//     // the code to support zigzag arrays of any size.
-//     blackOrWhitePixel =
-//       pgm_read_byte(&firstArray[arrayPosition % firstArraySize]) & 
-//       pgm_read_byte(&secondArray[arrayPosition % secondArraySize]);
-//   }
-//   // If only one array is used, then the second array will be empty and will
-//   // have a size of zero. Detect this and use only the first array.
-//   if (!secondArraySize)
-//   {
-//     blackOrWhitePixel = pgm_read_byte(&firstArray[arrayPosition % firstArraySize]);
-//   }
-//   // Work in progress: I'm working on GitHub issue #8 - trying to allow for
-//   // larger patterns with proper antialiasing. At the moment this is still
-//   // converting  the binary 0 or 1 value into a pixel darkness value, i.e., 0
-//   // becomes 0, 1 becomes full brightness. I will be working on making shades
-//   // of gray possible later.
-//   // 
-//   // Note: I originally had this line:
-//   //      return blackOrWhitePixel * SCANNER_BRIGHTNESS;
-//   //
-//   // Which was intended to work if True was 1 and False was 0. But I was finding
-//   // that True was not casting to 1, it was casting to a larger number. This is
-//   // going to be rewritten when the arrays become shades of gray.
-//   if (blackOrWhitePixel)
-//   {
-//     return SCANNER_BRIGHTNESS;
-//   }
-//   else
-//   {
-//     return 0;
-//   }
-// }
 
 // ---------------------------------------------------------------------------
 // Subroutine to add the colored flashing "conversation" lights, atop the moving
@@ -710,9 +649,7 @@ void updateDivTable(int currentPatternIndex)
   for (uint8_t tableIndex = 1; tableIndex < subpixelResolution; tableIndex++)
   {
     div256Table[tableIndex] = ((float)1 / subpixelResolution) * tableIndex * 256;
-    // Debug printout if needed: Serial.print(div256Table[tableIndex]); Serial.print(" ");
   }
-  // Debug printout if needed: Serial.println("");
 
   // Precalculate additional division variables. These variables control the
   // operation which copies each "slit" view of the patterns onto the full size
@@ -733,13 +670,12 @@ void ce3kScanner()
   static int subPixelOffset = 0;      // Move through the arrays slowly while antialiasing.
   static CE3Kpattern currentPattern;  // Which pattern is currently running.
   static int currentPatternIndex;     // Which index in the array of pattern data structures is the curernt pattern.
-
-  // Perform actions on the first run of this function only.
-  static bool firstTime = true;
-
+  static bool firstTime = true;       // Keep track of code which only needs to be run the first time through the loop.
+  
   // Only animate the scanner lights at a certain frame rate.
   EVERY_N_MILLISECONDS ( SCANNER_ANIMATION_SPEED )
   {
+    // Perform actions on the first run of this function only.
     if (firstTime)
     {
       firstTime = false;
@@ -892,32 +828,6 @@ void ce3kScanner()
       // lights can be painted separately without having to blend them with the
       // white LEDs. If you are using CRGB LEDs, you'll have to refactor this.
       zigzagSlit[x].white = blendedDarkness;
-
-      // ---------------------------------------------------------------------------
-      // Debugging printouts.
-        // FastLED.show();
-        // Serial.println("");
-        // Serial.println("x = " + String(x));
-        // Serial.println("imageOffset = " + String(imageOffset));
-        // Serial.println("oneSubPixelWeightUnit = " + String(oneSubPixelWeightUnit));
-        // Serial.println("blendWeight = " + String(blendWeight));
-        // Serial.println("SubpixelResolution = " + String(currentPattern.SubpixelResolution));
-        // Serial.println("subPixelOffset = " + String(subPixelOffset));
-        // Serial.println("thisPixelPosition = " + String(thisPixelPosition));
-        // Serial.println("nextPixelPosition = " + String(nextPixelPosition));
-        // Serial.println("thisPixelDarkness = " + String(thisPixelDarkness));
-        // Serial.println("nextPixelDarkness = " + String(nextPixelDarkness));
-        // Serial.println("blendedDarkness = " + String(blendedDarkness));
-        // Serial.println("");
-        // while (Serial.available() < 1)
-        // {
-        //   delay(10);
-        // }
-        // while (Serial.available() > 0)
-        // {
-        //   byte dummyread = Serial.read();
-        // }
-      // ---------------------------------------------------------------------------
     }
 
     // Copy the slit array onto the entire LED strand. If the current width is
@@ -926,36 +836,24 @@ void ce3kScanner()
     // copy only the relevant subsection. More details and example found here:
     // https://github.com/marmilicious/FastLED_examples/blob/master/memmove8_pattern_copy.ino
 
-    // Old unoptimized version here:
-    // for (int n=0; n<NUM_LEDS; n+=currentPattern.Width)
-    // {
-    //   // Precalculate a number to prevent myself from writing past the end of
-    //   // the CRGBW array. This variable will be the same as the current width
-    //   // for most of the copy operations, and then on the last copy operation,
-    //   // it will be less than the current width because it is copying only up
-    //   // to the end of the LEDs array.
-    //   int numLedsToCopy = currentPattern.Width;
-    //   if (n+currentPattern.Width >= NUM_LEDS) 
-    //   {
-    //     numLedsToCopy = NUM_LEDS-n;
-    //   }
-    //   // Copy the slit array to the LED strand. Syntax of this command is:    
-    //   // memmove8( &destination[start position], &source[start position], size of pixel data )
-    //   //
-    //   // NOTE: In my LED array I'm using CRGBW strand hardware, but if yours is
-    //   // CRGB, you'll need to refactor the code to accept CRGB.
-    //   //
-    //   // If you want to see just the color flashes and not the white scanner
-    //   // lights, either comment out this line or set SCANNER_BRIGHTNESS 0.
-    //   memmove8(&leds[n], &zigzagSlit[0], numLedsToCopy*sizeof(CRGBW));
-    // }
-
-    // New optimized version:
+    // This code has had some speed optimizations made. Originally it was an
+    // incrementing for/next loop, and in the middle of the loop there was
+    // an "if" test every time to determine if the copied data would exceed the
+    // end of the strand. Instead, here it has been changed to a descending
+    // while loop so that its test condition runs faster. Also the variables
+    // have been changed to uints instead of ints to make things faster. And
+    // the "if" test no longer runs every loop, instead it copies leftover
+    // pixels at the end of the strand when the loop is done. It knows whether
+    // there are leftover pixels to copy, because the costly division
+    // operations have been pre-calculated in the "updateDivTable" routine,
+    // instead of being done every time through the loop.
     uint16_t patternWidth = (uint16_t)currentPattern.Width;
     uint16_t n = 0;
     uint16_t copiedPatterns = slitCopyFullRepeatsCount;
     while (copiedPatterns--)
     {
+      // Copy the slit array to the LED strand. Syntax of this command is:    
+      // memmove8( &destination[start position], &source[start position], size of pixel data )      
       // If you want to see just the color flashes and not the white scanner
       // lights, either comment out the memmove8 lines, or set SCANNER_BRIGHTNESS 0.
       memmove8(&leds[n], &zigzagSlit[0], patternWidth * sizeof(CRGBW));
@@ -974,9 +872,9 @@ void ce3kScanner()
     // small pause in the animation. The pause occurs if the subpixel offset
     // number can be at the maximum value in one frame and then also be 0 in the
     // next frame. For instance with a subpixel resolution of 5, it would go
-    // 012345 012345 012345, making the blend values for each animation go 0.00,
-    // 0.20, 0.40, 0.60, 0.80, 1.00 each cycle. The 1.00 blend value in that last
-    // frame would match the 0.00 in the next cycle, and so the brightness of the
+    // 012345 012345 012345, making the blend values for each animation go 0%,
+    // 20%, 40%, 60%, 80%, 100% each cycle. The 100% blend value in that last
+    // frame would match the 0% in the next cycle, and so the brightness of the
     // pixel would be the same in both the "0" and the "5" frames because the
     // blend results would be the same in both frames, and the animation would
     // not seem to advance during that frame. This causes a noticeable "frame
