@@ -35,11 +35,16 @@
 // Global definitions for setting up the LED strips.
 #define LED_TYPE                WS2812B
 #define DATA_PIN                48
-#define NUM_LEDS                40     // This code looks best on larger LED strands, 100-400 or more.
+#define NUM_LEDS                130    // This code looks best on larger LED strands, 100-400 or more.
 #define COLOR_ORDER             RGB
 #define MAX_POWER_MILLIAMPS     500    // Set to appropriate power for your LED power supply.
 #define SERIAL_PORT_SPEED       115200
 #define BRIGHTNESS              255
+
+// This variable can be modified to globally toggle animations off and on.
+// On my particular system, there is a button combo on the lighting
+// controller which will toggle this variable, to pause all animations.
+bool colorCyclingIsOn = true;
 
 // Prepare the arrays to hold the LED data. This is a special version of the
 // definitions, which is needed for the special CRGBW strips with the extra

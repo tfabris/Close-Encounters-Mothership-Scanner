@@ -738,12 +738,15 @@ void ce3kScanner()
     // Cycle to the next scanner pattern at intervals.
     EVERY_N_MILLISECONDS(CE3K_PATTERN_CHANGE_INTERVAL)
     {
+      if (colorCyclingIsOn)   // This variable globally toggles animations on and off.
+      {
         imageOffset = 0;      // Must reset these variables when changing patterns
         subPixelOffset = 0;   // in order to prevent positioning and indexing bugs.
         currentPatternIndex ++;
         if (currentPatternIndex >= NUM_CE3K_PATTERNS) { currentPatternIndex = 0; }
         currentPattern = CE3Kpatterns[currentPatternIndex];    
         updateDivTable(currentPatternIndex);
+      }
     }
 
     // Sanity check that I remembered to set WIDEST_ARRAY correctly.
@@ -866,7 +869,11 @@ void ce3kScanner()
     }
 
     // Increment to the next line in the image (by fractional sub-pixel).
-    subPixelOffset ++;
+    // First check the variable which globally toggles animations on and off.
+    if (colorCyclingIsOn)
+    {
+      subPixelOffset ++;
+    }
 
     // This comparison must be ">=" rather than just ">", in order to prevent a
     // small pause in the animation. The pause occurs if the subpixel offset
@@ -911,10 +918,14 @@ void ce3kScanner()
     }   
   }  // This bracket ends the "EVERY_N_MILLISECONDS" for the scanner animation frames.
 
-  // Call the subroutine to add the color conversation flashes. If you wish to
-  // see only the scanner lines and not the color flashes, then comment out
-  // this line, or set CONVERSATION_BRIGHTNESS 0.
-  CE3Kconversation();
+  // Check the variable which globally toggles animations on and off.
+  if (colorCyclingIsOn)
+  {
+    // Call the subroutine to add the color conversation flashes. If you wish to
+    // see only the scanner lines and not the color flashes, then comment out
+    // this line, or set CONVERSATION_BRIGHTNESS 0.
+    CE3Kconversation();
+  }
 }
 
 #endif
