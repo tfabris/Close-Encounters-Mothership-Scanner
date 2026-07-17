@@ -1,6 +1,3 @@
-#ifndef Close_Encounters_Mothership_Scanner_h
-#define Close_Encounters_Mothership_Scanner_h
-
 // ---------------------------------------------------------------------------
 // Close Encounters Mothership Scanner by Tony Fabris
 //
@@ -30,6 +27,8 @@
 // from W in my code, but it should be relatively simple to refactor this code
 // to work with regular CRGB strips, if that's what you're using.
 // ---------------------------------------------------------------------------
+#ifndef Close_Encounters_Mothership_Scanner_h
+#define Close_Encounters_Mothership_Scanner_h
 
 // ---------------------------------------------------------------------------
 // Set up variables
