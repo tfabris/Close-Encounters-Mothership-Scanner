@@ -1,23 +1,19 @@
-/* FastLED_RGBW
- * 
- * Hack to enable SK6812 RGBW strips to work with FastLED.
- *
- * Original code by Jim Bumgardner (http://krazydad.com).
- * Modified by David Madison (http://partsnotincluded.com).
- * Extended by Christoph Wempe
- * and Tony Fabris
- * 
-*/
+// ----------------------------------------------------------------------------
+// FastLED_RGBW_2.h
+// ----------------------------------------------------------------------------
+//
+// Hack to enable SK6812 RGBW strips to work with FastLED on Arduino. At the
+// time of this writing, FastLED doesn't support RGBW on that chipset.
+//
+// Original code:              Jim Bumgardner (http://krazydad.com).
+// Further modifications by:   David Madison (http://partsnotincluded.com).
+//                             Christoph Wempe
+//                             Tony Fabris 
+// ----------------------------------------------------------------------------
 
 #ifndef FastLED_RGBW_h
 #define FastLED_RGBW_h
 
-
-/// scale four one byte values by a fith one, which is treated as
-///         the numerator of a fraction whose demominator is 256
-///         In other words, it computes r,g,b,w * (scale / 256)
-///
-///         THIS FUNCTION ALWAYS MODIFIES ITS ARGUMENTS IN PLACE
 
 LIB8STATIC void nscale8x4( uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& w, fract8 scale)
 {
@@ -46,39 +42,27 @@ LIB8STATIC void nscale8x4( uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& w, fract
 }
 
 
-struct CRGBW {
-	union {
-		struct {
-			union {
-				uint8_t g;
-				uint8_t green;
-			};
-			union {
-				uint8_t r;
-				uint8_t red;
-			};
-			union {
-				uint8_t b;
-				uint8_t blue;
-			};
-			union {
-				uint8_t w;
-				uint8_t white;
-			};
-		};
-		uint8_t raw[4];
-	};
+struct CRGBW
+{
+    union 
+    {
+        struct
+        {
+          union { uint8_t g; uint8_t green; };
+          union { uint8_t r; uint8_t red; };
+          union { uint8_t b; uint8_t blue; };
+          union { uint8_t w; uint8_t white; };
+        };
+        uint8_t raw[4];
+    };
 
-  // The "inline" and "always_inlines" statements improve code speed by instructing the AVR compiler to insert
-  // the pixel byte updates directly into my loop assemblies instead of processing a costly function jump.
+  // The "inline" and "__attribute__((always_inline))" statements improve code
+  // speed by instructing the AVR compiler to insert the pixel byte updates
+  // directly into my loop assemblies instead of processing a function jump.
 	inline CRGBW() __attribute__((always_inline)){}
-
 	inline CRGBW(uint8_t rd, uint8_t grn, uint8_t blu, uint8_t wht) __attribute__((always_inline))
   {
-		r = rd;
-		g = grn;
-		b = blu;
-		w = wht;
+		r = rd;	g = grn; b = blu;	w = wht;
 	}
 
 	inline void operator = (const CRGB c) __attribute__((always_inline))
@@ -89,45 +73,44 @@ struct CRGBW {
 		this->white = 0;
 	}
 
-  /// add one RGBW to another, saturating at 0xFF for each channel
+	inline void operator = (const CRGBW c) __attribute__((always_inline))
+  { 
+		this->r = c.r;
+		this->g = c.g;
+		this->b = c.b;
+		this->w = c.w;
+	}
+
   inline CRGBW& operator+= (const CRGB& rhs ) __attribute__((always_inline))
   {
     r = qadd8( r, rhs.r);
     g = qadd8( g, rhs.g);
     b = qadd8( b, rhs.b);
-    w = 0;
+    w = 0;       // RGB-Only version.
+    return *this;
+  }
+  
+  inline CRGBW& operator+=(const CRGBW& rhs) __attribute__((always_inline))
+  {
+    r = qadd8( r, rhs.r);
+    g = qadd8( g, rhs.g);
+    b = qadd8( b, rhs.b);
+    w = qadd8( w, rhs.w); // RGBW version.
     return *this;
   }
 
-  /// Add one RGBW to another, saturating at 0xFF for each channel
-  inline CRGBW& operator+= (const CRGBW& rhs ) __attribute__((always_inline))
-  {
-      r = qadd8( r, rhs.r);
-      g = qadd8( g, rhs.g);
-      b = qadd8( b, rhs.b);
-      w = 0;
-      return *this;
-  }
-
-
-  /// scale down a RGBW to N 256ths of it's current brightness, using
-  /// 'plain math' dimming rules, which means that if the low light levels
-  /// may dim all the way to 100% black.
   inline CRGBW& nscale8 (uint8_t scaledown ) __attribute__((always_inline))
   {
     nscale8x4( r, g, b, w, scaledown);
     return *this;
   }
 
-  /// scale down a RGBW to N 256ths of it's current brightness, using
-  /// 'plain math' dimming rules, which means that if the low light levels
-  /// may dim all the way to 100% black.
   inline CRGBW& nscale8 (const CRGBW & scaledown ) __attribute__((always_inline))
   {
     r = ::scale8(r, scaledown.r);
     g = ::scale8(g, scaledown.g);
     b = ::scale8(b, scaledown.b);
-    w = 0;
+    w = ::scale8(w, scaledown.w);
     return *this;
   }
 };
