@@ -59,27 +59,27 @@ struct CRGBW
   // The "inline" and "__attribute__((always_inline))" statements improve code
   // speed by instructing the AVR compiler to insert the pixel byte updates
   // directly into my loop assemblies instead of processing a function jump.
-	inline CRGBW() __attribute__((always_inline)){}
-	inline CRGBW(uint8_t rd, uint8_t grn, uint8_t blu, uint8_t wht) __attribute__((always_inline))
+  inline CRGBW() __attribute__((always_inline)){}
+  inline CRGBW(uint8_t rd, uint8_t grn, uint8_t blu, uint8_t wht) __attribute__((always_inline))
   {
-		r = rd;	g = grn; b = blu;	w = wht;
-	}
+    r = rd; g = grn; b = blu; w = wht;
+  }
 
-	inline void operator = (const CRGB c) __attribute__((always_inline))
+  inline void operator = (const CRGB c) __attribute__((always_inline))
   { 
-		this->r = c.r;
-		this->g = c.g;
-		this->b = c.b;
-		this->white = 0;
-	}
+    this->r = c.r;
+    this->g = c.g;
+    this->b = c.b;
+    this->white = 0;
+  }
 
-	inline void operator = (const CRGBW c) __attribute__((always_inline))
+  inline void operator = (const CRGBW c) __attribute__((always_inline))
   { 
-		this->r = c.r;
-		this->g = c.g;
-		this->b = c.b;
-		this->w = c.w;
-	}
+    this->r = c.r;
+    this->g = c.g;
+    this->b = c.b;
+    this->w = c.w;
+  }
 
   inline CRGBW& operator+= (const CRGB& rhs ) __attribute__((always_inline))
   {
@@ -118,9 +118,9 @@ struct CRGBW
 
 inline uint16_t getRGBWsize(uint16_t nleds)
 {
-	uint16_t nbytes = nleds * 4;
-	if(nbytes % 3 > 0) return nbytes / 3 + 1;
-	else return nbytes / 3;
+  uint16_t nbytes = nleds * 4;
+  if(nbytes % 3 > 0) return nbytes / 3 + 1;
+  else return nbytes / 3;
 }
 
 inline void fill_solid( struct CRGBW * leds, int numToFill, CRGB color)
