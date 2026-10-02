@@ -44,6 +44,11 @@ legendary effects artists who created the original effect:
 ### LED Source code:
 - https://github.com/tfabris/Close-Encounters-Mothership-Scanner
 
+### LED Shelf lights:
+- This is part of a larger project, where I've built a set of shelves with
+  LEDs along the edges. The details of that project are here:
+  - https://github.com/tfabris/LED-Controller
+
 ### Notes:
 - This code is a work in progress, it doesn't fully simulate the original
   effect... yet. See the [issues page](../../issues) if you want to know what's
